@@ -74,17 +74,9 @@ public final class LocationGoL implements Location {
                 int nbs = countAliveNeighbours(map, x, y);
 
                 if (map[x][y]) {
-                    if (nbs < deathLimit) {
-                        newMap[x][y] = false;
-                    } else {
-                        newMap[x][y] = true;
-                    }
+                    newMap[x][y] = nbs >= deathLimit;
                 } else {
-                    if (nbs > birthLimit) {
-                        newMap[x][y] = true;
-                    } else {
-                        newMap[x][y] = false;
-                    }
+                    newMap[x][y] = nbs > birthLimit;
                 }
             }
         }
@@ -111,7 +103,7 @@ public final class LocationGoL implements Location {
 
     private void flood(int x, int y, boolean[][] toFlood) {
 
-        if (x < 0 || y < 0 || x >= toFlood.length || y >= toFlood[0].length || toFlood[x][y] == true) {
+        if (x < 0 || y < 0 || x >= toFlood.length || y >= toFlood[0].length || toFlood[x][y]) {
             return;
         } else {
             toFlood[x][y] = true;
@@ -149,8 +141,31 @@ public final class LocationGoL implements Location {
 
     private boolean[][] copyArray(boolean[][] newMap) {
         return Arrays.stream(newMap)
-                .map(e -> e.clone())
+                .map(boolean[]::clone)
                 .toArray(boolean[][]::new);
+    }
+
+    private void growForests(String[][] map) {
+        for (int i = 0; i < map.length-1; i++) {
+            for (int j = 0; j < map[0].length-1; j++) {
+                if (map[i][j].equals(".") && random() < 0.03) {
+                    map[i][j] = "f";
+
+                    for (int k = -1; k < 2; k++) {
+                        for (int l = -1; l < 2; l++) {
+                            int nbx = i + k;
+                            int nby = j + l;
+                            if (nbx >= 0 && nby >= 0 && nbx < map.length && nby < map[0].length
+                                    && map[nbx][nby].equals(".")) {
+                                if (random() < 0.75) {
+                                    map[nbx][nby] = "f";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public String[][] getMap() {
@@ -167,7 +182,9 @@ public final class LocationGoL implements Location {
             }
         }
         int entrance = entrances.keySet().iterator().next();
-        stringMap[entrance][entrances.get(entrance)] = "x";
+        stringMap[entrance][entrances.get(entrance)] = "+";
+
+        growForests(stringMap);
 
         return stringMap;
     }

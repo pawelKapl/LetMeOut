@@ -1,12 +1,16 @@
-import data.Location;
-import data.LocationGoL;
+import data.terrains.Cave;
+import data.terrains.Terrain;
 
 public class Main {
 
     public static void main(String[] args) {
-        Location empty = new LocationGoL("Planeta-Wojny",25,140);
+        Terrain map = new Cave("Planeta-Wojny",25,140);
 
-        String[][] location = empty.getMap();
+        printMap(map);
+    }
+
+    private static void printMap(Terrain map) {
+        String[][] location = map.getMap();
 
         for (String[] y : location) {
             for (String x : y) {
@@ -27,8 +31,5 @@ public class Main {
             }
             System.out.println();
         }
-
     }
-
-
 }

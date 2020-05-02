@@ -1,4 +1,4 @@
-package data;
+package data.terrains;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -7,14 +7,14 @@ import java.util.Random;
 
 import static java.lang.StrictMath.random;
 
-public final class LocationGoL implements Location {
+public final class Cave implements Terrain {
 
     private final String name;
     private final boolean[][] mapPattern;
     private int floodCount;
     private final Map<Integer, Integer> entrances;
 
-    public LocationGoL(String name, int width, int height) {
+    public Cave(String name, int width, int height) {
         if (height < 20) {
             height = 20;
         }

@@ -6,6 +6,7 @@ public class Preferences {
     public final static int windowHeight = 1000;
     public final static int mapWidth = 102;
     public final static int mapHeight = 27;
+    public final static int mapVolume = mapHeight*mapWidth;
 
 
 }

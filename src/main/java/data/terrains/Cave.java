@@ -97,7 +97,7 @@ public final class Cave implements Terrain {
                 int nbx = x + j;
                 int nby = y + i;
                 if (i == 0 && j == 0) {
-                } else if (nbx < 0 || nby < 0 || nbx >= map[0].length || nby >= map.length) {
+                } else if (isWithinMap(map, nbx, nby)) {
                     count++;
                 } else if (map[nby][nbx]) {
                     count++;
@@ -105,6 +105,10 @@ public final class Cave implements Terrain {
             }
         }
         return count;
+    }
+
+    private boolean isWithinMap(boolean[][] map, int nbx, int nby) {
+        return nbx < 0 || nby < 0 || nbx >= map[0].length || nby >= map.length;
     }
 
     private void flood(int x, int y, boolean[][] toFlood) {

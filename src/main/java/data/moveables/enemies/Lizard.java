@@ -21,4 +21,9 @@ public class Lizard implements Enemy {
     public int getHP() {
         return hp;
     }
+
+    @Override
+    public void setCoords(Coords coords) {
+        this.coords = coords;
+    }
 }

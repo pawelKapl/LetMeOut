@@ -9,8 +9,8 @@ public class Solider implements Player {
     private final String name;
 
 
-    public Solider(Coords coords, String name) {
-        this.coords = coords;
+    public Solider(String name) {
+        this.coords =  new Coords(0, 0);
         this.name = name;
         this.hp = 100;
     }
@@ -28,5 +28,10 @@ public class Solider implements Player {
     @Override
     public int getHP() {
         return hp;
+    }
+
+    @Override
+    public void setCoords(Coords coords) {
+        this.coords = coords;
     }
 }

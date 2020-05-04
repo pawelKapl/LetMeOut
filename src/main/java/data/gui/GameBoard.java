@@ -1,6 +1,7 @@
 package data.gui;
 
 import data.gameEngine.GameLogic;
+import data.moveables.enemies.Enemy;
 import data.moveables.playerClass.Player;
 import data.other.Preferences;
 
@@ -29,6 +30,8 @@ public class GameBoard extends JPanel implements Updatable {
         g.fillRect(0, 0, Preferences.windowWidth, Preferences.windowHeight);
         printFrames(g);
         printLocation(g);
+        printPlayer(g);
+        printEnemies(g);
         printPlayerStatus(g);
     }
 
@@ -83,8 +86,19 @@ public class GameBoard extends JPanel implements Updatable {
             dy += 20;
             dx = 35;
         }
+    }
+
+    private void printPlayer(Graphics g) {
         g.setColor(Color.BLUE);
         g.drawString("@", (player.getCoords().getX()*12)+30, (player.getCoords().getY()*20)+100);
+    }
+
+    private void printEnemies(Graphics g) {
+        g.setColor(Color.RED);
+
+        for (Enemy e : game.getEnemies()) {
+            g.drawString("k", (e.getCoords().getX()*12)+35,(e.getCoords().getY()*20)+100);
+        }
     }
 
     private void printFrames(Graphics g) {

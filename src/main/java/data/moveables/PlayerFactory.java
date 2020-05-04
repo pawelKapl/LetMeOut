@@ -18,39 +18,35 @@ public class PlayerFactory {
 
         log.info("Building new Player...");
 
-        int[] ints = setStartingPoint();
-
         switch (profession) {
             case (1):
-                return new Solider(ints[0], ints[1], name);
+                return new Solider(setStartingPoint(), name);
             default:
                 log.warning("Wrong profession");
-                return new Solider(ints[0], ints[1], "DefaultName");
+                return new Solider(setStartingPoint(), "DefaultName");
         }
     }
 
-    private int[] setStartingPoint() {
+    private Coords setStartingPoint() {
+        log.info("Getting Starting Point for a new Player...");
 
-        log.info("Getting Starting Point for new Player...");
-
-        int[] coords = new int[2];
+        Coords coords = new Coords(0,0);
         Map<Integer, Integer> entrances = terrain.getEntrances();
         int y = entrances.keySet().iterator().next();
         int x = entrances.get(y);
 
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
-                int nbx = x + i;
-                int nby = y + j;
+                int nbx = x + j;
+                int nby = y + i;
                 if (i == 0 && j == 0) {
                 } else if (nbx >= 0 && nby >= 0
                         && nby < terrain.getMap().length
                         && nbx < terrain.getMap()[0].length
                         && terrain.getMap()[nby][nbx] != '#') {
-                    coords[0] = nby;
-                    coords[1] = nbx;
+                    coords.setY(nby);
+                    coords.setX(nbx);
                     return coords;
-
                 }
             }
         }

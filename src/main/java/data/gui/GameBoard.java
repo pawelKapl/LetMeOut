@@ -6,37 +6,49 @@ import data.other.Preferences;
 
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
-import java.util.logging.Logger;
 
 @SuppressWarnings("serial")
 public class GameBoard extends JPanel implements Updatable {
 
     private Game game;
-
-    private final Logger log = Logger.getLogger(GameBoard.class.toString());
+    private Player player;
+    private char[][] location;
 
     public GameBoard(Game game) {
         this.game = game;
+        this.player = this.game.getPlayer();
+        this.location = this.game.getTerrain().getMap();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, Preferences.windowWidth, Preferences.windowHeight);
-        System.out.println("elo");
         printFrames(g);
         printLocation(g);
+        printPlayerStatus(g);
+    }
+
+    private void printPlayerStatus(Graphics g) {
+        String profession = player.getClass().getSimpleName();
+
+        Font font = new Font("legend", Font.BOLD, 15);
+        g.setFont(font);
+        g.setColor(Color.WHITE);
+        g.drawString("Location:  " + game.getTerrain().getName(), 35, 50);
+
+        g.drawString("Player: " + player.getName() + "    Class: " + profession, 35, Preferences.windowHeight*2/3 + 50);
+        g.setColor(Color.RED);
+        g.drawString("HP: " + player.getHP(), 180 + player.getName().length()*7 + profession.length()*7,
+                Preferences.windowHeight*2/3 + 50);
     }
 
     private void printLocation(Graphics g) {
         int dx = 35;
-        int dy = 50;
-
-        char[][] location = game.getTerrain().getMap();
-        Player player = game.getPlayer();
+        int dy = 100;
 
         for (int i = 0; i < location.length; i++) {
             for (int j = 0; j < location[0].length; j++) {
@@ -52,6 +64,7 @@ public class GameBoard extends JPanel implements Updatable {
                     case 'd':
                         g.setColor(Color.PINK);
                         g.drawString(Character.toString(location[i][j]), dx, dy);
+                        break;
                     case 'o':
                         g.setColor(Color.YELLOW);
                         g.drawString(Character.toString(location[i][j]), dx, dy);
@@ -59,6 +72,7 @@ public class GameBoard extends JPanel implements Updatable {
                     case 'u':
                         g.setColor(Color.BLUE);
                         g.drawString(Character.toString(location[i][j]), dx, dy);
+                        break;
                     case 'f':
                         g.setColor(Color.GREEN);
                         g.drawString(Character.toString(location[i][j]), dx, dy);
@@ -70,8 +84,7 @@ public class GameBoard extends JPanel implements Updatable {
             dx = 35;
         }
         g.setColor(Color.BLUE);
-        g.drawString("@", (player.getY()*12)+35, (player.getX()*20)+50);
-
+        g.drawString("@", (player.getCoords().getX()*12)+30, (player.getCoords().getY()*20)+100);
     }
 
     private void printFrames(Graphics g) {

@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Logger;
 
 import static java.lang.StrictMath.random;
 
@@ -15,29 +16,31 @@ public final class Cave implements Terrain {
     private final boolean[][] mapPattern;
     private final char[][] mapFull;
 
-    public Cave(String name, int width, int height) {
-        if (height < 20) {
-            height = 20;
+    private final Logger log = Logger.getLogger(this.getClass().toString());
+
+    public Cave(String name, int height, int width) {
+        if (height < 15) {
+            height = 15;
         }
-        if (width < 15) {
-            width = 15;
+        if (width < 20) {
+            width = 20;
         }
         this.name = name;
-        this.entrances = genEntrances(width, height);
-        this.mapPattern = generateMap(width,height);
+        this.entrances = genEntrances(height,width);
+        this.mapPattern = generateMap(height,width);
         this.mapFull = decorateMap();
     }
 
-    private boolean[][] generateMap(int width, int height) {
-
+    private boolean[][] generateMap(int height, int width) {
+        log.info("Map shape calculation process started");
         boolean[][] newMap;
-        int simulationStepsNumber = 2;
 
         while (true) {
             floodCount = 0;
-            newMap = initializeMap(width, height);
+            newMap = initializeMap(height, width);
 
-            for (int i = 0; i < simulationStepsNumber; i++) {
+            //tweakAble
+            for (int i = 0; i < 2; i++) {
                 newMap = simulationStep(newMap, 4, 3);
             }
 
@@ -45,23 +48,24 @@ public final class Cave implements Terrain {
 
             int entrance = entrances.keySet().iterator().next();
 
-            flood(entrance, entrances.get(entrance), toFlood);
+            flood(entrances.get(entrance), entrance, toFlood);
 
             if (floodCount > (width*height*6/10)) {
                 break;
             }
         }
+        log.info("Map shape calculation process successfully ended");
         return newMap;
     }
 
-    private boolean[][] initializeMap(int width, int height) {
+    private boolean[][] initializeMap(int height, int width) {
 
         float isAliveChance = 0.35f; //coverage lvl of map
-        boolean[][] map = new boolean[width][height];
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        boolean[][] map = new boolean[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 if(random() < isAliveChance) {
-                    map[x][y] = true;
+                    map[i][j] = true;
                 }
             }
         }
@@ -71,14 +75,14 @@ public final class Cave implements Terrain {
     private boolean[][] simulationStep(boolean[][] map, int birthLimit, int deathLimit) {
         boolean[][] newMap = new boolean[map.length][map[0].length];
 
-        for (int x = 0; x < map.length; x++) {
-            for (int y = 0; y < map[0].length; y++) {
-                int nbs = countAliveNeighbours(map, x, y);
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                int nbs = countAliveNeighbours(map, j, i);
 
-                if (map[x][y]) {
-                    newMap[x][y] = nbs >= deathLimit;
+                if (map[i][j]) {
+                    newMap[i][j] = nbs >= deathLimit;
                 } else {
-                    newMap[x][y] = nbs > birthLimit;
+                    newMap[i][j] = nbs > birthLimit;
                 }
             }
         }
@@ -90,12 +94,12 @@ public final class Cave implements Terrain {
         int count = 0;
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
-                int nbx = x + i;
-                int nby = y + j;
+                int nbx = x + j;
+                int nby = y + i;
                 if (i == 0 && j == 0) {
-                } else if (nbx < 0 || nby < 0 || nbx >= map.length || nby >= map[0].length) {
+                } else if (nbx < 0 || nby < 0 || nbx >= map[0].length || nby >= map.length) {
                     count++;
-                } else if (map[nbx][nby]) {
+                } else if (map[nby][nbx]) {
                     count++;
                 }
             }
@@ -105,10 +109,10 @@ public final class Cave implements Terrain {
 
     private void flood(int x, int y, boolean[][] toFlood) {
 
-        if (x < 0 || y < 0 || x >= toFlood.length || y >= toFlood[0].length || toFlood[x][y]) {
+        if (x < 0 || y < 0 || y >= toFlood.length || x >= toFlood[0].length || toFlood[y][x]) {
             return;
         } else {
-            toFlood[x][y] = true;
+            toFlood[y][x] = true;
             floodCount++;
         }
 
@@ -118,23 +122,23 @@ public final class Cave implements Terrain {
         flood(x, y -1, toFlood);
     }
 
-    private Map<Integer, Integer> genEntrances(int width, int height) {
-
+    private Map<Integer, Integer> genEntrances(int height, int width) {
+        log.info("Generating entrances/exits");
         Random gen = new Random();
         Map<Integer, Integer> entrance = new HashMap<>();
 
         while (entrance.size() < 1) {
             if (gen.nextBoolean()) {
                 if (gen.nextBoolean()) {
-                    entrance.putIfAbsent(0, gen.nextInt(height - 10) + 5);
+                    entrance.putIfAbsent(0, gen.nextInt(width - 10) + 5);
                 } else {
-                    entrance.putIfAbsent(width - 1, gen.nextInt(height - 10) + 5);
+                    entrance.putIfAbsent(height - 1, gen.nextInt(width - 10) + 5);
                 }
             } else {
                 if (gen.nextBoolean()) {
-                    entrance.putIfAbsent(gen.nextInt(width-10) + 5, height - 1);
+                    entrance.putIfAbsent(gen.nextInt(height-10) + 5, width - 1);
                 } else {
-                    entrance.putIfAbsent(gen.nextInt(width-10) + 5, 0);
+                    entrance.putIfAbsent(gen.nextInt(height-10) + 5, 0);
                 }
             }
         }
@@ -148,20 +152,19 @@ public final class Cave implements Terrain {
     }
 
     private void growForests(char[][] map) {
-        System.out.println("growing");
+        log.info("Growing forests...");
         for (int i = 0; i < map.length-1; i++) {
             for (int j = 0; j < map[0].length-1; j++) {
                 if (map[i][j] == '.' && random() < 0.03) {
                     map[i][j] = 'f';
-
                     for (int k = -1; k < 2; k++) {
                         for (int l = -1; l < 2; l++) {
-                            int nbx = i + k;
-                            int nby = j + l;
-                            if (nbx >= 0 && nby >= 0 && nbx < map.length && nby < map[0].length
-                                    && map[nbx][nby] == '.') {
+                            int nby = i + k;
+                            int nbx = j + l;
+                            if (nbx >= 0 && nby >= 0 && nby < map.length && nbx < map[0].length
+                                    && map[nby][nbx] == '.') {
                                 if (random() < 0.75) {
-                                    map[nbx][nby] = 'f';
+                                    map[nby][nbx] = 'f';
                                 }
                             }
                         }
@@ -171,24 +174,23 @@ public final class Cave implements Terrain {
         }
     }
 
-    private void addTreasures(boolean[][] terrain, char[][] map) {
-
+    private void addTreasures(char[][] map) {
+        log.info("Hiding treasures...");
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                if (!terrain[i][j]) {
-                    if (countAliveNeighbours(terrain, i, j) == 6 && random() > 0.1) {
+                if (!mapPattern[i][j]) {
+                    if (countAliveNeighbours(mapPattern, j, i) == 6 && random() > 0.1) {
                         map[i][j] = 'u';
-                    } else if (countAliveNeighbours(terrain, i, j) == 5 && random() > 0.3) {
+                    } else if (countAliveNeighbours(mapPattern, j, i) == 5 && random() > 0.3) {
                         map[i][j] = 'o';
                     }
                 }
             }
         }
-
     }
 
     private final char[][] decorateMap() {
-
+        log.info("Composing map and converting to char table");
         char[][] charMap = new char[mapPattern.length][mapPattern[0].length];
 
         for (int i = 0; i < mapPattern.length; i++) {
@@ -204,7 +206,7 @@ public final class Cave implements Terrain {
         charMap[entrance][entrances.get(entrance)] = 'd';
 
         growForests(charMap);
-        addTreasures(mapPattern, charMap);
+        addTreasures(charMap);
 
         return charMap;
     }
@@ -217,5 +219,7 @@ public final class Cave implements Terrain {
         return mapFull;
     }
 
-
+    public String getName() {
+        return name;
+    }
 }

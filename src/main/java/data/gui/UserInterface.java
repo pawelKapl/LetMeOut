@@ -32,7 +32,7 @@ public class UserInterface implements Runnable {
     private void createComponents(Container contentPane) {
         this.gameBoard = new GameBoard(game);
         contentPane.add(gameBoard);
-        KeyboardController kc = new KeyboardController(game.getPlayer());
+        KeyboardController kc = new KeyboardController(game);
         kc.setUpdatable(gameBoard);
         frame.addKeyListener(kc);
     }

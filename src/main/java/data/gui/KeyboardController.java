@@ -1,6 +1,6 @@
 package data.gui;
 
-import data.moveables.Player;
+import data.gameEngine.Game;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -8,12 +8,13 @@ import java.util.logging.Logger;
 
 public class KeyboardController implements KeyListener {
 
-    private Player player;
+    private Game game;
     private final Logger log = Logger.getLogger(this.getClass().toString());
     private Updatable updatable;
 
-    public KeyboardController(Player player) {
-        this.player = player;
+
+    public KeyboardController(Game game) {
+        this.game = game;
     }
 
     @Override
@@ -30,22 +31,21 @@ public class KeyboardController implements KeyListener {
         switch (keyCode) {
             case KeyEvent.VK_W:
             case KeyEvent.VK_UP:
-                player.moveUp();
+                game.movePlayer(0, -1);
                 break;
             case KeyEvent.VK_S:
             case KeyEvent.VK_DOWN:
-                player.moveDown();
+                game.movePlayer(0, 1);
                 break;
             case KeyEvent.VK_A:
             case KeyEvent.VK_LEFT:
-                player.moveLeft();
+                game.movePlayer(-1, 0);
                 break;
             case KeyEvent.VK_D:
             case KeyEvent.VK_RIGHT:
-                player.moveRight();
+                game.movePlayer(1, 0);
                 break;
         }
-        updatable.update();
     }
 
     public void setUpdatable(Updatable updatable) {

@@ -1,8 +1,7 @@
 package data.moveables;
 
-public interface Player {
+public interface Movable {
 
-    String getName();
     Coords getCoords();
     int getHP();
 }

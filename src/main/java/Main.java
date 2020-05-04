@@ -1,4 +1,4 @@
-import data.gameEngine.Game;
+import data.gameEngine.GameLogic;
 import data.gui.UserInterface;
 
 import javax.swing.SwingUtilities;
@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
         log.info("Starting game");
 
-        Game game = new Game();
+        GameLogic game = new GameLogic();
 
         UserInterface ui = new UserInterface(game);
         SwingUtilities.invokeLater(ui);

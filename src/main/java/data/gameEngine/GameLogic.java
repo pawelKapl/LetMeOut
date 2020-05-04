@@ -2,23 +2,26 @@ package data.gameEngine;
 
 import data.gui.Updatable;
 import data.moveables.Coords;
-import data.moveables.Player;
 import data.moveables.PlayerFactory;
+import data.moveables.enemies.Enemy;
+import data.moveables.playerClass.Player;
 import data.other.Preferences;
 import data.terrains.Cave;
 import data.terrains.Terrain;
 
+import java.util.List;
 import java.util.logging.Logger;
 
-public class Game {
+public class GameLogic {
 
     private Player player;
     private Terrain terrain;
     private Updatable updatable;
+    private List<Enemy> enemies;
 
     private final Logger log = Logger.getLogger(this.getClass().toString());
 
-    public Game() {
+    public GameLogic() {
         terrain = new Cave("Planeta-Wojny", Preferences.mapHeight,Preferences.mapWidth);
         setPlayer();
     }

@@ -1,7 +1,7 @@
 package data.gui;
 
-import data.gameEngine.Game;
-import data.moveables.Player;
+import data.gameEngine.GameLogic;
+import data.moveables.playerClass.Player;
 import data.other.Preferences;
 
 import javax.swing.JPanel;
@@ -12,11 +12,11 @@ import java.awt.Graphics;
 @SuppressWarnings("serial")
 public class GameBoard extends JPanel implements Updatable {
 
-    private Game game;
+    private GameLogic game;
     private Player player;
     private char[][] location;
 
-    public GameBoard(Game game) {
+    public GameBoard(GameLogic game) {
         this.game = game;
         this.player = this.game.getPlayer();
         this.location = this.game.getTerrain().getMap();

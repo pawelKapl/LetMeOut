@@ -19,11 +19,11 @@ public final class Cave implements Terrain {
     private final Logger log = Logger.getLogger(this.getClass().toString());
 
     public Cave(String name, int height, int width) {
-        if (height < 15) {
-            height = 15;
+        if (height < 15 || height > 27) {
+            height = 25;
         }
-        if (width < 20) {
-            width = 20;
+        if (width < 20 || width > 102) {
+            width = 100;
         }
         this.name = name;
         this.entrances = genEntrances(height,width);

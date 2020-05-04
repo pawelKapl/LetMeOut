@@ -1,4 +1,6 @@
-package data.moveables;
+package data.moveables.playerClass;
+
+import data.moveables.Coords;
 
 public class Solider implements Player {
 

@@ -1,5 +1,7 @@
 package data.moveables;
 
+import data.moveables.playerClass.Player;
+import data.moveables.playerClass.Solider;
 import data.terrains.Terrain;
 
 import java.util.Map;

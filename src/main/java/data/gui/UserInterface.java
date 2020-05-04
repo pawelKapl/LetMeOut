@@ -1,6 +1,6 @@
 package data.gui;
 
-import data.gameEngine.Game;
+import data.gameEngine.GameLogic;
 import data.other.Preferences;
 
 import javax.swing.JFrame;
@@ -12,9 +12,9 @@ public class UserInterface implements Runnable {
 
     private JFrame frame;
     private GameBoard gameBoard;
-    private Game game;
+    private GameLogic game;
 
-    public UserInterface(Game game) {
+    public UserInterface(GameLogic game) {
         this.game = game;
     }
 

@@ -1,6 +1,6 @@
 package data.gui;
 
-import data.gameEngine.Game;
+import data.gameEngine.GameLogic;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -8,12 +8,12 @@ import java.util.logging.Logger;
 
 public class KeyboardController implements KeyListener {
 
-    private Game game;
+    private GameLogic game;
     private final Logger log = Logger.getLogger(this.getClass().toString());
     private Updatable updatable;
 
 
-    public KeyboardController(Game game) {
+    public KeyboardController(GameLogic game) {
         this.game = game;
     }
 

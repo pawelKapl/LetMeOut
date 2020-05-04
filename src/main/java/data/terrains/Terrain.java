@@ -1,6 +1,9 @@
 package data.terrains;
 
+import java.util.Map;
+
 public interface Terrain {
 
-    String[][] getMap();
+    char[][] getMap();
+    Map<Integer, Integer> getEntrances();
 }

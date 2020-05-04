@@ -10,9 +10,10 @@ import static java.lang.StrictMath.random;
 public final class Cave implements Terrain {
 
     private final String name;
-    private final boolean[][] mapPattern;
     private int floodCount;
     private final Map<Integer, Integer> entrances;
+    private final boolean[][] mapPattern;
+    private final char[][] mapFull;
 
     public Cave(String name, int width, int height) {
         if (height < 20) {
@@ -24,6 +25,7 @@ public final class Cave implements Terrain {
         this.name = name;
         this.entrances = genEntrances(width, height);
         this.mapPattern = generateMap(width,height);
+        this.mapFull = decorateMap();
     }
 
     private boolean[][] generateMap(int width, int height) {
@@ -145,20 +147,21 @@ public final class Cave implements Terrain {
                 .toArray(boolean[][]::new);
     }
 
-    private void growForests(String[][] map) {
+    private void growForests(char[][] map) {
+        System.out.println("growing");
         for (int i = 0; i < map.length-1; i++) {
             for (int j = 0; j < map[0].length-1; j++) {
-                if (map[i][j].equals(".") && random() < 0.03) {
-                    map[i][j] = "f";
+                if (map[i][j] == '.' && random() < 0.03) {
+                    map[i][j] = 'f';
 
                     for (int k = -1; k < 2; k++) {
                         for (int l = -1; l < 2; l++) {
                             int nbx = i + k;
                             int nby = j + l;
                             if (nbx >= 0 && nby >= 0 && nbx < map.length && nby < map[0].length
-                                    && map[nbx][nby].equals(".")) {
+                                    && map[nbx][nby] == '.') {
                                 if (random() < 0.75) {
-                                    map[nbx][nby] = "f";
+                                    map[nbx][nby] = 'f';
                                 }
                             }
                         }
@@ -168,24 +171,51 @@ public final class Cave implements Terrain {
         }
     }
 
-    public String[][] getMap() {
+    private void addTreasures(boolean[][] terrain, char[][] map) {
 
-        String[][] stringMap = new String[mapPattern.length][mapPattern[0].length];
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                if (!terrain[i][j]) {
+                    if (countAliveNeighbours(terrain, i, j) == 6 && random() > 0.1) {
+                        map[i][j] = 'u';
+                    } else if (countAliveNeighbours(terrain, i, j) == 5 && random() > 0.3) {
+                        map[i][j] = 'o';
+                    }
+                }
+            }
+        }
+
+    }
+
+    private final char[][] decorateMap() {
+
+        char[][] charMap = new char[mapPattern.length][mapPattern[0].length];
 
         for (int i = 0; i < mapPattern.length; i++) {
             for (int j = 0; j < mapPattern[0].length; j++) {
                 if (mapPattern[i][j]) {
-                    stringMap[i][j] = "#";
+                    charMap[i][j] = '#';
                 } else {
-                    stringMap[i][j] = ".";
+                    charMap[i][j] = '.';
                 }
             }
         }
         int entrance = entrances.keySet().iterator().next();
-        stringMap[entrance][entrances.get(entrance)] = "+";
+        charMap[entrance][entrances.get(entrance)] = 'd';
 
-        growForests(stringMap);
+        growForests(charMap);
+        addTreasures(mapPattern, charMap);
 
-        return stringMap;
+        return charMap;
     }
+
+    public Map<Integer, Integer> getEntrances() {
+        return new HashMap<>(entrances);
+    }
+
+    public char[][] getMap() {
+        return mapFull;
+    }
+
+
 }

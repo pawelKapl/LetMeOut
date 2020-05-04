@@ -1,35 +1,30 @@
-import data.terrains.Cave;
-import data.terrains.Terrain;
+import data.gameEngine.Game;
+import data.gui.GameBoard;
+import data.gui.UserInterface;
+
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import java.util.logging.Logger;
 
 public class Main {
 
+    private static JFrame window;
+    private static GameBoard gameBoard;
+
+    private static final Logger log = Logger.getLogger(Main.class.toString());
+
     public static void main(String[] args) {
-        Terrain map = new Cave("Planeta-Wojny",25,140);
+        log.info("Starting game");
 
-        printMap(map);
-    }
+        UserInterface ui = new UserInterface(new Game());
+        SwingUtilities.invokeLater(ui);
 
-    private static void printMap(Terrain map) {
-        String[][] location = map.getMap();
-
-        for (String[] y : location) {
-            for (String x : y) {
-                switch (x) {
-                    case "#":
-                        System.out.print("\033[1;36m" + x);
-                        break;
-                    case ".":
-                        System.out.print("\033[0m" + x);
-                        break;
-                    case "+":
-                        System.out.print("\033[1;35m" + x);
-                        break;
-                    default:
-                        System.out.print("\u001B[92m" + x);
-                        break;
-                }
+        while (ui.getUpdatable() == null) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                log.info("The drawing board hasn't been created yet.");
             }
-            System.out.println();
         }
     }
 }

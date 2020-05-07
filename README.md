@@ -2,7 +2,11 @@
 
 My Roguelike attempt - in progress
 
-
+Main assumptions: <br>
+    - only pure Java <br>
+    - turn-based <br>
+    - highly randomized <br>
+ 
 Current progress: <br>
     - working random map generator <br>
     - gui interface implemented <br>

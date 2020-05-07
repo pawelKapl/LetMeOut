@@ -11,12 +11,11 @@ import static java.lang.StrictMath.random;
 public final class Cave implements Terrain {
 
     private final String name;
-    private int floodCount;
     private final Map<Integer, Integer> entrances;
-    private final boolean[][] mapPattern;
-    private final char[][] mapFull;
+    private final char[][] mapFinal;
 
     private final Logger log = Logger.getLogger(this.getClass().toString());
+
 
     public Cave(String name, int height, int width) {
         if (height < 15 || height > 27) {
@@ -27,16 +26,37 @@ public final class Cave implements Terrain {
         }
         this.name = name;
         this.entrances = genEntrances(height,width);
-        this.mapPattern = generateMap(height,width);
-        this.mapFull = decorateMap();
+        this.mapFinal = createMap(generatePattern(height, width));
     }
 
-    private boolean[][] generateMap(int height, int width) {
+    private final char[][] createMap(boolean[][] mapPattern) {
+        log.info("Composing map and converting to char table");
+        char[][] charMap = new char[mapPattern.length][mapPattern[0].length];
+
+        for (int i = 0; i < mapPattern.length; i++) {
+            for (int j = 0; j < mapPattern[0].length; j++) {
+                if (mapPattern[i][j]) {
+                    charMap[i][j] = '#';
+                } else {
+                    charMap[i][j] = '.';
+                }
+            }
+        }
+        int entrance = entrances.keySet().iterator().next();
+        charMap[entrance][entrances.get(entrance)] = 'd';
+
+        growForests(charMap);
+        addTreasures(charMap, mapPattern);
+
+        return charMap;
+    }
+
+    private final boolean[][] generatePattern(int height, int width) {
         log.info("Map shape calculation process started");
         boolean[][] newMap;
 
         while (true) {
-            floodCount = 0;
+            int floodCount = 0;
             newMap = initializeMap(height, width);
 
             //tweakAble
@@ -48,7 +68,7 @@ public final class Cave implements Terrain {
 
             int entrance = entrances.keySet().iterator().next();
 
-            flood(entrances.get(entrance), entrance, toFlood);
+            floodCount = flood(entrances.get(entrance), entrance, toFlood, floodCount);
 
             if (floodCount > (width*height*6/10)) {
                 break;
@@ -97,7 +117,8 @@ public final class Cave implements Terrain {
                 int nbx = x + j;
                 int nby = y + i;
                 if (i == 0 && j == 0) {
-                } else if (isWithinMap(map, nbx, nby)) {
+                    //just nothing
+                } else if (isOffMap(map, nbx, nby)) {
                     count++;
                 } else if (map[nby][nbx]) {
                     count++;
@@ -107,23 +128,21 @@ public final class Cave implements Terrain {
         return count;
     }
 
-    private boolean isWithinMap(boolean[][] map, int nbx, int nby) {
-        return nbx < 0 || nby < 0 || nbx >= map[0].length || nby >= map.length;
-    }
+    private int flood(int x, int y, boolean[][] toFlood, int count) {
 
-    private void flood(int x, int y, boolean[][] toFlood) {
-
-        if (x < 0 || y < 0 || y >= toFlood.length || x >= toFlood[0].length || toFlood[y][x]) {
-            return;
+        if (isOffMap(toFlood, x, y) || toFlood[y][x]) {
+            return count;
         } else {
             toFlood[y][x] = true;
-            floodCount++;
+            count++;
         }
 
-        flood(x +1, y, toFlood);
-        flood(x -1, y, toFlood);
-        flood(x, y +1, toFlood);
-        flood(x, y -1, toFlood);
+        count = flood(x +1, y, toFlood, count);
+        count = flood(x -1, y, toFlood, count);
+        count = flood(x, y +1, toFlood, count);
+        count = flood(x, y -1, toFlood, count);
+
+        return count;
     }
 
     private Map<Integer, Integer> genEntrances(int height, int width) {
@@ -161,28 +180,32 @@ public final class Cave implements Terrain {
             for (int j = 0; j < map[0].length-1; j++) {
                 if (map[i][j] == '.' && random() < 0.03) {
                     map[i][j] = 'f';
-                    for (int k = -1; k < 2; k++) {
-                        for (int l = -1; l < 2; l++) {
-                            int nby = i + k;
-                            int nbx = j + l;
-                            if (nbx >= 0 && nby >= 0 && nby < map.length && nbx < map[0].length
-                                    && map[nby][nbx] == '.') {
-                                if (random() < 0.75) {
-                                    map[nby][nbx] = 'f';
-                                }
-                            }
-                        }
+                    forestExpansion(map, i, j);
+                }
+            }
+        }
+    }
+
+    private void forestExpansion(char[][] map, int i, int j) {
+        for (int k = -1; k < 2; k++) {
+            for (int l = -1; l < 2; l++) {
+                int nby = i + k;
+                int nbx = j + l;
+                if (nbx >= 0 && nby >= 0 && nby < map.length &&
+                        nbx < map[0].length && map[nby][nbx] == '.') {
+                    if (random() < 0.75) {
+                        map[nby][nbx] = 'f';
                     }
                 }
             }
         }
     }
 
-    private void addTreasures(char[][] map) {
+    private void addTreasures(char[][] map, boolean[][] mapPattern) {
         log.info("Hiding treasures...");
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                if (!mapPattern[i][j]) {
+                if (map[i][j] != '#') {
                     if (countAliveNeighbours(mapPattern, j, i) == 6 && random() > 0.1) {
                         map[i][j] = 'u';
                     } else if (countAliveNeighbours(mapPattern, j, i) == 5 && random() > 0.3) {
@@ -193,26 +216,8 @@ public final class Cave implements Terrain {
         }
     }
 
-    private final char[][] decorateMap() {
-        log.info("Composing map and converting to char table");
-        char[][] charMap = new char[mapPattern.length][mapPattern[0].length];
-
-        for (int i = 0; i < mapPattern.length; i++) {
-            for (int j = 0; j < mapPattern[0].length; j++) {
-                if (mapPattern[i][j]) {
-                    charMap[i][j] = '#';
-                } else {
-                    charMap[i][j] = '.';
-                }
-            }
-        }
-        int entrance = entrances.keySet().iterator().next();
-        charMap[entrance][entrances.get(entrance)] = 'd';
-
-        growForests(charMap);
-        addTreasures(charMap);
-
-        return charMap;
+    private boolean isOffMap(boolean[][] map, int x, int y) {
+        return x < 0 || y < 0 || x >= map[0].length || y >= map.length;
     }
 
     public Map<Integer, Integer> getEntrances() {
@@ -220,7 +225,7 @@ public final class Cave implements Terrain {
     }
 
     public char[][] getMap() {
-        return mapFull;
+        return mapFinal;
     }
 
     public String getName() {

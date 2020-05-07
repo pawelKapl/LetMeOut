@@ -1,7 +1,7 @@
-package data.moveables;
+package data.movables;
 
-import data.moveables.playerClass.Player;
-import data.moveables.playerClass.Solider;
+import data.movables.playerClass.Player;
+import data.movables.playerClass.Solider;
 
 import java.util.logging.Logger;
 

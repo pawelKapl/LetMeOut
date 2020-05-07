@@ -1,7 +1,7 @@
-package data.moveables;
+package data.movables;
 
-import data.moveables.enemies.Enemy;
-import data.moveables.enemies.Lizard;
+import data.movables.enemies.Enemy;
+import data.movables.enemies.Lizard;
 
 import java.util.logging.Logger;
 

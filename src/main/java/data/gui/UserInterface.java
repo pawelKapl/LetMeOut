@@ -26,7 +26,6 @@ public class UserInterface implements Runnable {
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
-
     }
 
     private void createComponents(Container contentPane) {

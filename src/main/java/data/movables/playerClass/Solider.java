@@ -1,6 +1,6 @@
-package data.moveables.playerClass;
+package data.movables.playerClass;
 
-import data.moveables.Coords;
+import data.movables.Coords;
 
 public class Solider implements Player {
 
@@ -33,5 +33,25 @@ public class Solider implements Player {
     @Override
     public void setCoords(Coords coords) {
         this.coords = coords;
+    }
+
+    @Override
+    public int getX() {
+        return coords.getX();
+    }
+
+    @Override
+    public int getY() {
+        return coords.getY();
+    }
+
+    @Override
+    public void setX(int x) {
+        coords.setX(x);
+    }
+
+    @Override
+    public void setY(int y) {
+        coords.setY(y);
     }
 }

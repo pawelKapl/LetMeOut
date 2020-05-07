@@ -1,6 +1,6 @@
-package data.moveables.playerClass;
+package data.movables.playerClass;
 
-import data.moveables.Movable;
+import data.movables.Movable;
 
 public interface Player extends Movable {
 

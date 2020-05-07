@@ -19,14 +19,13 @@ public class KeyboardController implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
 
         int keyCode = e.getKeyCode();
-        log.info("Moved");
+        log.info("Pressed key");
 
         switch (keyCode) {
             case KeyEvent.VK_W:
@@ -54,6 +53,5 @@ public class KeyboardController implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-
     }
 }

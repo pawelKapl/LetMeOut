@@ -7,8 +7,7 @@ import data.gameEngine.pathfinding.TileBasedMap;
 import data.gameEngine.pathfinding.TileMapImpl;
 import data.gui.Updatable;
 import data.movables.Coords;
-import data.movables.EnemyFactory;
-import data.movables.PlayerFactory;
+import data.movables.MovableFactory;
 import data.movables.enemies.Enemy;
 import data.movables.playerClass.Player;
 import data.other.Preferences;
@@ -27,9 +26,10 @@ public class GameLogic {
     private Player player;
     private Terrain terrain;
     private Updatable updatable;
-    private List<Enemy> enemies = new ArrayList<>();
-    private EnemyFactory enemyFactory = new EnemyFactory();
     private PathFinder pathFinder;
+    private FogOfWar fogOfWar;
+    private List<Enemy> enemies = new ArrayList<>();
+    private MovableFactory movableFactory = new MovableFactory();
     private Random random = new Random();
 
     private final Logger log = Logger.getLogger(this.getClass().toString());
@@ -45,6 +45,8 @@ public class GameLogic {
         addEnemies(Preferences.mapVolume/70);
         TileBasedMap tbm = new TileMapImpl(terrain.getMap(), enemies);
         pathFinder = new AStarPathFinder(tbm, 10, false);
+        fogOfWar = new FogOfWar(Preferences.mapHeight, Preferences.mapWidth);
+        fogOfWar.uncover(player.getCoords());
     }
 
     public void movePlayer(int dx, int dy) {
@@ -62,7 +64,9 @@ public class GameLogic {
 
         player.setX(x);
         player.setY(y);
+
         enemyTurn();
+        fogOfWar.uncover(player.getCoords());
         updatable.update();
     }
 
@@ -73,7 +77,7 @@ public class GameLogic {
     }
 
     private void moveEnemy(Enemy enemy) {
-        if (playerWithinRange(enemy.getCoords())) {
+        if (playerWithinRange(enemy)) {
             log.info("Enemy has spotted player!");
             if (!chasePlayer(enemy)) {
                 return;
@@ -106,12 +110,13 @@ public class GameLogic {
         return true;
     }
 
-    private boolean playerWithinRange(Coords enemyCoords) {
+    private boolean playerWithinRange(Enemy enemy) {
+        int visionRadius = enemy.getVisionRadius();
         Coords temp = new Coords(0, 0);
-        for (int i = -3; i < 4; i++) {
-            temp.setY(enemyCoords.getY() + i);
-            for (int j = -3; j < 4; j++) {
-                temp.setX(enemyCoords.getX() + j);
+        for (int i = -visionRadius; i <= visionRadius; i++) {
+            temp.setY(enemy.getY() + i);
+            for (int j = -visionRadius; j <= visionRadius; j++) {
+                temp.setX(enemy.getX() + j);
 
                 //in the range
                 if (temp.equals(player.getCoords())) {
@@ -144,7 +149,7 @@ public class GameLogic {
 
     private void addEnemies(int number) {
         for (int i = 0; i < number; i++) {
-            Enemy enemy = enemyFactory.buildEnemy(1);
+            Enemy enemy = movableFactory.buildEnemy(1);
             enemy.setCoords(setEnemyStartingPoint());
             enemies.add(enemy);
         }
@@ -240,8 +245,7 @@ public class GameLogic {
     }
 
     private void setPlayer() {
-        PlayerFactory pf = new PlayerFactory();
-        player = pf.buildPlayer("Recon", 1);
+        player = movableFactory.buildPlayer("Recon", 1);
         setPlayerStartingPoint();
     }
 
@@ -259,5 +263,9 @@ public class GameLogic {
 
     public List<Enemy> getEnemies() {
         return enemies;
+    }
+
+    public FogOfWar getFogOfWar() {
+        return fogOfWar;
     }
 }

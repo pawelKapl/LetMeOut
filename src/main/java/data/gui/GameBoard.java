@@ -17,6 +17,8 @@ public class GameBoard extends JPanel implements Updatable {
     private Player player;
     private char[][] location;
 
+
+
     public GameBoard(GameLogic game) {
         this.game = game;
         this.player = this.game.getPlayer();
@@ -33,6 +35,27 @@ public class GameBoard extends JPanel implements Updatable {
         printPlayer(g);
         printEnemies(g);
         printPlayerStatus(g);
+        printFogOfWar(g);
+
+    }
+
+    private void printFogOfWar(Graphics g) {
+        boolean[][] fog = game.getFogOfWar().getFog();
+
+        int dx = 35;
+        int dy = 83;
+
+        g.setColor(Color.BLACK);
+        for (int i = 0; i < fog.length; i++) {
+            for (int j = 0; j < fog[0].length; j++) {
+                if(!fog[i][j]) {
+                    g.fillRect(dx, dy, 12, 20);
+                }
+                dx += 12;
+            }
+            dy += 20;
+            dx = 35;
+        }
     }
 
     private void printPlayerStatus(Graphics g) {

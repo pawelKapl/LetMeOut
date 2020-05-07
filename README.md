@@ -1,10 +1,7 @@
-# RoguelikeGwiezdnaFlota
+# Roguelike Gwiezdna Flota
 
 My Roguelike attempt - in progress
 
-
-Random map generator (with flood control):
-![alt text](https://i.imgur.com/tRwnUmJ.png)
 
 Current progress: <br>
     - working random map generator <br>
@@ -13,3 +10,10 @@ Current progress: <br>
     - enemies position calculation algorithm <br>
     - main game logic class
     - moving and chasing enemies (path finding by A*)
+    - fog of war
+
+![alt text](https://i.imgur.com/tRwnUmJ.png)
+
+![alt text](https://i.imgur.com/wec5wGt.png)
+
+Want to participate? Just let me know!

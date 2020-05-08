@@ -76,7 +76,9 @@ public abstract class Player implements Movable {
         this.hp = hp;
     }
 
-    public abstract void getHit(int damage);
+    public void getHit(int damage) {
+        hp -= damage;
+    }
 
     public abstract int attack();
 }

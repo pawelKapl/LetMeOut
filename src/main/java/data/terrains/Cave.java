@@ -70,7 +70,7 @@ public final class Cave implements Terrain {
 
             floodCount = flood(entrances.get(entrance), entrance, toFlood, floodCount);
 
-            if (floodCount > (width*height*6/10)) {
+            if (floodCount > (width*height*55/100)) {
                 break;
             }
         }
@@ -80,7 +80,7 @@ public final class Cave implements Terrain {
 
     private boolean[][] initializeMap(int height, int width) {
 
-        float isAliveChance = 0.35f; //coverage lvl of map
+        float isAliveChance = 0.40f; //coverage lvl of map
         boolean[][] map = new boolean[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -207,7 +207,7 @@ public final class Cave implements Terrain {
             for (int j = 0; j < map[0].length; j++) {
                 if (map[i][j] != '#') {
                     if (countAliveNeighbours(mapPattern, j, i) == 6 && random() > 0.1) {
-                        map[i][j] = 'u';
+                        map[i][j] = 'Ϯ';
                     } else if (countAliveNeighbours(mapPattern, j, i) == 5 && random() > 0.3) {
                         map[i][j] = 'o';
                     }

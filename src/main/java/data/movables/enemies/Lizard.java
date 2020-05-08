@@ -8,14 +8,9 @@ public class Lizard extends Enemy {
     public Lizard(Coords coords) {
         super(coords);
         super.setVisionRadius(3);
-        super.setHP(15);
+        super.setHP(50);
         super.setAttack(10);
-        super.setDefense(2);
-    }
-
-    @Override
-    public void getHit(int damage) {
-        //todo
+        super.setDefense(7);
     }
 
     @Override

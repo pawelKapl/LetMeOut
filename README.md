@@ -15,9 +15,11 @@ Current progress: <br>
     - main game logic class
     - moving and chasing enemies (path finding by A*)
     - fog of war
+    - basic player attack and fight log
+
+![alt text](https://i.imgur.com/OwpTffC.png)
 
 ![alt text](https://i.imgur.com/tRwnUmJ.png)
 
-![alt text](https://i.imgur.com/wec5wGt.png)
 
 Want to participate? Just let me know!

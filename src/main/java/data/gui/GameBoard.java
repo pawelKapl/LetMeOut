@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.util.LinkedList;
 
 @SuppressWarnings("serial")
 public class GameBoard extends JPanel implements Updatable {
@@ -35,8 +36,28 @@ public class GameBoard extends JPanel implements Updatable {
         printPlayer(g);
         printEnemies(g);
         printPlayerStatus(g);
+        printFightLog(g);
         printFogOfWar(g);
 
+    }
+
+    private void printFightLog(Graphics g) {
+        LinkedList<String> fightLog = game.getFightUtil().getMessages();
+
+        Font font = new Font("legend", Font.PLAIN, 15);
+        g.setFont(font);
+        g.setColor(Color.WHITE);
+
+        int y = Preferences.windowHeight*2/3 + 90;
+        for (String s : fightLog) {
+            if (s.startsWith("Fight")) {
+                g.setColor(Color.yellow);
+            } else if (s.startsWith("Event")) {
+                g.setColor(Color.RED);
+            }
+            g.drawString(s, 35, y);
+            y += 20;
+        }
     }
 
     private void printFogOfWar(Graphics g) {
@@ -68,7 +89,7 @@ public class GameBoard extends JPanel implements Updatable {
 
         g.drawString("Player: " + player.getName() + "    Class: " + profession, 35, Preferences.windowHeight*2/3 + 50);
         g.setColor(Color.RED);
-        g.drawString("HP: " + player.getHP(), 180 + player.getName().length()*7 + profession.length()*7,
+        g.drawString("hp: " + player.getHP(), 180 + player.getName().length()*7 + profession.length()*7,
                 Preferences.windowHeight*2/3 + 50);
     }
 
@@ -80,11 +101,11 @@ public class GameBoard extends JPanel implements Updatable {
             for (int j = 0; j < location[0].length; j++) {
                 switch (location[i][j]) {
                     case '#':
-                        g.setColor(Color.CYAN);
+                        g.setColor(new Color(89, 159, 168));
                         g.drawString(Character.toString(location[i][j]), dx, dy);
                         break;
                     case '.':
-                        g.setColor(Color.WHITE);
+                        g.setColor(new Color(115, 124, 151));
                         g.drawString(Character.toString(location[i][j]), dx, dy);
                         break;
                     case 'd':
@@ -92,15 +113,12 @@ public class GameBoard extends JPanel implements Updatable {
                         g.drawString(Character.toString(location[i][j]), dx, dy);
                         break;
                     case 'o':
+                    case 'Ϯ':
                         g.setColor(Color.YELLOW);
                         g.drawString(Character.toString(location[i][j]), dx, dy);
                         break;
-                    case 'u':
-                        g.setColor(Color.BLUE);
-                        g.drawString(Character.toString(location[i][j]), dx, dy);
-                        break;
                     case 'f':
-                        g.setColor(Color.GREEN);
+                        g.setColor(new Color(24, 161, 24));
                         g.drawString(Character.toString(location[i][j]), dx, dy);
                         break;
                 }
@@ -112,12 +130,12 @@ public class GameBoard extends JPanel implements Updatable {
     }
 
     private void printPlayer(Graphics g) {
-        g.setColor(Color.BLUE);
+        g.setColor(new Color(37, 29, 196));
         g.drawString("@", (player.getX()*12)+30, (player.getY()*20)+100);
     }
 
     private void printEnemies(Graphics g) {
-        g.setColor(Color.RED);
+        g.setColor(new Color(214, 30,30));
         for (Enemy e : game.getEnemies()) {
             g.drawString("k", (e.getX()*12)+35,(e.getY()*20)+100);
         }

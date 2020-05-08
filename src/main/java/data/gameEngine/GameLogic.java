@@ -31,6 +31,7 @@ public class GameLogic {
     private List<Enemy> enemies = new ArrayList<>();
     private MovableFactory movableFactory = new MovableFactory();
     private Random random = new Random();
+    private FightUtil fightUtil;
 
     private final Logger log = Logger.getLogger(this.getClass().toString());
 
@@ -47,12 +48,19 @@ public class GameLogic {
         pathFinder = new AStarPathFinder(tbm, 10, false);
         fogOfWar = new FogOfWar(Preferences.mapHeight, Preferences.mapWidth);
         fogOfWar.uncover(player.getCoords());
+        fightUtil = new FightUtil(player, enemies);
     }
 
     public void movePlayer(int dx, int dy) {
 
         int x = player.getX() + dx;
         int y = player.getY() + dy;
+
+        if (occupiedByEnemy(x, y)) {
+            fightUtil.attackEnemy(x, y);
+            updatable.update();
+            enemyTurn();
+        }
 
         if (!isFree(x, y)) {
             return;
@@ -267,5 +275,9 @@ public class GameLogic {
 
     public FogOfWar getFogOfWar() {
         return fogOfWar;
+    }
+
+    public FightUtil getFightUtil() {
+        return fightUtil;
     }
 }

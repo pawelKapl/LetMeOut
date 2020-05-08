@@ -6,16 +6,11 @@ public class Solider extends Player {
     public Solider(String name) {
         super(name);
         super.setDefense(5);
-        super.setAttack(10);
-    }
-
-    @Override
-    public void getHit(int damage) {
-        //todo
+        super.setAttack(6);
     }
 
     @Override
     public int attack() {
-        return 0;
+        return getAttack();
     }
 }

@@ -6,6 +6,7 @@ Main assumptions: <br>
     - only pure Java <br>
     - turn-based <br>
     - highly randomized <br>
+    - d20 based fight model
  
 Current progress: <br>
     - working random map generator based on game of life and flood fill <br>

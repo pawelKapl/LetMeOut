@@ -13,10 +13,10 @@ Current progress: <br>
     - gui interface implemented (swing) <br>
     - player movement mechanism introduced <br>
     - enemies position calculation algorithm <br>
-    - main game logic class
-    - moving and chasing enemies (path finding by A*)
-    - fog of war
-    - basic player attack and fight log
+    - main game logic class <br>
+    - moving and chasing enemies (path finding by A*) <br>
+    - fog of war <br>
+    - basic player attack and fight log <br>
 
 ![alt text](https://i.imgur.com/OwpTffC.png)
 

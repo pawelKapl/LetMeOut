@@ -8,8 +8,8 @@ Main assumptions: <br>
     - highly randomized <br>
  
 Current progress: <br>
-    - working random map generator <br>
-    - gui interface implemented <br>
+    - working random map generator based on game of life and flood fill <br>
+    - gui interface implemented (swing) <br>
     - player movement mechanism introduced <br>
     - enemies position calculation algorithm <br>
     - main game logic class

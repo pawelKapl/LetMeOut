@@ -13,6 +13,7 @@ import data.movables.playerClass.Player;
 import data.other.Preferences;
 import data.terrains.Cave;
 import data.terrains.Terrain;
+import data.terrains.TerrainType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -237,7 +238,7 @@ public class GameLogic {
         return x >= 0 && y >= 0
                 && y < terrain.getMap().length
                 && x < terrain.getMap()[0].length
-                && terrain.getMap()[y][x] != '#'
+                && terrain.getMap()[y][x] != TerrainType.WALL
                 && !occupiedByEnemy(x, y)
                 && !occupiedByPlayer(x, y);
     }
@@ -258,8 +259,8 @@ public class GameLogic {
     }
 
     private boolean isTreasure(int x, int y) {
-        return terrain.getMap()[y][x] == 'o'
-                || terrain.getMap()[y][x] == 'u';
+        return terrain.getMap()[y][x] == TerrainType.ITEM
+                || terrain.getMap()[y][x] == TerrainType.UNIQUE_ITEM;
     }
 
     private void setPlayer() {

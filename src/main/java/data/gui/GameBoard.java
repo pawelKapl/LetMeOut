@@ -1,23 +1,28 @@
 package data.gui;
 
+import data.equipment.Armor;
 import data.equipment.Equipment;
+import data.equipment.Item;
+import data.equipment.Weapon;
 import data.gameEngine.GameLogic;
 import data.movables.enemies.Enemy;
 import data.movables.playerClass.Player;
 import data.other.Preferences;
+import data.terrains.TerrainType;
 
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.LinkedList;
+import java.util.Map;
 
 @SuppressWarnings("serial")
 public class GameBoard extends JPanel implements Updatable {
 
     private GameLogic game;
     private Player player;
-    private char[][] location;
+    private TerrainType[][] location;
 
 
     public GameBoard(GameLogic game) {
@@ -38,6 +43,7 @@ public class GameBoard extends JPanel implements Updatable {
         printPlayerStatus(g);
         printEquipmentMenu(g);
         printFightLog(g);
+        printEquipmentLog(g);
         printFogOfWar(g);
 
     }
@@ -78,21 +84,38 @@ public class GameBoard extends JPanel implements Updatable {
     private void printFightLog(Graphics g) {
         LinkedList<String> fightLog = game.getFightUtil().getMessages();
 
-        Font font = new Font("legend", Font.PLAIN, 12);
-        g.setFont(font);
-        g.setColor(Color.WHITE);
+        setLogFont(g);
 
         int y = Preferences.windowHeight*2/3 + 90;
         for (String s : fightLog) {
 
-            if (s.startsWith("Fight")) {
-                g.setColor(Color.yellow);
-            } else if (s.startsWith("Event")) {
+            if (s.startsWith("[FIGHT]")) {
+                g.setColor(Color.YELLOW);
+            } else if (s.startsWith("[EVENT]")) {
                 g.setColor(Color.BLUE);
-            } else if (s.startsWith("Attack")) {
+            } else if (s.startsWith("[ATTACK]")) {
                 g.setColor(new Color(214, 30,30));
             }
             g.drawString(s, 35, y);
+            y += 20;
+        }
+    }
+
+    private void printEquipmentLog(Graphics g) {
+        LinkedList<String> fightLog = game.getPlayer().getMessages();
+
+        setLogFont(g);
+        g.setColor(Color.WHITE);
+
+        int y = Preferences.windowHeight*2/3 + 50;
+        for (String s : fightLog) {
+
+            if (s.startsWith("[INFO]")) {
+                g.setColor(Color.WHITE);
+            } else if (s.startsWith("[WARN]")) {
+                g.setColor(new Color(214, 30,30));
+            }
+            g.drawString(s, 1070, y);
             y += 20;
         }
     }
@@ -104,26 +127,26 @@ public class GameBoard extends JPanel implements Updatable {
         for (int i = 0; i < location.length; i++) {
             for (int j = 0; j < location[0].length; j++) {
                 switch (location[i][j]) {
-                    case '#':
+                    case WALL:
                         g.setColor(new Color(89, 159, 168));
-                        g.drawString(Character.toString(location[i][j]), dx, dy);
+                        g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
-                    case '.':
+                    case GROUND:
                         g.setColor(new Color(115, 124, 151));
-                        g.drawString(Character.toString(location[i][j]), dx, dy);
+                        g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
-                    case 'd':
-                        g.setColor(Color.PINK);
-                        g.drawString(Character.toString(location[i][j]), dx, dy);
+                    case DOOR:
+                        g.setColor(new Color(255, 0, 215));
+                        g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
-                    case 'o':
-                    case 'Ϯ':
+                    case ITEM:
+                    case UNIQUE_ITEM:
                         g.setColor(Color.YELLOW);
-                        g.drawString(Character.toString(location[i][j]), dx, dy);
+                        g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
-                    case 'f':
+                    case FOREST:
                         g.setColor(new Color(24, 161, 24));
-                        g.drawString(Character.toString(location[i][j]), dx, dy);
+                        g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
                 }
                 dx += 12;
@@ -154,16 +177,27 @@ public class GameBoard extends JPanel implements Updatable {
 
         g.drawString("Equipment:", startWidth,255);
         startWidth += 5;
+        g.setColor(new Color(210, 92, 92));
         g.drawString("Small Health Potions: " + eq.getSmallPotions() + "  <P>", startWidth, 285);
+        g.setColor(new Color(160, 5, 5));
         g.drawString("Large Health Potions: " + eq.getLargePotions() + "  <L>", startWidth, 305);
+
+        g.setColor(Color.WHITE);
         g.drawString("Items: ", startWidth, 345);
+
         startWidth += 10;
         int y = 365;
         if (eq.getItems().isEmpty()) {
             g.drawString("<Empty>", startWidth, y);
         } else {
-            for (int item : eq.getItems().keySet()) {
-                g.drawString(String.format("%d. %s", item, eq.getItems().get(item).getName()), startWidth, y);
+            Map<Integer, Item> items = eq.getItems();
+            for (int item : items.keySet()) {
+                if (items.get(item) instanceof Weapon) {
+                    g.setColor(new Color(35, 201, 26));
+                } else if (items.get(item) instanceof Armor) {
+                    g.setColor(new Color(24, 70, 201));
+                }
+                g.drawString(String.format("%d. %s", item, items.get(item).getName()), startWidth, y);
                 y += 20;
             }
         }
@@ -177,10 +211,17 @@ public class GameBoard extends JPanel implements Updatable {
         g.setColor(new Color(45, 45, 45));
         g.drawRect(Preferences.windowWidth*4/5 + 30,265,250,400);
         g.drawRect(25, Preferences.windowHeight*2/3 + 70, 500,150);
+        g.drawRect(1060,Preferences.windowHeight*2/3 + 30, 500, 200);
 
         g.setColor(Color.RED);
         g.drawString("DarkOnion", Preferences.windowWidth/2 - 30, Preferences.windowHeight - 60);
     }
+
+    private void setLogFont(Graphics g) {
+        Font font = new Font("legend", Font.PLAIN, 12);
+        g.setFont(font);
+    }
+
 
     @Override
     public void update() {

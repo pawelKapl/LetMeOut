@@ -2,11 +2,10 @@ package data.equipment;
 
 import data.movables.playerClass.Player;
 
-public class BasicKnife implements Item {
+public class BasicKnife implements Weapon {
 
     private final String name = "Basic Knife (+2 dmg)";
     private final String description = "Basic Knife. Weapon. +2dmg bonus.";
-    private final String type = "WEAPON";
 
 
     @Override
@@ -25,7 +24,8 @@ public class BasicKnife implements Item {
     }
 
     @Override
-    public String getType() {
-        return type;
+    public int getBonusAttack() {
+        //todo
+        return 0;
     }
 }

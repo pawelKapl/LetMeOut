@@ -7,5 +7,4 @@ public interface Item {
     void use(Player player);
     String getDescription();
     String getName();
-    String getType();
 }

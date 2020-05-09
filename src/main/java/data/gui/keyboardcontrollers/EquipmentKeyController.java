@@ -31,11 +31,11 @@ public class EquipmentKeyController implements KeyListener {
 
         switch (keyCode) {
             case KeyEvent.VK_P:
-                player.getEquipment().useSmallPotion(player);
+                player.getEquipment().useSmallPotion();
                 updatable.update();
                 break;
             case KeyEvent.VK_L:
-                player.getEquipment().useLargePotion(player);
+                player.getEquipment().useLargePotion();
                 updatable.update();
                 break;
         }

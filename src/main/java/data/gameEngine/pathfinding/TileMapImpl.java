@@ -2,16 +2,17 @@ package data.gameEngine.pathfinding;
 
 import data.movables.Movable;
 import data.movables.enemies.Enemy;
+import data.terrains.TerrainType;
 
 import java.util.List;
 
 public class TileMapImpl implements TileBasedMap {
 
     private boolean[][] visited;
-    private char[][] terrain;
+    private TerrainType[][] terrain;
     private List<Enemy> enemies;
 
-    public TileMapImpl(char[][] terrain, List<Enemy> enemies) {
+    public TileMapImpl(TerrainType[][] terrain, List<Enemy> enemies) {
         this.terrain = terrain;
         this.visited = new boolean[terrain.length][terrain[0].length];
         this.enemies = enemies;
@@ -29,7 +30,7 @@ public class TileMapImpl implements TileBasedMap {
 
     @Override
     public boolean blocked(Movable movable, int x, int y) {
-        return terrain[y][x] == '#' || occupiedByUnit(x,y);
+        return terrain[y][x] == TerrainType.WALL || occupiedByUnit(x,y);
     }
 
     @Override

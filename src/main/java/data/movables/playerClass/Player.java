@@ -1,12 +1,19 @@
 package data.movables.playerClass;
 
+import data.equipment.Armor;
 import data.equipment.Equipment;
 import data.movables.Coords;
 import data.movables.Movable;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 public abstract class Player implements Movable {
 
-    private Equipment equipment = new Equipment();
+    private Equipment equipment;
+    private List<Armor> armors = new ArrayList<>(4);
+    private LinkedList<String> messages = new LinkedList<>();
     private Coords coords;
     private int maxHp = 100;
     private int hp;
@@ -64,7 +71,11 @@ public abstract class Player implements Movable {
     }
 
     public int getDefense() {
-        return defense;
+        int sumDefense = defense;
+        for (Armor armor : armors) {
+            sumDefense += armor.getBonusDefense();
+        }
+        return sumDefense;
     }
 
     public void setDefense(int defense) {
@@ -73,6 +84,10 @@ public abstract class Player implements Movable {
 
     public Equipment getEquipment() {
         return equipment;
+    }
+
+    public void setEquipment(Equipment equipment) {
+        this.equipment = equipment;
     }
 
     public int getHP() {
@@ -85,6 +100,39 @@ public abstract class Player implements Movable {
         } else {
             this.hp = hp;
         }
+    }
+
+    public List<Armor> getArmorList() {
+        return armors;
+    }
+
+    public void wearNewArmor(Armor armor) {
+        if (armors.size() < 4) {
+            armors.add(armor);
+            addMessage("[INFO]: Added new armor: " + armor.getName());
+        } else {
+            addMessage("[WARN]: You are wearing already to many items! Limit = 4pcs");
+        }
+    }
+
+    public void removeArmor(Armor armor) {
+        if (armors.contains(armor)) {
+            armors.remove(armor);
+            addMessage("[INFO]: Removed armor: " + armor.getName());
+        } else {
+            addMessage("[WARN]: You are not wearing such armor!");
+        }
+    }
+
+    public void addMessage(String message) {
+        if (messages.size() == 7) {
+            messages.removeLast();
+        }
+        messages.push(message);
+    }
+
+    public LinkedList<String> getMessages() {
+        return messages;
     }
 
     public void getHit(int damage) {

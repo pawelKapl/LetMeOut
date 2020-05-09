@@ -12,7 +12,7 @@ public final class Cave implements Terrain {
 
     private final String name;
     private final Map<Integer, Integer> entrances;
-    private final char[][] mapFinal;
+    private final TerrainType[][] mapFinal;
 
     private final Logger log = Logger.getLogger(this.getClass().toString());
 
@@ -29,26 +29,26 @@ public final class Cave implements Terrain {
         this.mapFinal = createMap(generatePattern(height, width));
     }
 
-    private final char[][] createMap(boolean[][] mapPattern) {
+    private final TerrainType[][] createMap(boolean[][] mapPattern) {
         log.info("Composing map and converting to char table");
-        char[][] charMap = new char[mapPattern.length][mapPattern[0].length];
+        TerrainType[][] enumMap = new TerrainType[mapPattern.length][mapPattern[0].length];
 
         for (int i = 0; i < mapPattern.length; i++) {
             for (int j = 0; j < mapPattern[0].length; j++) {
                 if (mapPattern[i][j]) {
-                    charMap[i][j] = '#';
+                    enumMap[i][j] = TerrainType.WALL;
                 } else {
-                    charMap[i][j] = '.';
+                    enumMap[i][j] = TerrainType.GROUND;
                 }
             }
         }
         int entrance = entrances.keySet().iterator().next();
-        charMap[entrance][entrances.get(entrance)] = 'd';
+        enumMap[entrance][entrances.get(entrance)] = TerrainType.DOOR;
 
-        growForests(charMap);
-        addTreasures(charMap, mapPattern);
+        growForests(enumMap);
+        addTreasures(enumMap, mapPattern);
 
-        return charMap;
+        return enumMap;
     }
 
     private final boolean[][] generatePattern(int height, int width) {
@@ -174,42 +174,42 @@ public final class Cave implements Terrain {
                 .toArray(boolean[][]::new);
     }
 
-    private void growForests(char[][] map) {
+    private void growForests(TerrainType[][] map) {
         log.info("Growing forests...");
         for (int i = 0; i < map.length-1; i++) {
             for (int j = 0; j < map[0].length-1; j++) {
-                if (map[i][j] == '.' && random() < 0.03) {
-                    map[i][j] = 'f';
+                if (map[i][j] == TerrainType.GROUND && random() < 0.03) {
+                    map[i][j] = TerrainType.FOREST;
                     forestExpansion(map, i, j);
                 }
             }
         }
     }
 
-    private void forestExpansion(char[][] map, int i, int j) {
+    private void forestExpansion(TerrainType[][] map, int i, int j) {
         for (int k = -1; k < 2; k++) {
             for (int l = -1; l < 2; l++) {
                 int nby = i + k;
                 int nbx = j + l;
                 if (nbx >= 0 && nby >= 0 && nby < map.length &&
-                        nbx < map[0].length && map[nby][nbx] == '.') {
+                        nbx < map[0].length && map[nby][nbx] == TerrainType.GROUND) {
                     if (random() < 0.75) {
-                        map[nby][nbx] = 'f';
+                        map[nby][nbx] = TerrainType.FOREST;
                     }
                 }
             }
         }
     }
 
-    private void addTreasures(char[][] map, boolean[][] mapPattern) {
+    private void addTreasures(TerrainType[][] map, boolean[][] mapPattern) {
         log.info("Hiding treasures...");
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                if (map[i][j] != '#' && map[i][j] != 'd') {
+                if (map[i][j] != TerrainType.WALL && map[i][j] != TerrainType.DOOR) {
                     if (countAliveNeighbours(mapPattern, j, i) == 6 && random() > 0.1) {
-                        map[i][j] = 'Ϯ';
+                        map[i][j] = TerrainType.UNIQUE_ITEM;
                     } else if (countAliveNeighbours(mapPattern, j, i) == 5 && random() > 0.3) {
-                        map[i][j] = 'o';
+                        map[i][j] = TerrainType.ITEM;
                     }
                 }
             }
@@ -224,7 +224,7 @@ public final class Cave implements Terrain {
         return new HashMap<>(entrances);
     }
 
-    public char[][] getMap() {
+    public TerrainType[][] getMap() {
         return mapFinal;
     }
 

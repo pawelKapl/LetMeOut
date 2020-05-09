@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface Terrain {
 
-    char[][] getMap();
+    TerrainType[][] getMap();
     Map<Integer, Integer> getEntrances();
     String getName();
 }

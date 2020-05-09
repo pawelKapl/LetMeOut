@@ -18,13 +18,10 @@ Current progress: <br>
     - fog of war <br>
     - basic player attack and fight log <br>
     - basic enemy attack + log <br>
-    - equipment with potions and items
+    - equipment with potions and items + equipment log
 
-![alt text](https://i.imgur.com/Ogt6M7S.png)
+![alt text](https://i.imgur.com/IcouMPf.png)
 
 ![alt text](https://i.imgur.com/tRwnUmJ.png)
-
-
-
 
 Want to participate? Just let me know!

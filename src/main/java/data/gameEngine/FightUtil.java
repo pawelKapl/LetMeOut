@@ -38,19 +38,19 @@ public class FightUtil {
                 //critical hit
                 attack = 20 + player.attack();
                 enemy.getHit(attack);
-                addMessage(String.format("Fight: Critical Hit! You dealt %d damage to %s",
+                addMessage(String.format("[FIGHT]: Critical Hit! You dealt %d damage to %s",
                         attack, enemy.getClass().getSimpleName()));
                 break;
             case 1:
                 //miss
-                addMessage("Fight: Missed hit!");
+                addMessage("[FIGHT]: Missed hit!");
                 break;
             default:
                 //regular hit
                 int dodgeRate = random.nextInt(enemy.getDefense()+1);
                 attack = rollDice + player.attack() - dodgeRate;
                 enemy.getHit(attack);
-                addMessage(String.format("Fight: You dealt %d damage to %s, enemy reflection rate was -%d.)",
+                addMessage(String.format("[FIGHT]: You dealt %d damage to %s, enemy reflection rate was -%d.)",
                         attack, enemy.getClass().getSimpleName(), dodgeRate));
                 break;
         }
@@ -63,26 +63,31 @@ public class FightUtil {
 
         switch (rollDice) {
             case 20:
+                //critical hit
                 attack = rollDice/2 + enemy.attack();
                 player.getHit(attack);
-                addMessage(String.format("Attack: Critical hit! %s attacked you and dealt %d damage.",
+                addMessage(String.format("[ATTACK]: Critical hit! %s attacked you and dealt %d damage.",
                         enemy.getClass().getSimpleName(), attack));
+                break;
             case 1:
                 //miss
-                addMessage(String.format("Attack: %s tried to hit you and missed!", enemy.getClass().getSimpleName()));
+                addMessage(String.format("[ATTACK]: %s tried to hit you and missed!", enemy.getClass().getSimpleName()));
+                break;
             default:
+                //regular hit
                 int dodgeRate = random.nextInt(player.getDefense()+1);
                 attack = rollDice/2 + enemy.attack() - player.getDefense();
                 player.getHit(attack);
-                addMessage(String.format("Attack: %s attacked you and dealt %d damage, your reflection rate was -%d.",
+                addMessage(String.format("[ATTACK]: %s attacked you and dealt %d damage, your reflection rate was -%d.",
                         enemy.getClass().getSimpleName( ), attack, dodgeRate));
+                break;
 
         }
     }
 
     private void killEnemyIfZeroHp(Enemy enemy) {
         if (enemy.getHP() <= 0) {
-            addMessage(String.format("Event: %s died!", enemy.getClass().getSimpleName()));
+            addMessage(String.format("[EVENT]: %s died!", enemy.getClass().getSimpleName()));
             enemies.remove(enemy);
         }
     }
@@ -97,7 +102,6 @@ public class FightUtil {
     public void tryAttackPlayer(Enemy enemy) {
         if (nextToPlayer(enemy)) {
             calculateEnemyBasicAttack(enemy);
-
         }
     }
 

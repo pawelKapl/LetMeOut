@@ -205,7 +205,7 @@ public final class Cave implements Terrain {
         log.info("Hiding treasures...");
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
-                if (map[i][j] != '#') {
+                if (map[i][j] != '#' && map[i][j] != 'd') {
                     if (countAliveNeighbours(mapPattern, j, i) == 6 && random() > 0.1) {
                         map[i][j] = 'Ϯ';
                     } else if (countAliveNeighbours(mapPattern, j, i) == 5 && random() > 0.3) {

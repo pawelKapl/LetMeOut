@@ -8,14 +8,14 @@ public class Lizard extends Enemy {
     public Lizard(Coords coords) {
         super(coords);
         super.setVisionRadius(3);
-        super.setHP(50);
-        super.setAttack(10);
-        super.setDefense(7);
+        super.setHP(40);
+        super.setAttack(8);
+        super.setDefense(6);
     }
 
     @Override
     public int attack() {
         //todo
-        return 0;
+        return getAttack();
     }
 }

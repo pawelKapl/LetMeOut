@@ -1,4 +1,4 @@
-package data.gui;
+package data.gui.keyboardcontrollers;
 
 import data.gameEngine.GameLogic;
 
@@ -6,14 +6,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.logging.Logger;
 
-public class KeyboardController implements KeyListener {
+public class MovementKeyController implements KeyListener {
 
     private GameLogic game;
     private final Logger log = Logger.getLogger(this.getClass().toString());
-    private Updatable updatable;
 
 
-    public KeyboardController(GameLogic game) {
+    public MovementKeyController(GameLogic game) {
         this.game = game;
     }
 
@@ -45,10 +44,6 @@ public class KeyboardController implements KeyListener {
                 game.movePlayer(1, 0);
                 break;
         }
-    }
-
-    public void setUpdatable(Updatable updatable) {
-        this.updatable = updatable;
     }
 
     @Override

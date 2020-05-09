@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import static java.lang.Math.random;
-
 public class FightUtil {
 
     private Player player;
@@ -40,7 +38,8 @@ public class FightUtil {
                 //critical hit
                 attack = 20 + player.attack();
                 enemy.getHit(attack);
-                addMessage(String.format("Fight: Critical Hit! Dealed %d damage to %s", attack, enemy.getClass().getSimpleName()));
+                addMessage(String.format("Fight: Critical Hit! You dealt %d damage to %s",
+                        attack, enemy.getClass().getSimpleName()));
                 break;
             case 1:
                 //miss
@@ -48,13 +47,37 @@ public class FightUtil {
                 break;
             default:
                 //regular hit
-                int dodgeRate = (int) random()*enemy.getDefense();
+                int dodgeRate = random.nextInt(enemy.getDefense()+1);
                 attack = rollDice + player.attack() - dodgeRate;
                 enemy.getHit(attack);
-                addMessage(String.format("Fight: Dealed %d damage to %s", attack, enemy.getClass().getSimpleName()));
+                addMessage(String.format("Fight: You dealt %d damage to %s, enemy reflection rate was -%d.)",
+                        attack, enemy.getClass().getSimpleName(), dodgeRate));
                 break;
         }
         killEnemyIfZeroHp(enemy);
+    }
+
+    private void calculateEnemyBasicAttack(Enemy enemy) {
+        int rollDice = random.nextInt(21);
+        int attack;
+
+        switch (rollDice) {
+            case 20:
+                attack = rollDice/2 + enemy.attack();
+                player.getHit(attack);
+                addMessage(String.format("Attack: Critical hit! %s attacked you and dealt %d damage.",
+                        enemy.getClass().getSimpleName(), attack));
+            case 1:
+                //miss
+                addMessage(String.format("Attack: %s tried to hit you and missed!", enemy.getClass().getSimpleName()));
+            default:
+                int dodgeRate = random.nextInt(player.getDefense()+1);
+                attack = rollDice/2 + enemy.attack() - player.getDefense();
+                player.getHit(attack);
+                addMessage(String.format("Attack: %s attacked you and dealt %d damage, your reflection rate was -%d.",
+                        enemy.getClass().getSimpleName( ), attack, dodgeRate));
+
+        }
     }
 
     private void killEnemyIfZeroHp(Enemy enemy) {
@@ -65,13 +88,37 @@ public class FightUtil {
     }
 
     private void addMessage(String message) {
-        if (messages.size() == 6) {
+        if (messages.size() == 7) {
             messages.removeLast();
         }
         messages.push(message);
     }
 
+    public void tryAttackPlayer(Enemy enemy) {
+        if (nextToPlayer(enemy)) {
+            calculateEnemyBasicAttack(enemy);
+
+        }
+    }
+
+    private boolean nextToPlayer(Enemy enemy) {
+        int x = enemy.getX();
+        int y = enemy.getY();
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                int dx = x + j;
+                int dy = y + i;
+                if (dx == player.getX() && dy == player.getY()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public LinkedList<String> getMessages() {
         return messages;
     }
+
+
 }

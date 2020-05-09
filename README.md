@@ -17,10 +17,14 @@ Current progress: <br>
     - moving and chasing enemies (path finding by A*) <br>
     - fog of war <br>
     - basic player attack and fight log <br>
+    - basic enemy attack + log <br>
+    - equipment with potions and items
 
-![alt text](https://i.imgur.com/OwpTffC.png)
+![alt text](https://i.imgur.com/Ogt6M7S.png)
 
 ![alt text](https://i.imgur.com/tRwnUmJ.png)
+
+
 
 
 Want to participate? Just let me know!

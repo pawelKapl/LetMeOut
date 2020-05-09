@@ -1,5 +1,6 @@
 package data.gui;
 
+import data.equipment.Equipment;
 import data.gameEngine.GameLogic;
 import data.movables.enemies.Enemy;
 import data.movables.playerClass.Player;
@@ -19,7 +20,6 @@ public class GameBoard extends JPanel implements Updatable {
     private char[][] location;
 
 
-
     public GameBoard(GameLogic game) {
         this.game = game;
         this.player = this.game.getPlayer();
@@ -36,28 +36,10 @@ public class GameBoard extends JPanel implements Updatable {
         printPlayer(g);
         printEnemies(g);
         printPlayerStatus(g);
+        printEquipmentMenu(g);
         printFightLog(g);
         printFogOfWar(g);
 
-    }
-
-    private void printFightLog(Graphics g) {
-        LinkedList<String> fightLog = game.getFightUtil().getMessages();
-
-        Font font = new Font("legend", Font.PLAIN, 15);
-        g.setFont(font);
-        g.setColor(Color.WHITE);
-
-        int y = Preferences.windowHeight*2/3 + 90;
-        for (String s : fightLog) {
-            if (s.startsWith("Fight")) {
-                g.setColor(Color.yellow);
-            } else if (s.startsWith("Event")) {
-                g.setColor(Color.RED);
-            }
-            g.drawString(s, 35, y);
-            y += 20;
-        }
     }
 
     private void printFogOfWar(Graphics g) {
@@ -91,6 +73,28 @@ public class GameBoard extends JPanel implements Updatable {
         g.setColor(Color.RED);
         g.drawString("hp: " + player.getHP(), 180 + player.getName().length()*7 + profession.length()*7,
                 Preferences.windowHeight*2/3 + 50);
+    }
+
+    private void printFightLog(Graphics g) {
+        LinkedList<String> fightLog = game.getFightUtil().getMessages();
+
+        Font font = new Font("legend", Font.PLAIN, 12);
+        g.setFont(font);
+        g.setColor(Color.WHITE);
+
+        int y = Preferences.windowHeight*2/3 + 90;
+        for (String s : fightLog) {
+
+            if (s.startsWith("Fight")) {
+                g.setColor(Color.yellow);
+            } else if (s.startsWith("Event")) {
+                g.setColor(Color.BLUE);
+            } else if (s.startsWith("Attack")) {
+                g.setColor(new Color(214, 30,30));
+            }
+            g.drawString(s, 35, y);
+            y += 20;
+        }
     }
 
     private void printLocation(Graphics g) {
@@ -141,13 +145,41 @@ public class GameBoard extends JPanel implements Updatable {
         }
     }
 
+    private void printEquipmentMenu(Graphics g) {
+        Equipment eq = player.getEquipment();
+        Font font = new Font("equipment", Font.PLAIN, 12);
+        g.setFont(font);
+        g.setColor(Color.WHITE);
+        int startWidth = Preferences.windowWidth*4/5 + 30;
+
+        g.drawString("Equipment:", startWidth,255);
+        startWidth += 5;
+        g.drawString("Small Health Potions: " + eq.getSmallPotions() + "  <P>", startWidth, 285);
+        g.drawString("Large Health Potions: " + eq.getLargePotions() + "  <L>", startWidth, 305);
+        g.drawString("Items: ", startWidth, 345);
+        startWidth += 10;
+        int y = 365;
+        if (eq.getItems().isEmpty()) {
+            g.drawString("<Empty>", startWidth, y);
+        } else {
+            for (int item : eq.getItems().keySet()) {
+                g.drawString(String.format("%d. %s", item, eq.getItems().get(item).getName()), startWidth, y);
+                y += 20;
+            }
+        }
+    }
+
     private void printFrames(Graphics g) {
         g.setColor(Color.WHITE);
         g.drawRect(10,10, Preferences.windowWidth*4/5, Preferences.windowHeight*2/3);
         g.drawRect(Preferences.windowWidth*4/5 + 20, 10, Preferences.windowWidth/5 - 50, Preferences.windowHeight*2/3);
-        g.drawRect(10, Preferences.windowHeight*2/3 + 20, Preferences.windowWidth - 40, Preferences.windowHeight/3 - 120);
+        g.drawRect(10, Preferences.windowHeight*2/3 + 20, Preferences.windowWidth - 40, Preferences.windowHeight/3 - 110);
+        g.setColor(new Color(45, 45, 45));
+        g.drawRect(Preferences.windowWidth*4/5 + 30,265,250,400);
+        g.drawRect(25, Preferences.windowHeight*2/3 + 70, 500,150);
+
         g.setColor(Color.RED);
-        g.drawString("DarkOnion", Preferences.windowWidth/2 - 30, Preferences.windowHeight - 70);
+        g.drawString("DarkOnion", Preferences.windowWidth/2 - 30, Preferences.windowHeight - 60);
     }
 
     @Override

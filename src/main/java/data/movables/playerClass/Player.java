@@ -1,11 +1,14 @@
 package data.movables.playerClass;
 
+import data.equipment.Equipment;
 import data.movables.Coords;
 import data.movables.Movable;
 
 public abstract class Player implements Movable {
 
+    private Equipment equipment = new Equipment();
     private Coords coords;
+    private int maxHp = 100;
     private int hp;
     private final String name;
     private int attack;
@@ -68,12 +71,20 @@ public abstract class Player implements Movable {
         this.defense = defense;
     }
 
+    public Equipment getEquipment() {
+        return equipment;
+    }
+
     public int getHP() {
         return hp;
     }
 
     public void setHp(int hp) {
-        this.hp = hp;
+        if (hp > maxHp) {
+            this.hp = maxHp;
+        } else {
+            this.hp = hp;
+        }
     }
 
     public void getHit(int damage) {

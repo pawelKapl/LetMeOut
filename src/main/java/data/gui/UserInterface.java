@@ -1,6 +1,8 @@
 package data.gui;
 
 import data.gameEngine.GameLogic;
+import data.gui.keyboardcontrollers.EquipmentKeyController;
+import data.gui.keyboardcontrollers.MovementKeyController;
 import data.other.Preferences;
 
 import javax.swing.JFrame;
@@ -31,9 +33,8 @@ public class UserInterface implements Runnable {
     private void createComponents(Container contentPane) {
         this.gameBoard = new GameBoard(game);
         contentPane.add(gameBoard);
-        KeyboardController kc = new KeyboardController(game);
-        kc.setUpdatable(gameBoard);
-        frame.addKeyListener(kc);
+        frame.addKeyListener(new MovementKeyController(game));
+        frame.addKeyListener(new EquipmentKeyController(game.getPlayer(), gameBoard));
     }
 
     public Updatable getUpdatable() {

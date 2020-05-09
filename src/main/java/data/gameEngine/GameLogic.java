@@ -80,7 +80,17 @@ public class GameLogic {
 
     private void enemyTurn() {
         for (Enemy enemy : enemies) {
+            fightUtil.tryAttackPlayer(enemy);
+            playerAliveCheck();
             moveEnemy(enemy);
+        }
+    }
+
+    private void playerAliveCheck() {
+        if (player.getHP() <= 0) {
+            //to do
+            prepareLocation();
+            updatable.update();
         }
     }
 

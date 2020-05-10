@@ -5,6 +5,7 @@ import data.gui.keyboardcontrollers.EquipmentKeyController;
 import data.gui.keyboardcontrollers.MovementKeyController;
 import data.other.Preferences;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 import java.awt.Container;
@@ -33,6 +34,8 @@ public class UserInterface implements Runnable {
     private void createComponents(Container contentPane) {
         this.gameBoard = new GameBoard(game);
         contentPane.add(gameBoard);
+        ImageIcon img = new ImageIcon("src/resources/icon.png");
+        frame.setIconImage(img.getImage());
         frame.addKeyListener(new MovementKeyController(game));
         frame.addKeyListener(new EquipmentKeyController(game.getPlayer(), gameBoard));
     }

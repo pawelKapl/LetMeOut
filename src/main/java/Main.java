@@ -9,7 +9,7 @@ public class Main {
     private static final Logger log = Logger.getLogger(Main.class.toString());
 
     public static void main(String[] args) {
-        log.info("Starting game");
+        log.info("Starting game!");
 
         GameLogic game = new GameLogic();
 
@@ -20,7 +20,7 @@ public class Main {
             try {
                 Thread.sleep(100);
             } catch (InterruptedException ex) {
-                log.info("The drawing board hasn't been created yet.");
+                log.info("The drawing board hasn't been created yet. Waiting!");
             }
         }
         game.setUpdatable(ui.getUpdatable());

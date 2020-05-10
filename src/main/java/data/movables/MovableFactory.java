@@ -13,8 +13,6 @@ public class MovableFactory {
 
     public Enemy buildEnemy(int race) {
 
-        log.info("Building new Enemy...");
-
         switch (race) {
             case (1):
                 return new Lizard(new Coords(0,0));

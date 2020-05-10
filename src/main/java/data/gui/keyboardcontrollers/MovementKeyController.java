@@ -13,6 +13,7 @@ public class MovementKeyController implements KeyListener {
 
 
     public MovementKeyController(GameLogic game) {
+        log.info("Creating Movement Key Controller");
         this.game = game;
     }
 

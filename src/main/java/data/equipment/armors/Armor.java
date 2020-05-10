@@ -1,4 +1,6 @@
-package data.equipment;
+package data.equipment.armors;
+
+import data.equipment.Item;
 
 import java.util.Objects;
 

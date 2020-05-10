@@ -1,28 +1,28 @@
 package data.movables.playerClass;
 
-import data.equipment.Armor;
 import data.equipment.Equipment;
 import data.equipment.Item;
-import data.equipment.Weapon;
+import data.equipment.armors.Armor;
+import data.equipment.weapons.Weapon;
 import data.movables.Coords;
 import data.movables.Movable;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public abstract class Player implements Movable {
 
-    private Equipment equipment;
-    private List<Armor> armors = new ArrayList<>(4);
-    private List<Weapon> weapons = new ArrayList<>(2);
-    private LinkedList<String> messages = new LinkedList<>();
     private Coords coords;
     private int maxHp = 100;
     private int hp;
     private final String name;
     private int attack;
     private int defense;
+
+    private Equipment equipment;
+    private LinkedList<Armor> armors = new LinkedList<>();
+    private LinkedList<Weapon> weapons = new LinkedList<>();
+    private LinkedList<String> messages = new LinkedList<>();
 
 
     public Player(String name) {
@@ -71,8 +71,64 @@ public abstract class Player implements Movable {
             if (item instanceof Weapon) {
                 equipWeapon((Weapon) item);
             } else {
-                wearNewArmor((Armor) item);
+                equipArmor((Armor) item);
             }
+        }
+    }
+
+    public List<Weapon> getWeapons() {
+        return weapons;
+    }
+
+    public void equipWeapon(Weapon weapon) {
+        if (weapons.size() < 2) {
+            weapons.push(weapon);
+            equipment.removeItemFromEquipment(weapon);
+            addMessage("[INFO]: Equipped new weapon: " + weapon.getName());
+        } else {
+            addMessage("[WARN]: You are handling already to many weapons! Limit = 2pcs");
+        }
+    }
+
+    public void removeWeaponFromInventory() {
+        if (!weapons.isEmpty()) {
+            Weapon weapon = weapons.peek();
+            if (equipment.addToEquipment(weapon)) {
+                weapons.poll();
+                addMessage("[INFO]: Removed weapon: " + weapon.getName());
+            } else {
+                addMessage("[WARN]: Your equipment is already full, cannot move item!");
+            }
+        } else {
+            addMessage("[WARN]: You are not handling any weapon");
+        }
+    }
+
+    public List<Armor> getArmorList() {
+        return armors;
+    }
+
+    public void equipArmor(Armor armor) {
+        if (armors.size() < 4) {
+            armors.push(armor);
+            equipment.removeItemFromEquipment(armor);
+            addMessage("[INFO]: Added new armor: " + armor.getName());
+        } else {
+            addMessage("[WARN]: You are wearing already to many items! Limit = 4pcs");
+        }
+    }
+
+    public void removeArmorFromInventory() {
+        if (!armors.isEmpty()) {
+            Armor armor = armors.peek();
+            if (equipment.addToEquipment(armor)) {
+                armors.poll();
+                addMessage("[INFO]: Removed armor: " + armor.getName());
+            } else {
+                addMessage("[WARN]: Your equipment is already full, cannot move item!");
+            }
+        } else {
+            addMessage("[WARN]: You are not wearing any armor");
         }
     }
 
@@ -86,34 +142,6 @@ public abstract class Player implements Movable {
 
     public void setAttack(int attack) {
         this.attack = attack;
-    }
-
-    public List<Weapon> getWeapons() {
-        return weapons;
-    }
-
-    public void equipWeapon(Weapon weapon) {
-        if (weapons.size() < 2) {
-            weapons.add(weapon);
-            equipment.removeItemFromEquipment(weapon);
-            addMessage("[INFO]: Equipped new weapon: " + weapon.getName());
-        } else {
-            addMessage("[WARN]: You are handling already to many weapons! Limit = 2pcs");
-        }
-    }
-
-    public void removeWeaponFromInventory() {
-        if (!weapons.isEmpty()) {
-            Weapon weapon = weapons.get(0);
-            if (equipment.addToEquipment(weapon)) {
-                weapons.remove(weapon);
-                addMessage("[INFO]: Removed weapon: " + weapon.getName());
-            } else {
-                addMessage("[WARN]: Your equipment is already full, cannot move item!");
-            }
-        } else {
-            addMessage("[WARN]: You are not handling any weapon");
-        }
     }
 
     public int getDefense() {
@@ -148,32 +176,8 @@ public abstract class Player implements Movable {
         }
     }
 
-    public List<Armor> getArmorList() {
-        return armors;
-    }
-
-    public void wearNewArmor(Armor armor) {
-        if (armors.size() < 4) {
-            armors.add(armor);
-            equipment.removeItemFromEquipment(armor);
-            addMessage("[INFO]: Added new armor: " + armor.getName());
-        } else {
-            addMessage("[WARN]: You are wearing already to many items! Limit = 4pcs");
-        }
-    }
-
-    public void removeArmorFromEquipment() {
-        if (!armors.isEmpty()) {
-            Armor armor = armors.get(0);
-            if (equipment.addToEquipment(armor)) {
-                armors.remove(armor);
-                addMessage("[INFO]: Removed armor: " + armor.getName());
-            } else {
-                addMessage("[WARN]: Your equipment is already full, cannot move item!");
-            }
-        } else {
-            addMessage("[WARN]: You are not wearing any armor");
-        }
+    public void getHit(int damage) {
+        hp -= damage;
     }
 
     public void addMessage(String message) {
@@ -186,10 +190,4 @@ public abstract class Player implements Movable {
     public LinkedList<String> getMessages() {
         return messages;
     }
-
-    public void getHit(int damage) {
-        hp -= damage;
-    }
-
-    public abstract int specialAttack();
 }

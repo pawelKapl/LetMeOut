@@ -12,4 +12,6 @@ public class Lizard extends Enemy {
         super.setAttack(8);
         super.setDefense(6);
     }
+
+    //+ some extra class specific skills to do
 }

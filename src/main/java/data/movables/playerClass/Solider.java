@@ -11,8 +11,5 @@ public class Solider extends Player {
         super.setEquipment(new Equipment(this));
     }
 
-    @Override
-    public int specialAttack() {
-        return 0;
-    }
+    //+ some extra class specific skills to do
 }

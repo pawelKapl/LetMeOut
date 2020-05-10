@@ -1,5 +1,7 @@
 package data.equipment;
 
+import data.equipment.armors.LeatherArmor;
+import data.equipment.weapons.BasicKnife;
 import data.movables.playerClass.Player;
 
 import java.util.Map;

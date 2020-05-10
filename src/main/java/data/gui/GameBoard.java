@@ -1,9 +1,9 @@
 package data.gui;
 
-import data.equipment.Armor;
 import data.equipment.Equipment;
 import data.equipment.Item;
-import data.equipment.Weapon;
+import data.equipment.armors.Armor;
+import data.equipment.weapons.Weapon;
 import data.gameEngine.GameLogic;
 import data.movables.enemies.Enemy;
 import data.movables.playerClass.Player;
@@ -48,6 +48,7 @@ public class GameBoard extends JPanel implements Updatable {
         super.paintComponent(g);
         g.setColor(Color.BLACK);
         g.fillRect(0, 0, Preferences.windowWidth, Preferences.windowHeight);
+        //pretty large 'façade' :)
         printFrames(g);
         printLocation(g);
         printPlayer(g);

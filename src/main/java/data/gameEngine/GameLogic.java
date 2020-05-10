@@ -42,18 +42,19 @@ public class GameLogic {
     }
 
     private void prepareLocation() {
+        log.info("Preparing Location Components");
         terrain = new Cave("Planeta-Wojny", Preferences.mapHeight,Preferences.mapWidth);
         setPlayer();
-        addEnemies(Preferences.mapVolume/70);
+        addEnemies(Preferences.mapVolume/60);
         TileBasedMap tbm = new TileMapImpl(terrain.getMap(), enemies);
         pathFinder = new AStarPathFinder(tbm, 10, false);
         fogOfWar = new FogOfWar(Preferences.mapHeight, Preferences.mapWidth);
         fogOfWar.uncover(player.getCoords());
         fightUtil = new FightUtil(player, enemies);
+        log.info("Preparation of Location Components ended successfully");
     }
 
     public void movePlayer(int dx, int dy) {
-
         int x = player.getX() + dx;
         int y = player.getY() + dy;
 
@@ -102,7 +103,7 @@ public class GameLogic {
                 return;
             }
         } else {
-            if (random() > 0.6) {
+            if (random() > 0.8) {
                 Coords newCoords = randomMove(enemy);
                 if (isFree(newCoords.getX(), newCoords.getY())) {
                     enemy.setCoords(newCoords);
@@ -112,7 +113,6 @@ public class GameLogic {
     }
 
     private boolean chasePlayer(Enemy enemy) {
-
         FPath path = pathFinder.findPath(enemy, enemy.getX(), enemy.getY(), player.getX(), player.getY());
 
         if (path != null) {
@@ -137,7 +137,6 @@ public class GameLogic {
             for (int j = -visionRadius; j <= visionRadius; j++) {
                 temp.setX(enemy.getX() + j);
 
-                //in the range
                 if (temp.equals(player.getCoords())) {
                     return true;
                 }
@@ -167,11 +166,13 @@ public class GameLogic {
     }
 
     private void addEnemies(int number) {
+        log.info("Adding enemies");
         for (int i = 0; i < number; i++) {
             Enemy enemy = movableFactory.buildEnemy(1);
             enemy.setCoords(setEnemyStartingPoint());
             enemies.add(enemy);
         }
+        log.info("Adding Enemies completed successfully");
     }
 
     private void checkTreasure() {
@@ -209,7 +210,7 @@ public class GameLogic {
                     for (int j = -3; j < 4; j++) {
                         int ndx = x + j;
                         int ndy = y + i;
-                        if (isFree(ndx, ndy) && isTreasure(ndx, ndy)) {
+                        if (isWithinMap(ndx, ndy) && isTreasure(ndx, ndy)) {
                             return new Coords(x, y);
                         }
                     }
@@ -235,12 +236,16 @@ public class GameLogic {
     }
 
     private boolean isFree(int x, int y) {
-        return x >= 0 && y >= 0
-                && y < terrain.getMap().length
-                && x < terrain.getMap()[0].length
+        return isWithinMap(x, y)
                 && terrain.getMap()[y][x] != TerrainType.WALL
                 && !occupiedByEnemy(x, y)
                 && !occupiedByPlayer(x, y);
+    }
+
+    private boolean isWithinMap(int x, int y) {
+        return x >= 0 && y >= 0
+                && y < terrain.getMap().length
+                && x < terrain.getMap()[0].length;
     }
 
     private boolean occupiedByPlayer(int x, int y) {

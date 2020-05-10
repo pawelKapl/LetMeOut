@@ -50,7 +50,7 @@ public class FightUtil {
                 int dodgeRate = random.nextInt(enemy.getDefense()+1);
                 attack = rollDice + player.getAttack() - dodgeRate;
                 enemy.getHit(attack);
-                addMessage(String.format("[FIGHT]: You dealt %d damage to %s, enemy reflection rate was -%d.)",
+                addMessage(String.format("[FIGHT]: You dealt %d damage to %s, enemy reflection rate was -%d.",
                         attack, enemy.getClass().getSimpleName(), dodgeRate));
                 break;
         }
@@ -81,7 +81,6 @@ public class FightUtil {
                 addMessage(String.format("[ATTACK]: %s attacked you and dealt %d damage, your reflection rate was -%d.",
                         enemy.getClass().getSimpleName( ), attack, dodgeRate));
                 break;
-
         }
     }
 
@@ -123,6 +122,4 @@ public class FightUtil {
     public LinkedList<String> getMessages() {
         return messages;
     }
-
-
 }

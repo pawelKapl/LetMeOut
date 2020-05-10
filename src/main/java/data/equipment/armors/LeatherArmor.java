@@ -1,4 +1,4 @@
-package data.equipment;
+package data.equipment.armors;
 
 public class LeatherArmor extends Armor {
 

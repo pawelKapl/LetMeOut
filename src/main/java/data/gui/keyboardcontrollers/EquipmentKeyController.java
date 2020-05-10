@@ -15,17 +15,13 @@ public class EquipmentKeyController implements KeyListener {
 
 
     public EquipmentKeyController(Player player, Updatable updatable) {
+        log.info("Creating Equipment Key Controller");
         this.player = player;
         this.updatable = updatable;
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {
-    }
-
-    @Override
     public void keyPressed(KeyEvent e) {
-
         int keyCode = e.getKeyCode();
         log.info("Pressed key");
 
@@ -47,7 +43,7 @@ public class EquipmentKeyController implements KeyListener {
                 updatable.update();
                 break;
             case KeyEvent.VK_COMMA:
-                player.removeArmorFromEquipment();
+                player.removeArmorFromInventory();
                 updatable.update();
                 break;
             case KeyEvent.VK_PERIOD:
@@ -57,14 +53,18 @@ public class EquipmentKeyController implements KeyListener {
         }
     }
 
-    @Override
-    public void keyReleased(KeyEvent e) {
-    }
-
     private void ifWillToEquip(int keyCode) {
         if (keyCode > 48 && keyCode < 58) {
             player.equip(keyCode - 48);
             updatable.update();
         }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
     }
 }

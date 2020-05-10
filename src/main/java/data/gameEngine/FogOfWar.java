@@ -2,11 +2,15 @@ package data.gameEngine;
 
 import data.movables.Coords;
 
+import java.util.logging.Logger;
+
 public class FogOfWar {
 
     private boolean[][] fog;
+    private final Logger log = Logger.getLogger(this.getClass().toString());
 
     public FogOfWar(int height, int width) {
+        log.info("Creating Fog of War");
         fog = new boolean[height][width];
     }
 

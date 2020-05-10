@@ -1,31 +1,15 @@
 package data.equipment;
 
-import data.movables.playerClass.Player;
-
-public class BasicKnife implements Weapon {
-
-    private final String name = "Basic Knife (+2 dmg)";
-    private final String description = "Basic Knife. Weapon. +2dmg bonus.";
+public class BasicKnife extends Weapon {
 
 
-    @Override
-    public void use(Player player) {
-        //todo
-    }
-
-    @Override
-    public String getDescription() {
-        return description;
-    }
-
-    @Override
-    public String getName() {
-        return this.name;
+    public BasicKnife() {
+        setDescription("Basic Knife");
+        setName("Basic Knife (+3dmg)");
     }
 
     @Override
     public int getBonusAttack() {
-        //todo
-        return 0;
+        return 3;
     }
 }

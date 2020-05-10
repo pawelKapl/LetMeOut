@@ -36,7 +36,7 @@ public class FightUtil {
         switch (rollDice) {
             case 20:
                 //critical hit
-                attack = 20 + player.attack();
+                attack = 20 + player.getAttack();
                 enemy.getHit(attack);
                 addMessage(String.format("[FIGHT]: Critical Hit! You dealt %d damage to %s",
                         attack, enemy.getClass().getSimpleName()));
@@ -48,7 +48,7 @@ public class FightUtil {
             default:
                 //regular hit
                 int dodgeRate = random.nextInt(enemy.getDefense()+1);
-                attack = rollDice + player.attack() - dodgeRate;
+                attack = rollDice + player.getAttack() - dodgeRate;
                 enemy.getHit(attack);
                 addMessage(String.format("[FIGHT]: You dealt %d damage to %s, enemy reflection rate was -%d.)",
                         attack, enemy.getClass().getSimpleName(), dodgeRate));
@@ -64,7 +64,7 @@ public class FightUtil {
         switch (rollDice) {
             case 20:
                 //critical hit
-                attack = rollDice/2 + enemy.attack();
+                attack = rollDice/2 + enemy.getAttack();
                 player.getHit(attack);
                 addMessage(String.format("[ATTACK]: Critical hit! %s attacked you and dealt %d damage.",
                         enemy.getClass().getSimpleName(), attack));
@@ -76,7 +76,7 @@ public class FightUtil {
             default:
                 //regular hit
                 int dodgeRate = random.nextInt(player.getDefense()+1);
-                attack = rollDice/2 + enemy.attack() - player.getDefense();
+                attack = rollDice/2 + enemy.getAttack() - player.getDefense();
                 player.getHit(attack);
                 addMessage(String.format("[ATTACK]: %s attacked you and dealt %d damage, your reflection rate was -%d.",
                         enemy.getClass().getSimpleName( ), attack, dodgeRate));

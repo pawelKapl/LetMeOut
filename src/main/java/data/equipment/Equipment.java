@@ -15,25 +15,34 @@ public class Equipment {
     public Equipment(Player player) {
         this.player = player;
         addToEquipment(new BasicKnife());
+        addToEquipment(new LeatherArmor());
     }
 
-    public void addToEquipment(Item item) {
+    public boolean addToEquipment(Item item) {
         for (int i = 1; i < 10; i++) {
-            if (!items.containsValue(i)) {
+            if (!items.containsKey(i) || items.containsValue(item)) {
                 items.put(i, item);
                 player.addMessage(String.format("[INFO]: Added %s to equipment", item.getName()));
-                return;
+                return true;
             }
         }
+        return false;
     }
 
-    public void removeFromEquipment(int number) {
-        if (items.containsValue(number)) {
-            Item item = items.get(number);
-            items.remove(item);
-            player.addMessage(String.format("[INFO]: You've removed %s from equipment", item.getName()));
+    public void removeItemFromEquipment(Item itemToRemove) {
+        if (items.containsValue(itemToRemove)) {
+            items.values().removeIf(i -> i.equals(itemToRemove));
+            player.addMessage(String.format("[INFO]: You've removed %s from equipment", itemToRemove.getName()));
         } else {
-            player.addMessage(String.format("[WARN]: No item with %d in equipment", number));
+            player.addMessage(String.format("[WARN]: No item : %s in equipment", itemToRemove.getName()));
+        }
+    }
+    public void removeItemFromEquipmentByKey(int key) {
+        if (items.containsKey(key)) {
+            items.remove(key);
+            player.addMessage(String.format("[INFO]: You've removed item with id: %d from equipment", key));
+        } else {
+            player.addMessage(String.format("[WARN]: No item with id: %d in equipment", key));
         }
     }
 

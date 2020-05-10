@@ -87,6 +87,4 @@ public abstract class Enemy implements Movable {
     public void getHit(int damage) {
         hp -= damage;
     }
-
-    public abstract int attack();
 }

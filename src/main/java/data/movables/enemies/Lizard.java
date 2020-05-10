@@ -12,10 +12,4 @@ public class Lizard extends Enemy {
         super.setAttack(8);
         super.setDefense(6);
     }
-
-    @Override
-    public int attack() {
-        //todo
-        return getAttack();
-    }
 }

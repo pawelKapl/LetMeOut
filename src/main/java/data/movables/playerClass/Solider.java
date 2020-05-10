@@ -12,7 +12,7 @@ public class Solider extends Player {
     }
 
     @Override
-    public int attack() {
-        return getAttack();
+    public int specialAttack() {
+        return 0;
     }
 }

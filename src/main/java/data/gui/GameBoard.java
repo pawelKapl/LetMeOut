@@ -15,7 +15,19 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+
+import static data.other.Colors.ATT_GREEN;
+import static data.other.Colors.BLINDING_PINK;
+import static data.other.Colors.DARK_FRAMES;
+import static data.other.Colors.DARK_RED;
+import static data.other.Colors.DEF_BLUE;
+import static data.other.Colors.GROUND_GREY;
+import static data.other.Colors.LIGHT_RED;
+import static data.other.Colors.LIZARD_RED;
+import static data.other.Colors.PLAYER_BLUE;
+import static data.other.Colors.WALL_CYAN;
 
 @SuppressWarnings("serial")
 public class GameBoard extends JPanel implements Updatable {
@@ -42,6 +54,7 @@ public class GameBoard extends JPanel implements Updatable {
         printEnemies(g);
         printPlayerStatus(g);
         printEquipmentMenu(g);
+        printInventoryMenu(g);
         printFightLog(g);
         printEquipmentLog(g);
         printFogOfWar(g);
@@ -68,33 +81,40 @@ public class GameBoard extends JPanel implements Updatable {
     }
 
     private void printPlayerStatus(Graphics g) {
+        setLegendFont(g);
+
         String profession = player.getClass().getSimpleName();
+        int height = Preferences.windowHeight*2/3 + 50;
+        int width = 35;
 
-        Font font = new Font("legend", Font.BOLD, 15);
-        g.setFont(font);
-        g.setColor(Color.WHITE);
-        g.drawString("Location:  " + game.getTerrain().getName(), 35, 50);
+        g.drawString("Location:  " + game.getTerrain().getName(), width, 40);
+        g.drawString("Player: " + player.getName() + "    Class: " + profession, width, height);
 
-        g.drawString("Player: " + player.getName() + "    Class: " + profession, 35, Preferences.windowHeight*2/3 + 50);
-        g.setColor(Color.RED);
-        g.drawString("hp: " + player.getHP(), 180 + player.getName().length()*7 + profession.length()*7,
-                Preferences.windowHeight*2/3 + 50);
+        g.setColor(DARK_RED);
+        width += 200 + player.getName().length()*7 + profession.length()*7;
+        g.drawString("hp: " + player.getHP(),  width,
+                height);
+        width += 70;
+        g.setColor(ATT_GREEN);
+        g.drawString("att: " + player.getAttack(), width, height);
+        width += 60;
+        g.setColor(DEF_BLUE);
+        g.drawString("def: " + player.getDefense(), width, height);
     }
 
     private void printFightLog(Graphics g) {
-        LinkedList<String> fightLog = game.getFightUtil().getMessages();
-
         setLogFont(g);
 
+        LinkedList<String> fightLog = game.getFightUtil().getMessages();
         int y = Preferences.windowHeight*2/3 + 90;
         for (String s : fightLog) {
 
             if (s.startsWith("[FIGHT]")) {
                 g.setColor(Color.YELLOW);
             } else if (s.startsWith("[EVENT]")) {
-                g.setColor(Color.BLUE);
+                g.setColor(DEF_BLUE);
             } else if (s.startsWith("[ATTACK]")) {
-                g.setColor(new Color(214, 30,30));
+                g.setColor(DARK_RED);
             }
             g.drawString(s, 35, y);
             y += 20;
@@ -102,18 +122,16 @@ public class GameBoard extends JPanel implements Updatable {
     }
 
     private void printEquipmentLog(Graphics g) {
-        LinkedList<String> fightLog = game.getPlayer().getMessages();
-
         setLogFont(g);
-        g.setColor(Color.WHITE);
 
+        LinkedList<String> fightLog = game.getPlayer().getMessages();
         int y = Preferences.windowHeight*2/3 + 50;
         for (String s : fightLog) {
 
             if (s.startsWith("[INFO]")) {
                 g.setColor(Color.WHITE);
             } else if (s.startsWith("[WARN]")) {
-                g.setColor(new Color(214, 30,30));
+                g.setColor(DARK_RED);
             }
             g.drawString(s, 1070, y);
             y += 20;
@@ -128,15 +146,15 @@ public class GameBoard extends JPanel implements Updatable {
             for (int j = 0; j < location[0].length; j++) {
                 switch (location[i][j]) {
                     case WALL:
-                        g.setColor(new Color(89, 159, 168));
+                        g.setColor(WALL_CYAN);
                         g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
                     case GROUND:
-                        g.setColor(new Color(115, 124, 151));
+                        g.setColor(GROUND_GREY);
                         g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
                     case DOOR:
-                        g.setColor(new Color(255, 0, 215));
+                        g.setColor(BLINDING_PINK);
                         g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
                     case ITEM:
@@ -145,7 +163,7 @@ public class GameBoard extends JPanel implements Updatable {
                         g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
                     case FOREST:
-                        g.setColor(new Color(24, 161, 24));
+                        g.setColor(ATT_GREEN);
                         g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
                 }
@@ -157,45 +175,79 @@ public class GameBoard extends JPanel implements Updatable {
     }
 
     private void printPlayer(Graphics g) {
-        g.setColor(new Color(37, 29, 196));
+        g.setColor(PLAYER_BLUE);
         g.drawString("@", (player.getX()*12)+30, (player.getY()*20)+100);
     }
 
     private void printEnemies(Graphics g) {
-        g.setColor(new Color(214, 30,30));
+        g.setColor(LIZARD_RED);
         for (Enemy e : game.getEnemies()) {
             g.drawString("k", (e.getX()*12)+35,(e.getY()*20)+100);
         }
     }
 
+    private void printInventoryMenu(Graphics g) {
+        setLegendFont(g);
+
+        int startWidth = Preferences.windowWidth*4/5 + 30;
+        int startHeight = 40;
+        g.drawString("Inventory:  ", startWidth, startHeight);
+        setLogFont(g);
+        startHeight += 30;
+
+        g.drawString("[Equipped Weapons]", startWidth + 65, startHeight);
+        startHeight += 30;
+
+        int y = startHeight;
+        List<Weapon> weapons = player.getWeapons();
+        g.setColor(ATT_GREEN);
+        for (Weapon weapon : weapons) {
+            g.drawString(weapon.getName(), startWidth + 20, y);
+            y += 20;
+        }
+
+        startHeight += 70;
+        g.setColor(Color.WHITE);
+        g.drawString("[Equipped Armor]", startWidth + 73, startHeight);
+
+        y = startHeight + 30;
+        List<Armor> armors = player.getArmorList();
+        g.setColor(DEF_BLUE);
+        for (Armor armor : armors) {
+            g.drawString(armor.getName(), startWidth + 20, y);
+            y += 20;
+        }
+    }
+
     private void printEquipmentMenu(Graphics g) {
         Equipment eq = player.getEquipment();
-        Font font = new Font("equipment", Font.PLAIN, 12);
-        g.setFont(font);
-        g.setColor(Color.WHITE);
+        setLogFont(g);
+
         int startWidth = Preferences.windowWidth*4/5 + 30;
+        int startHeight = 340;
 
-        g.drawString("Equipment:", startWidth,255);
+        g.drawString("Equipment:", startWidth,startHeight);
         startWidth += 5;
-        g.setColor(new Color(210, 92, 92));
-        g.drawString("Small Health Potions: " + eq.getSmallPotions() + "  <P>", startWidth, 285);
-        g.setColor(new Color(160, 5, 5));
-        g.drawString("Large Health Potions: " + eq.getLargePotions() + "  <L>", startWidth, 305);
+        g.setColor(LIGHT_RED);
+        g.drawString("Small Health Potions: " + eq.getSmallPotions() + "  <P>", startWidth, startHeight + 30);
+        g.setColor(DARK_RED);
+        g.drawString("Large Health Potions: " + eq.getLargePotions() + "  <L>", startWidth, startHeight + 50);
 
+        startHeight += 90;
         g.setColor(Color.WHITE);
-        g.drawString("Items: ", startWidth, 345);
+        g.drawString("Items: ", startWidth, startHeight);
 
         startWidth += 10;
-        int y = 365;
+        int y = startHeight + 20;
         if (eq.getItems().isEmpty()) {
             g.drawString("<Empty>", startWidth, y);
         } else {
             Map<Integer, Item> items = eq.getItems();
             for (int item : items.keySet()) {
                 if (items.get(item) instanceof Weapon) {
-                    g.setColor(new Color(35, 201, 26));
+                    g.setColor(ATT_GREEN);
                 } else if (items.get(item) instanceof Armor) {
-                    g.setColor(new Color(24, 70, 201));
+                    g.setColor(DEF_BLUE);
                 }
                 g.drawString(String.format("%d. %s", item, items.get(item).getName()), startWidth, y);
                 y += 20;
@@ -208,8 +260,8 @@ public class GameBoard extends JPanel implements Updatable {
         g.drawRect(10,10, Preferences.windowWidth*4/5, Preferences.windowHeight*2/3);
         g.drawRect(Preferences.windowWidth*4/5 + 20, 10, Preferences.windowWidth/5 - 50, Preferences.windowHeight*2/3);
         g.drawRect(10, Preferences.windowHeight*2/3 + 20, Preferences.windowWidth - 40, Preferences.windowHeight/3 - 110);
-        g.setColor(new Color(45, 45, 45));
-        g.drawRect(Preferences.windowWidth*4/5 + 30,265,250,400);
+        g.setColor(DARK_FRAMES);
+        g.drawRect(Preferences.windowWidth*4/5 + 30,350,250,315);
         g.drawRect(25, Preferences.windowHeight*2/3 + 70, 500,150);
         g.drawRect(1060,Preferences.windowHeight*2/3 + 30, 500, 200);
 
@@ -218,10 +270,16 @@ public class GameBoard extends JPanel implements Updatable {
     }
 
     private void setLogFont(Graphics g) {
-        Font font = new Font("legend", Font.PLAIN, 12);
+        Font font = new Font("log", Font.PLAIN, 12);
         g.setFont(font);
+        g.setColor(Color.WHITE);
     }
 
+    private void setLegendFont(Graphics g) {
+        Font font = new Font("legend", Font.BOLD, 15);
+        g.setFont(font);
+        g.setColor(Color.WHITE);
+    }
 
     @Override
     public void update() {

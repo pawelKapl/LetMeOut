@@ -1,0 +1,9 @@
+Worn Leather Armor;Armor. Starting item. Just a dirty, old, leather mantle. (+1def);1
+Leather Gloves;Armor. Black leather gloves with tiny holes, a bit worn. (+1def);1
+Leather Pants;Armor. Brown leather pants, a bit stinky, but still a in good shape. (+1def);1
+Simple knee pads;Armor. Looks cheap! Maybe they can protect against crawling. (+1def);1
+Simple elbow pads;Armor. Looks cheap! Maybe they can protect against crawling. (+1def);1
+Worn Trekking Shoes;Armor. Simple trekking shoes. (+1def);1
+Broken Motorcycle helmet;Armor. Red motorcycle helmet with signs of an accident. (+2def);2
+Old Solider Uniform;Armor. Solider uniform, probably from army surplus, oh wait, it is stained with blood. (+2def);2
+Old Solider Helmet;Armor. Metal Solider Helmet, probably form army surplus, nothing too fancy here! (+3def);3

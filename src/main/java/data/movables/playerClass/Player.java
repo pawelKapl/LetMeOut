@@ -3,8 +3,6 @@ package data.movables.playerClass;
 import data.equipment.Equipment;
 import data.equipment.Item;
 import data.equipment.armors.Armor;
-import data.equipment.armors.LeatherArmor;
-import data.equipment.weapons.BasicKnife;
 import data.equipment.weapons.Weapon;
 import data.movables.Coords;
 import data.movables.Movable;
@@ -23,7 +21,7 @@ public abstract class Player implements Movable {
 
     private boolean locked = false;
 
-    private Equipment equipment;
+    private Equipment equipment = new Equipment(this);
     private LinkedList<Armor> armors = new LinkedList<>();
     private LinkedList<Weapon> weapons = new LinkedList<>();
     private LinkedList<String> messages = new LinkedList<>();
@@ -33,8 +31,8 @@ public abstract class Player implements Movable {
         this.coords =  new Coords(0, 0);
         this.name = name;
         this.hp = 100;
-        armors.push(new LeatherArmor());
-        weapons.push(new BasicKnife());
+        weapons.push(equipment.getWeaponStore().get(0));
+        armors.push(equipment.getArmorStore().get(0));
     }
 
     public String getName() {
@@ -141,7 +139,7 @@ public abstract class Player implements Movable {
     public int getAttack() {
         int sumAttack = attack;
         for (Weapon weapon : weapons) {
-            sumAttack += weapon.getBonusAttack();
+            sumAttack += weapon.getAttack();
         }
         return sumAttack;
     }
@@ -153,7 +151,7 @@ public abstract class Player implements Movable {
     public int getDefense() {
         int sumDefense = defense;
         for (Armor armor : armors) {
-            sumDefense += armor.getBonusDefense();
+            sumDefense += armor.getDefense();
         }
         return sumDefense;
     }
@@ -166,9 +164,9 @@ public abstract class Player implements Movable {
         return equipment;
     }
 
-    public void setEquipment(Equipment equipment) {
-        this.equipment = equipment;
-    }
+//    public void setEquipment(Equipment equipment) {
+//        this.equipment = equipment;
+//    }
 
     public int getHP() {
         return hp;

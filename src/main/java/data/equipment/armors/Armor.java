@@ -8,8 +8,15 @@ public abstract class Armor implements Item {
 
     private String name;
     private String description;
+    private int defence;
 
-    public abstract int getBonusDefense();
+    public int getDefense() {
+        return defence;
+    }
+
+    public void setDefence(int defence) {
+        this.defence = defence;
+    }
 
     @Override
     public String getDescription() {

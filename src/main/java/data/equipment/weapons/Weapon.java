@@ -8,8 +8,16 @@ public abstract class Weapon implements Item {
 
     private String name;
     private String description;
+    private int attack;
 
-    public abstract int getBonusAttack();
+
+    public int getAttack() {
+        return attack;
+    }
+
+    public void setAttack(int attack) {
+        this.attack = attack;
+    }
 
     @Override
     public String getName() {

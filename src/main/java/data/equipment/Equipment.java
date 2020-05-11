@@ -1,8 +1,13 @@
 package data.equipment;
 
+import data.equipment.armors.Armor;
+import data.equipment.bootstrap.ArmorStore;
+import data.equipment.bootstrap.WeaponStore;
+import data.equipment.weapons.Weapon;
 import data.movables.playerClass.Player;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 
 import static java.lang.StrictMath.random;
@@ -12,7 +17,11 @@ public class Equipment {
     private Player player;
     private int smallPotions = 2;
     private int largePotions = 1;
+
     private Map<Integer, Item> items = new TreeMap<>();
+    private WeaponStore weaponStore = new WeaponStore();
+    private ArmorStore armorStore = new ArmorStore();
+    private Random random = new Random();
 
     private String currentDesc = "";
 
@@ -22,13 +31,17 @@ public class Equipment {
 
     public boolean addToEquipment(Item item) {
         for (int i = 1; i < 10; i++) {
-            if (!items.containsKey(i) || items.containsValue(item)) {
+            if (!items.containsKey(i) && !items.containsValue(item)) {
                 items.put(i, item);
                 player.addMessage(String.format("[INFO]: Added %s to equipment", item.getName()));
                 return true;
             }
         }
         return false;
+    }
+
+    private boolean playerDontHaveThisItem(Item item) {
+        return !player.getArmorList().contains(item) && !player.getWeapons().contains(item);
     }
 
     public void removeItemFromEquipment(Item itemToRemove) {
@@ -70,28 +83,60 @@ public class Equipment {
 
     public void addSmallPotion() {
         smallPotions++;
-        player.addMessage("[INFO]: One Small Potion added to equipment.");
+        player.addMessage("[LOOT]: One Small Potion added to equipment.");
     }
 
     public void addLargePotion() {
         largePotions++;
-        player.addMessage("[INFO]: One Large Potion added to equipment.");
+        player.addMessage("[LOOT]: One Large Potion added to equipment.");
     }
 
     public void uniqueTreasureDiscovery() {
         if (random() > 0.6) {
-            player.getEquipment().addLargePotion();
-            player.getEquipment().addSmallPotion();
+            addLargePotion();
+            addSmallPotion();
         } else if (random() > 0.4 && random() < 0.6) {
-            player.getEquipment().addSmallPotion();
+            addSmallPotion();
+        }
+        if (random() > 0.2) {
+            if (random() > 0.5) {
+                drawRandomArmor();
+            } else {
+                drawRandomWeapon();
+            }
         }
     }
 
     public void regularTreasureDiscovery() {
         if (random() > 0.9) {
-            player.getEquipment().addLargePotion();
+            addLargePotion();
         } else if (random() > 0.8 && random() < 0.9) {
-            player.getEquipment().addSmallPotion();
+            addSmallPotion();
+        }
+        if (random() > 0.7) {
+            if (random() > 0.5) {
+                drawRandomArmor();
+            } else {
+                drawRandomWeapon();
+            }
+        }
+    }
+
+    private void drawRandomWeapon() {
+        int key = random.nextInt(weaponStore.size() - 1) + 1;
+        Weapon weapon = weaponStore.get(key);
+        if (playerDontHaveThisItem(weapon)) {
+            addToEquipment(weapon);
+            player.addMessage("[LOOT]: Treasure loot " + weapon.getName() + "!");
+        }
+    }
+
+    private void drawRandomArmor() {
+        int key = random.nextInt(armorStore.size() - 1) + 1;
+        Armor armor = armorStore.get(key);
+        if (playerDontHaveThisItem(armor)) {
+            addToEquipment(armor);
+            player.addMessage("[LOOT]: Treasure loot " + armor.getName() + "!");
         }
     }
 
@@ -106,6 +151,14 @@ public class Equipment {
 
     public String getCurrentDesc() {
         return currentDesc;
+    }
+
+    public Map<Integer, Weapon> getWeaponStore() {
+        return weaponStore;
+    }
+
+    public ArmorStore getArmorStore() {
+        return armorStore;
     }
 
     public int getSmallPotions() {

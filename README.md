@@ -21,8 +21,9 @@ Current progress: <br>
     - equipment with potions and items + equipment log + item description view<br>
     - inventory (equipping, unequipping, counting bonus from items) <br>
     - blocking equipment operations when in combat <br>
+    - basic treasure find mechanism <br>
 
-![alt text](https://i.imgur.com/XInFhBs.png)
+![alt text](https://i.imgur.com/ViMCnhe.png)
 
 ![alt text](https://i.imgur.com/tRwnUmJ.png)
 

@@ -64,13 +64,9 @@ public class GameLogic {
             enemyTurn();
         }
 
-        if (!isFree(x, y)) {
-            return;
-        }
+        if (!isFree(x, y)) { return; }
 
-        if (isTreasure(x, y)) {
-            checkTreasure();
-        }
+        if (treasureDiscovery(x, y)) { return; }
 
         player.setX(x);
         player.setY(y);
@@ -80,11 +76,35 @@ public class GameLogic {
         updatable.update();
     }
 
+    private boolean treasureDiscovery(int x, int y) {
+        if (isTreasure(x, y)) {
+            if (player.isLocked()) {
+                updatable.update();
+                return true;
+            }
+            if (terrain.getMap()[y][x] == TerrainType.UNIQUE_ITEM) {
+                player.getEquipment().uniqueTreasureDiscovery();
+            } else {
+                player.getEquipment().regularTreasureDiscovery();
+            }
+            terrain.getMap()[y][x] = TerrainType.GROUND;
+        }
+        return false;
+    }
+
     private void enemyTurn() {
+        boolean playerInCombat = false;
         for (Enemy enemy : enemies) {
-            fightUtil.tryAttackPlayer(enemy);
+            if (fightUtil.tryAttackPlayer(enemy)) {
+                playerInCombat = true;
+            }
             playerAliveCheck();
-            moveEnemy(enemy);
+            if (moveEnemy(enemy)) {
+                playerInCombat = true;
+            }
+        }
+        if (!playerInCombat) {
+            player.unlock();
         }
     }
 
@@ -96,11 +116,12 @@ public class GameLogic {
         }
     }
 
-    private void moveEnemy(Enemy enemy) {
+    private boolean moveEnemy(Enemy enemy) {
         if (playerWithinRange(enemy)) {
+            player.lock();
             log.info("Enemy has spotted player!");
             if (!chasePlayer(enemy)) {
-                return;
+                return false;
             }
         } else {
             if (random() > 0.8) {
@@ -109,24 +130,18 @@ public class GameLogic {
                     enemy.setCoords(newCoords);
                 }
             }
+            return false;
         }
+        return true;
     }
 
     private boolean chasePlayer(Enemy enemy) {
         FPath path = pathFinder.findPath(enemy, enemy.getX(), enemy.getY(), player.getX(), player.getY());
-
-        if (path != null) {
-            Coords step = path.getStep(1);
-
-            if (!step.equals(player.getCoords())) {
-                enemy.setCoords(step);
-            } else {
-                return false;
-            }
-        } else {
-            return false;
+        if (path != null && !path.getStep(1).equals(player.getCoords())) {
+                enemy.setCoords(path.getStep(1));
+                return true;
         }
-        return true;
+        return false;
     }
 
     private boolean playerWithinRange(Enemy enemy) {
@@ -173,11 +188,6 @@ public class GameLogic {
             enemies.add(enemy);
         }
         log.info("Adding Enemies completed successfully");
-    }
-
-    private void checkTreasure() {
-        log.info("Checking for a treasure");
-        //to do
     }
 
     private void setPlayerStartingPoint() {

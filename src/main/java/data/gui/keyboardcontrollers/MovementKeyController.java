@@ -23,9 +23,7 @@ public class MovementKeyController implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-
         int keyCode = e.getKeyCode();
-        log.info("Pressed key");
 
         switch (keyCode) {
             case KeyEvent.VK_W:

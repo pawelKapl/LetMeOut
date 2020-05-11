@@ -23,9 +23,9 @@ public class EquipmentKeyController implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-        log.info("Pressed key");
 
         if (keyCode > 48 && keyCode < 58 && e.isAltDown()) {
+            if (locked()) { return; }
             player.getEquipment().removeItemFromEquipmentByKey(keyCode - 48);
             updatable.update();
             return;
@@ -43,18 +43,29 @@ public class EquipmentKeyController implements KeyListener {
                 updatable.update();
                 break;
             case KeyEvent.VK_COMMA:
+                if (locked()) { return; }
                 player.removeArmorFromInventory();
                 updatable.update();
                 break;
             case KeyEvent.VK_PERIOD:
+                if (locked()) { return; }
                 player.removeWeaponFromInventory();
                 updatable.update();
                 break;
         }
     }
 
+    private boolean locked() {
+        if (player.isLocked()) {
+            updatable.update();
+            return true;
+        }
+        return false;
+    }
+
     private void ifWillToEquip(int keyCode) {
         if (keyCode > 48 && keyCode < 58) {
+            if (locked()) { return; }
             player.equip(keyCode - 48);
             updatable.update();
         }

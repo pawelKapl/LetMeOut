@@ -20,6 +20,7 @@ Current progress: <br>
     - basic enemy attack + log <br>
     - equipment with potions and items + equipment log <br>
     - inventory (equipping, unequipping, counting bonus from items) <br>
+    - blocking equipment operations when in combat <br>
 
 ![alt text](https://i.imgur.com/2hiV6aE.png)
 

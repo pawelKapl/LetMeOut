@@ -3,6 +3,8 @@ package data.movables.playerClass;
 import data.equipment.Equipment;
 import data.equipment.Item;
 import data.equipment.armors.Armor;
+import data.equipment.armors.LeatherArmor;
+import data.equipment.weapons.BasicKnife;
 import data.equipment.weapons.Weapon;
 import data.movables.Coords;
 import data.movables.Movable;
@@ -19,6 +21,8 @@ public abstract class Player implements Movable {
     private int attack;
     private int defense;
 
+    private boolean locked = false;
+
     private Equipment equipment;
     private LinkedList<Armor> armors = new LinkedList<>();
     private LinkedList<Weapon> weapons = new LinkedList<>();
@@ -29,6 +33,8 @@ public abstract class Player implements Movable {
         this.coords =  new Coords(0, 0);
         this.name = name;
         this.hp = 100;
+        armors.push(new LeatherArmor());
+        weapons.push(new BasicKnife());
     }
 
     public String getName() {
@@ -185,6 +191,22 @@ public abstract class Player implements Movable {
             messages.removeLast();
         }
         messages.push(message);
+    }
+
+    public void lock() {
+        this.locked = true;
+    }
+
+    public void unlock() {
+        this.locked = false;
+    }
+
+    public boolean isLocked() {
+        if (locked) {
+            addMessage("[WARN]: Can't do that while in combat!");
+
+        }
+        return locked;
     }
 
     public LinkedList<String> getMessages() {

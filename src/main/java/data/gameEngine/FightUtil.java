@@ -27,6 +27,7 @@ public class FightUtil {
             }
         }
         calculateBasicAttack(enemyAttacked);
+        player.lock();
     }
 
     private void calculateBasicAttack(Enemy enemy) {
@@ -98,10 +99,14 @@ public class FightUtil {
         messages.push(message);
     }
 
-    public void tryAttackPlayer(Enemy enemy) {
+    public boolean tryAttackPlayer(Enemy enemy) {
+        boolean attacked = false;
         if (nextToPlayer(enemy)) {
+            attacked = true;
             calculateEnemyBasicAttack(enemy);
+            player.lock();
         }
+        return attacked;
     }
 
     private boolean nextToPlayer(Enemy enemy) {

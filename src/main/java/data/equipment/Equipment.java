@@ -1,11 +1,11 @@
 package data.equipment;
 
-import data.equipment.armors.LeatherArmor;
-import data.equipment.weapons.BasicKnife;
 import data.movables.playerClass.Player;
 
 import java.util.Map;
 import java.util.TreeMap;
+
+import static java.lang.StrictMath.random;
 
 public class Equipment {
 
@@ -16,8 +16,6 @@ public class Equipment {
 
     public Equipment(Player player) {
         this.player = player;
-        addToEquipment(new BasicKnife());
-        addToEquipment(new LeatherArmor());
     }
 
     public boolean addToEquipment(Item item) {
@@ -76,6 +74,23 @@ public class Equipment {
     public void addLargePotion() {
         largePotions++;
         player.addMessage("[INFO]: One Large Potion added to equipment.");
+    }
+
+    public void uniqueTreasureDiscovery() {
+        if (random() > 0.6) {
+            player.getEquipment().addLargePotion();
+            player.getEquipment().addSmallPotion();
+        } else if (random() > 0.4 && random() < 0.6) {
+            player.getEquipment().addSmallPotion();
+        }
+    }
+
+    public void regularTreasureDiscovery() {
+        if (random() > 0.9) {
+            player.getEquipment().addLargePotion();
+        } else if (random() > 0.7 && random() < 0.9) {
+            player.getEquipment().addSmallPotion();
+        }
     }
 
     public int getSmallPotions() {

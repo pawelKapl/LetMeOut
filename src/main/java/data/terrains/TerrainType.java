@@ -6,7 +6,9 @@ public enum TerrainType {
     FOREST("f"),
     DOOR("d"),
     ITEM("o"),
-    UNIQUE_ITEM("Ϯ");
+    UNIQUE_ITEM("Ϯ"),
+    LIZARD("k"),
+    PLAYER("@");
 
     private final String stamp;
 

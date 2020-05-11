@@ -4,8 +4,8 @@ public class BasicKnife extends Weapon {
 
 
     public BasicKnife() {
-        setDescription("Basic Knife");
-        setName("Basic Knife (+2dmg)");
+        setDescription("Item Description: Weapon. Starting item. Just a simple rusty knife. (+3dmg)");
+        setName("Basic Rusty Knife");
     }
 
     @Override

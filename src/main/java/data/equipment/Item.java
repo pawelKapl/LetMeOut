@@ -2,7 +2,7 @@ package data.equipment;
 
 public interface Item {
 
-    String getDescription(); //to implement idea of reading details
+    String getDescription();
     void setDescription(String description);
     String getName();
     void setName(String name);

@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +59,7 @@ public class GameBoard extends JPanel implements Updatable {
         printInventoryMenu(g);
         printFightLog(g);
         printEquipmentLog(g);
-        //printFogOfWar(g);
+        printFogOfWar(g);
 
     }
 
@@ -177,13 +178,13 @@ public class GameBoard extends JPanel implements Updatable {
 
     private void printPlayer(Graphics g) {
         g.setColor(PLAYER_BLUE);
-        g.drawString("@", (player.getX()*12)+30, (player.getY()*20)+100);
+        g.drawString(TerrainType.PLAYER.getStamp(), (player.getX()*12)+30, (player.getY()*20)+100);
     }
 
     private void printEnemies(Graphics g) {
         g.setColor(LIZARD_RED);
         for (Enemy e : game.getEnemies()) {
-            g.drawString("k", (e.getX()*12)+35,(e.getY()*20)+100);
+            g.drawString(TerrainType.LIZARD.getStamp(), (e.getX()*12)+35,(e.getY()*20)+100);
         }
     }
 
@@ -225,7 +226,7 @@ public class GameBoard extends JPanel implements Updatable {
         setLogFont(g);
 
         int startWidth = Preferences.windowWidth*4/5 + 30;
-        int startHeight = 340;
+        int startHeight = 310;
 
         g.drawString("Equipment:", startWidth,startHeight);
         startWidth += 5;
@@ -254,6 +255,49 @@ public class GameBoard extends JPanel implements Updatable {
                 y += 20;
             }
         }
+        printItemDescription(g, startWidth);
+    }
+
+    private void printItemDescription(Graphics g, int startWidth) {
+        g.setColor(Color.WHITE);
+        String[] description = formatDescription();
+        System.out.println(Arrays.toString(description));
+        int y = 615;
+        if (description != null) {
+            for (String s : description) {
+                if (s != null) {
+                    g.drawString(s, startWidth - 5, y);
+                    y += 20;
+                }
+            }
+            return;
+        }
+        g.drawString("-", startWidth - 5, y);
+
+    }
+
+    private String[] formatDescription() {
+        String currentDesc = player.getEquipment().getCurrentDesc();
+        if (!currentDesc.isBlank()) {
+            String[] strings = currentDesc.split(" ");
+            String[] newDescription = new String[3];
+            StringBuilder sb = new StringBuilder();
+
+            int i = 0;
+            int length = 0;
+            for (String s : strings) {
+                if (length + s.length() > 40) {
+                    length = 0;
+                    newDescription[i++] = sb.toString();
+                    sb = new StringBuilder();
+                }
+                sb.append(s + " ");
+                length += s.length() + 1;
+            }
+            newDescription[i] = sb.toString();
+            return newDescription;
+        }
+        return null;
     }
 
     private void printFrames(Graphics g) {
@@ -262,7 +306,8 @@ public class GameBoard extends JPanel implements Updatable {
         g.drawRect(Preferences.windowWidth*4/5 + 20, 10, Preferences.windowWidth/5 - 50, Preferences.windowHeight*2/3);
         g.drawRect(10, Preferences.windowHeight*2/3 + 20, Preferences.windowWidth - 40, Preferences.windowHeight/3 - 110);
         g.setColor(DARK_FRAMES);
-        g.drawRect(Preferences.windowWidth*4/5 + 30,350,250,315);
+        g.drawRect(Preferences.windowWidth*4/5 + 30,320,250,270);
+        g.drawRect(Preferences.windowWidth*4/5 + 30, 595, 250, 70);
         g.drawRect(25, Preferences.windowHeight*2/3 + 70, 500,150);
         g.drawRect(1060,Preferences.windowHeight*2/3 + 30, 500, 200);
 

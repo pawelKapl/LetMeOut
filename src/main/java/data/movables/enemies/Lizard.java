@@ -9,7 +9,7 @@ public class Lizard extends Enemy {
         super(coords);
         super.setVisionRadius(3);
         super.setHP(40);
-        super.setAttack(8);
+        super.setAttack(10);
         super.setDefense(6);
     }
 

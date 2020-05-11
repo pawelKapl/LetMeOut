@@ -18,13 +18,12 @@ Current progress: <br>
     - fog of war <br>
     - basic player attack and fight log <br>
     - basic enemy attack + log <br>
-    - equipment with potions and items + equipment log <br>
+    - equipment with potions and items + equipment log + item description view<br>
     - inventory (equipping, unequipping, counting bonus from items) <br>
     - blocking equipment operations when in combat <br>
 
-![alt text](https://i.imgur.com/2hiV6aE.png)
+![alt text](https://i.imgur.com/XInFhBs.png)
 
 ![alt text](https://i.imgur.com/tRwnUmJ.png)
-
 
 Want to participate? Just let me know!

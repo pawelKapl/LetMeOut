@@ -14,6 +14,8 @@ public class Equipment {
     private int largePotions = 1;
     private Map<Integer, Item> items = new TreeMap<>();
 
+    private String currentDesc = "";
+
     public Equipment(Player player) {
         this.player = player;
     }
@@ -88,9 +90,22 @@ public class Equipment {
     public void regularTreasureDiscovery() {
         if (random() > 0.9) {
             player.getEquipment().addLargePotion();
-        } else if (random() > 0.7 && random() < 0.9) {
+        } else if (random() > 0.8 && random() < 0.9) {
             player.getEquipment().addSmallPotion();
         }
+    }
+
+    public void setCurrentDesc(int key) {
+        if (items.containsKey(key)) {
+            currentDesc = items.get(key).getDescription();
+        } else {
+            player.addMessage(String.format("[WARN]: No item with id: %d in equipment", key));
+        }
+
+    }
+
+    public String getCurrentDesc() {
+        return currentDesc;
     }
 
     public int getSmallPotions() {

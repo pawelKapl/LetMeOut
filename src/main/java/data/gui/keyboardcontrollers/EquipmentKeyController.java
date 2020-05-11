@@ -31,6 +31,12 @@ public class EquipmentKeyController implements KeyListener {
             return;
         }
 
+        if (keyCode > 48 && keyCode < 58 && e.isControlDown()) {
+            player.getEquipment().setCurrentDesc(keyCode - 48);
+            updatable.update();
+            return;
+        }
+
         ifWillToEquip(keyCode);
 
         switch (keyCode) {

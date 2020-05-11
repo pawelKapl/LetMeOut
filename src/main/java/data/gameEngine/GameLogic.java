@@ -137,7 +137,7 @@ public class GameLogic {
 
     private boolean chasePlayer(Enemy enemy) {
         FPath path = pathFinder.findPath(enemy, enemy.getX(), enemy.getY(), player.getX(), player.getY());
-        if (path != null && !path.getStep(1).equals(player.getCoords())) {
+        if (path != null && isFree(path.getStep(1).getX(), path.getStep(1).getY())) {
                 enemy.setCoords(path.getStep(1));
                 return true;
         }

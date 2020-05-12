@@ -29,6 +29,7 @@ public class ArmorStore implements Map<Integer, Armor> {
             items = Files.readAllLines(path);
         } catch (IOException e) {
             e.printStackTrace();
+            log.warning("Troubles with reading file!" + path.getFileName());
         }
         int i = 0;
         for (String item : items) {

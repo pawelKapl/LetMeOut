@@ -18,10 +18,10 @@ public final class Cave implements Terrain {
 
 
     public Cave(String name, int height, int width) {
-        if (height < 15 || height > 27) {
+        if (!withinHeightBoundaries(height)) {
             height = 25;
         }
-        if (width < 20 || width > 102) {
+        if (withinWidthBoundaries(width)) {
             width = 100;
         }
         this.name = name;
@@ -218,6 +218,14 @@ public final class Cave implements Terrain {
 
     private boolean isOffMap(boolean[][] map, int x, int y) {
         return x < 0 || y < 0 || x >= map[0].length || y >= map.length;
+    }
+
+    private boolean withinWidthBoundaries(int width) {
+        return width >= 20 && width <= 102;
+    }
+
+    private boolean withinHeightBoundaries(int height) {
+        return height >= 15 && height <= 27;
     }
 
     public Map<Integer, Integer> getEntrances() {

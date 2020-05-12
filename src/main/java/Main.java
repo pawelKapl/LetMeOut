@@ -1,7 +1,9 @@
 import data.gameEngine.GameLogic;
 import data.gui.UserInterface;
 
-import javax.swing.SwingUtilities;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class Main {
@@ -14,14 +16,15 @@ public class Main {
         GameLogic game = new GameLogic();
 
         UserInterface ui = new UserInterface(game);
-        SwingUtilities.invokeLater(ui);
 
-        while (ui.getUpdatable() == null) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException ex) {
-                log.info("The drawing board hasn't been created yet. Waiting!");
-            }
+        ExecutorService es = Executors.newSingleThreadScheduledExecutor();
+        es.execute(ui);
+
+        try {
+            es.shutdown();
+            es.awaitTermination(1000, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
         game.setUpdatable(ui.getUpdatable());
     }

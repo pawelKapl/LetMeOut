@@ -29,6 +29,7 @@ public class WeaponStore implements Map<Integer, Weapon> {
             items = Files.readAllLines(path);
         } catch (IOException e) {
             e.printStackTrace();
+            log.warning("Troubles with reading file!" + path.getFileName());
         }
         int i = 0;
         for (String item : items) {

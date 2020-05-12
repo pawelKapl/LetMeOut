@@ -9,6 +9,7 @@ import data.movables.Movable;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class Player implements Movable {
 
@@ -137,11 +138,9 @@ public abstract class Player implements Movable {
     }
 
     public int getAttack() {
-        int sumAttack = attack;
-        for (Weapon weapon : weapons) {
-            sumAttack += weapon.getAttack();
-        }
-        return sumAttack;
+        return attack + weapons
+                .stream()
+                .collect(Collectors.summingInt(Weapon::getAttack));
     }
 
     public void setAttack(int attack) {
@@ -149,11 +148,9 @@ public abstract class Player implements Movable {
     }
 
     public int getDefense() {
-        int sumDefense = defense;
-        for (Armor armor : armors) {
-            sumDefense += armor.getDefense();
-        }
-        return sumDefense;
+        return defense + armors
+                .stream()
+                .collect(Collectors.summingInt(Armor::getDefense));
     }
 
     public void setDefense(int defense) {
@@ -163,10 +160,6 @@ public abstract class Player implements Movable {
     public Equipment getEquipment() {
         return equipment;
     }
-
-//    public void setEquipment(Equipment equipment) {
-//        this.equipment = equipment;
-//    }
 
     public int getHP() {
         return hp;

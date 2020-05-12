@@ -21,6 +21,7 @@ public class FightUtil {
 
     public void attackEnemy(int x, int y) {
         Enemy enemyAttacked = null;
+
         for (Enemy enemy : enemies) {
             if (enemy.getX() == x && enemy.getY() == y) {
                 enemyAttacked = enemy;

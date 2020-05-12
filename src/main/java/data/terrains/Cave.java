@@ -21,7 +21,7 @@ public final class Cave implements Terrain {
         if (!withinHeightBoundaries(height)) {
             height = 25;
         }
-        if (withinWidthBoundaries(width)) {
+        if (!withinWidthBoundaries(width)) {
             width = 100;
         }
         this.name = name;
@@ -128,19 +128,19 @@ public final class Cave implements Terrain {
         return count;
     }
 
-    private int flood(int x, int y, boolean[][] toFlood, int count) {
+    private int flood(int x, int y, boolean[][] mapToFlood, int count) {
 
-        if (isOffMap(toFlood, x, y) || toFlood[y][x]) {
+        if (isOffMap(mapToFlood, x, y) || mapToFlood[y][x]) {
             return count;
         } else {
-            toFlood[y][x] = true;
+            mapToFlood[y][x] = true;
             count++;
         }
 
-        count = flood(x +1, y, toFlood, count);
-        count = flood(x -1, y, toFlood, count);
-        count = flood(x, y +1, toFlood, count);
-        count = flood(x, y -1, toFlood, count);
+        count = flood(x +1, y, mapToFlood, count);
+        count = flood(x -1, y, mapToFlood, count);
+        count = flood(x, y +1, mapToFlood, count);
+        count = flood(x, y -1, mapToFlood, count);
 
         return count;
     }

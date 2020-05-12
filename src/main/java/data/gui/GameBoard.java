@@ -33,14 +33,10 @@ import static data.other.Colors.WALL_CYAN;
 public class GameBoard extends JPanel implements Updatable {
 
     private GameLogic game;
-    private Player player;
-    private TerrainType[][] location;
 
 
     public GameBoard(GameLogic game) {
         this.game = game;
-        this.player = this.game.getPlayer();
-        this.location = this.game.getTerrain().getMap();
     }
 
     @Override
@@ -83,6 +79,7 @@ public class GameBoard extends JPanel implements Updatable {
 
     private void printPlayerStatus(Graphics g) {
         setLegendFont(g);
+        Player player = game.getPlayer();
 
         String profession = player.getClass().getSimpleName();
         int height = Preferences.windowHeight*2/3 + 50;
@@ -109,7 +106,6 @@ public class GameBoard extends JPanel implements Updatable {
         LinkedList<String> fightLog = game.getFightUtil().getMessages();
         int y = Preferences.windowHeight*2/3 + 90;
         for (String s : fightLog) {
-
             if (s.startsWith("[FIGHT]")) {
                 g.setColor(Color.YELLOW);
             } else if (s.startsWith("[EVENT]")) {
@@ -128,7 +124,6 @@ public class GameBoard extends JPanel implements Updatable {
         LinkedList<String> fightLog = game.getPlayer().getMessages();
         int y = Preferences.windowHeight*2/3 + 50;
         for (String s : fightLog) {
-
             if (s.startsWith("[INFO]")) {
                 g.setColor(Color.WHITE);
             } else if (s.startsWith("[WARN]")) {
@@ -144,6 +139,8 @@ public class GameBoard extends JPanel implements Updatable {
     private void printLocation(Graphics g) {
         int dx = 35;
         int dy = 100;
+
+        TerrainType[][] location = game.getTerrain().getMap();
 
         for (int i = 0; i < location.length; i++) {
             for (int j = 0; j < location[0].length; j++) {
@@ -179,7 +176,7 @@ public class GameBoard extends JPanel implements Updatable {
 
     private void printPlayer(Graphics g) {
         g.setColor(PLAYER_BLUE);
-        g.drawString(TerrainType.PLAYER.getStamp(), (player.getX()*12)+30, (player.getY()*20)+100);
+        g.drawString(TerrainType.PLAYER.getStamp(), (game.getPlayer().getX()*12)+30, (game.getPlayer().getY()*20)+100);
     }
 
     private void printEnemies(Graphics g) {
@@ -191,6 +188,8 @@ public class GameBoard extends JPanel implements Updatable {
 
     private void printInventoryMenu(Graphics g) {
         setLegendFont(g);
+
+        Player player = game.getPlayer();
 
         int startWidth = Preferences.windowWidth*4/5 + 30;
         int startHeight = 40;
@@ -204,6 +203,7 @@ public class GameBoard extends JPanel implements Updatable {
         int y = startHeight;
         List<Weapon> weapons = player.getWeapons();
         g.setColor(ATT_GREEN);
+
         for (Weapon weapon : weapons) {
             g.drawString(weapon.getName(), startWidth + 20, y);
             y += 20;
@@ -223,7 +223,7 @@ public class GameBoard extends JPanel implements Updatable {
     }
 
     private void printEquipmentMenu(Graphics g) {
-        Equipment eq = player.getEquipment();
+        Equipment eq = game.getPlayer().getEquipment();
         setLogFont(g);
 
         int startWidth = Preferences.windowWidth*4/5 + 30;
@@ -277,7 +277,7 @@ public class GameBoard extends JPanel implements Updatable {
     }
 
     private String[] formatDescription() {
-        String currentDesc = player.getEquipment().getCurrentDesc();
+        String currentDesc = game.getPlayer().getEquipment().getCurrentDesc();
         if (!currentDesc.isBlank()) {
             String[] strings = currentDesc.split(" ");
             String[] newDescription = new String[5];

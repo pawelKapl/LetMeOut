@@ -45,16 +45,14 @@ public class Equipment {
     }
 
     public void removeItemFromEquipment(Item itemToRemove) {
-        if (items.containsValue(itemToRemove)) {
-            items.values().removeIf(i -> i.equals(itemToRemove));
+        if (items.values().removeIf(i -> i.equals(itemToRemove))) {
             player.addMessage(String.format("[INFO]: You've removed %s from equipment", itemToRemove.getName()));
         } else {
             player.addMessage(String.format("[WARN]: No item : %s in equipment", itemToRemove.getName()));
         }
     }
     public void removeItemFromEquipmentByKey(int key) {
-        if (items.containsKey(key)) {
-            items.remove(key);
+        if (items.keySet().removeIf(k -> k == key)) {
             player.addMessage(String.format("[INFO]: You've removed item with id: %d from equipment", key));
         } else {
             player.addMessage(String.format("[WARN]: No item with id: %d in equipment", key));
@@ -99,7 +97,7 @@ public class Equipment {
             addSmallPotion();
         }
         if (random() > 0.2) {
-            if (random() > 0.5) {
+            if (random.nextBoolean()) {
                 drawRandomArmor();
             } else {
                 drawRandomWeapon();
@@ -114,7 +112,7 @@ public class Equipment {
             addSmallPotion();
         }
         if (random() > 0.7) {
-            if (random() > 0.5) {
+            if (random.nextBoolean()) {
                 drawRandomArmor();
             } else {
                 drawRandomWeapon();

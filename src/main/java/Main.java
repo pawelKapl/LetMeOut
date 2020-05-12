@@ -14,7 +14,6 @@ public class Main {
         log.info("Starting game!");
 
         GameLogic game = new GameLogic();
-
         UserInterface ui = new UserInterface(game);
 
         ExecutorService es = Executors.newSingleThreadScheduledExecutor();

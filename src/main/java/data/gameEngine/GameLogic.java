@@ -98,7 +98,9 @@ public class GameLogic {
             if (fightUtil.tryAttackPlayer(enemy)) {
                 playerInCombat = true;
             }
-            playerAliveCheck();
+            if(!playerAliveCheck()) {
+                return;
+            }
             if (moveEnemy(enemy)) {
                 playerInCombat = true;
             }
@@ -108,17 +110,22 @@ public class GameLogic {
         }
     }
 
-    private void playerAliveCheck() {
+    private boolean playerAliveCheck() {
         if (player.getHP() <= 0) {
-            //to do
-            prepareLocation();
-            updatable.update();
+            restart();
+            return false;
         }
+        return true;
+    }
+
+    private void restart() {
+        enemies.clear();
+        prepareLocation();
+        updatable.update();
     }
 
     private boolean moveEnemy(Enemy enemy) {
         if (playerWithinRange(enemy)) {
-            player.lock();
             log.info("Enemy has spotted player!");
             if (!chasePlayer(enemy)) {
                 return false;
@@ -139,7 +146,8 @@ public class GameLogic {
         FPath path = pathFinder.findPath(enemy, enemy.getX(), enemy.getY(), player.getX(), player.getY());
         if (path != null && isFree(path.getStep(1).getX(), path.getStep(1).getY())) {
                 enemy.setCoords(path.getStep(1));
-                return true;
+            player.lock();
+            return true;
         }
         return false;
     }

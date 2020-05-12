@@ -172,15 +172,14 @@ public final class Cave implements Terrain {
 
     private Coords genExit(TerrainType[][] map, boolean[][] mapPattern) {
         AStarPathFinder asp = new AStarPathFinder(new TileMapImpl(map, new ArrayList<>()),
-                120, false);
+                (int) 1.2*map[0].length, false);
         Random random = new Random();
         while (true) {
-            System.out.println("Iterating");
             int x = random.nextInt(map[0].length - 6) + 5;
             int y = random.nextInt(map.length - 6) + 5;
             if (map[y][x] == TerrainType.GROUND & countAliveNeighbours(mapPattern, x, y) > 1) {
                 FPath pathToExit = asp.findPath(null, entrance.getX(), entrance.getY(), x, y);
-                if (pathToExit != null && pathToExit.size() > 50) {
+                if (pathToExit != null && pathToExit.size() > map[0].length/2) {
                     return new Coords(x, y);
                 }
             }

@@ -23,8 +23,13 @@ Current progress: <br>
     - blocking equipment operations when in combat <br>
     - basic treasure find mechanism + item collection bootstrap form txt files <br>
 
+
+
 ![alt text](https://i.imgur.com/ViMCnhe.png)
 
-![alt text](https://i.imgur.com/tRwnUmJ.png)
+Quick Gameplay:
+
+[![gameplay](https://i.imgur.com/kkwqnZW.png?1)](https://www.youtube.com/watch?v=xWyfJgaSxh0 "Click to watch gameplay!")
+https://www.youtube.com/watch?v=xWyfJgaSxh0
 
 Want to participate? Just let me know!

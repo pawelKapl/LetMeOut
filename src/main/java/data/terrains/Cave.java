@@ -1,8 +1,12 @@
 package data.terrains;
 
+import data.gameEngine.pathfinding.AStarPathFinder;
+import data.gameEngine.pathfinding.FPath;
+import data.gameEngine.pathfinding.TileMapImpl;
+import data.movables.Coords;
+
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -11,7 +15,7 @@ import static java.lang.StrictMath.random;
 public final class Cave implements Terrain {
 
     private final String name;
-    private final Map<Integer, Integer> entrances;
+    private final Coords entrance;
     private final TerrainType[][] mapFinal;
 
     private final Logger log = Logger.getLogger(this.getClass().toString());
@@ -25,7 +29,7 @@ public final class Cave implements Terrain {
             width = 100;
         }
         this.name = name;
-        this.entrances = genEntrances(height,width);
+        this.entrance = genEntrance(height,width);
         this.mapFinal = createMap(generatePattern(height, width));
     }
 
@@ -42,11 +46,13 @@ public final class Cave implements Terrain {
                 }
             }
         }
-        int entrance = entrances.keySet().iterator().next();
-        enumMap[entrance][entrances.get(entrance)] = TerrainType.DOOR;
+
+        enumMap[entrance.getY()][entrance.getX()] = TerrainType.DOOR;
 
         growForests(enumMap);
         addTreasures(enumMap, mapPattern);
+        Coords exit = genExit(enumMap , mapPattern);
+        enumMap[exit.getY()][exit.getX()] = TerrainType.DOOR;
 
         return enumMap;
     }
@@ -66,9 +72,7 @@ public final class Cave implements Terrain {
 
             boolean[][] toFlood = copyArray(newMap);
 
-            int entrance = entrances.keySet().iterator().next();
-
-            floodCount = flood(entrances.get(entrance), entrance, toFlood, floodCount);
+            floodCount = flood(entrance.getX(), entrance.getY(), toFlood, floodCount);
 
             if (floodCount > (width*height*55/100)) {
                 break;
@@ -145,27 +149,42 @@ public final class Cave implements Terrain {
         return count;
     }
 
-    private Map<Integer, Integer> genEntrances(int height, int width) {
-        log.info("Generating entrances/exits");
+    private Coords genEntrance(int height, int width) {
+        log.info("Generating entrance");
         Random gen = new Random();
-        Map<Integer, Integer> entrance = new HashMap<>();
+        Coords entrance;
 
-        while (entrance.size() < 1) {
+        if (gen.nextBoolean()) {
             if (gen.nextBoolean()) {
-                if (gen.nextBoolean()) {
-                    entrance.putIfAbsent(0, gen.nextInt(width - 10) + 5);
-                } else {
-                    entrance.putIfAbsent(height - 1, gen.nextInt(width - 10) + 5);
-                }
+                entrance = new Coords(gen.nextInt(width - 10) + 5, 0);
             } else {
-                if (gen.nextBoolean()) {
-                    entrance.putIfAbsent(gen.nextInt(height-10) + 5, width - 1);
-                } else {
-                    entrance.putIfAbsent(gen.nextInt(height-10) + 5, 0);
-                }
+                entrance = new Coords(gen.nextInt(width - 10) + 5, height - 1);
+            }
+        } else {
+            if (gen.nextBoolean()) {
+                entrance = new Coords(width - 1, gen.nextInt(height-10) + 5);
+            } else {
+                entrance = new Coords(0, gen.nextInt(height-10) + 5);
             }
         }
         return entrance;
+    }
+
+    private Coords genExit(TerrainType[][] map, boolean[][] mapPattern) {
+        AStarPathFinder asp = new AStarPathFinder(new TileMapImpl(map, new ArrayList<>()),
+                120, false);
+        Random random = new Random();
+        while (true) {
+            System.out.println("Iterating");
+            int x = random.nextInt(map[0].length - 6) + 5;
+            int y = random.nextInt(map.length - 6) + 5;
+            if (map[y][x] == TerrainType.GROUND & countAliveNeighbours(mapPattern, x, y) > 1) {
+                FPath pathToExit = asp.findPath(null, entrance.getX(), entrance.getY(), x, y);
+                if (pathToExit != null && pathToExit.size() > 50) {
+                    return new Coords(x, y);
+                }
+            }
+        }
     }
 
     private boolean[][] copyArray(boolean[][] newMap) {
@@ -191,8 +210,7 @@ public final class Cave implements Terrain {
             for (int l = -1; l < 2; l++) {
                 int nby = i + k;
                 int nbx = j + l;
-                if (nbx >= 0 && nby >= 0 && nby < map.length &&
-                        nbx < map[0].length && map[nby][nbx] == TerrainType.GROUND) {
+                if (isFreeToPopulate(map, nby, nbx)) {
                     if (random() < 0.75) {
                         map[nby][nbx] = TerrainType.FOREST;
                     }
@@ -220,6 +238,11 @@ public final class Cave implements Terrain {
         return x < 0 || y < 0 || x >= map[0].length || y >= map.length;
     }
 
+    private boolean isFreeToPopulate(TerrainType[][] map, int nby, int nbx) {
+        return nbx >= 0 && nby >= 0 && nby < map.length &&
+                nbx < map[0].length && map[nby][nbx] == TerrainType.GROUND;
+    }
+
     private boolean withinWidthBoundaries(int width) {
         return width >= 20 && width <= 102;
     }
@@ -228,8 +251,8 @@ public final class Cave implements Terrain {
         return height >= 15 && height <= 27;
     }
 
-    public Map<Integer, Integer> getEntrances() {
-        return new HashMap<>(entrances);
+    public Coords getEntrance() {
+        return entrance;
     }
 
     public TerrainType[][] getMap() {

@@ -36,6 +36,10 @@ public class FPath {
         return steps.contains(new Coords(x, y));
     }
 
+    public int size() {
+        return steps.size();
+    }
+
     @Override
     public String toString() {
         return steps.toString();

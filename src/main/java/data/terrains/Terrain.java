@@ -1,10 +1,10 @@
 package data.terrains;
 
-import java.util.Map;
+import data.movables.Coords;
 
 public interface Terrain {
 
     TerrainType[][] getMap();
-    Map<Integer, Integer> getEntrances();
+    Coords getEntrance();
     String getName();
 }

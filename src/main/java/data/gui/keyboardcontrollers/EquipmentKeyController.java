@@ -1,5 +1,6 @@
 package data.gui.keyboardcontrollers;
 
+import data.gameEngine.GameLogic;
 import data.gui.Updatable;
 import data.movables.playerClass.Player;
 
@@ -9,14 +10,14 @@ import java.util.logging.Logger;
 
 public class EquipmentKeyController implements KeyListener {
 
-    private Player player;
+    private GameLogic game;
     private final Logger log = Logger.getLogger(this.getClass().toString());
     private Updatable updatable;
 
 
-    public EquipmentKeyController(Player player, Updatable updatable) {
+    public EquipmentKeyController(GameLogic game, Updatable updatable) {
         log.info("Creating Equipment Key Controller");
-        this.player = player;
+        this.game = game;
         this.updatable = updatable;
     }
 
@@ -24,8 +25,10 @@ public class EquipmentKeyController implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
 
+        Player player = game.getPlayer();
+
         if (keyCode > 48 && keyCode < 58 && e.isAltDown()) {
-            if (locked()) { return; }
+            if (locked(player)) { return; }
             player.getEquipment().removeItemFromEquipmentByKey(keyCode - 48);
             updatable.update();
             return;
@@ -37,7 +40,7 @@ public class EquipmentKeyController implements KeyListener {
             return;
         }
 
-        ifWillToEquip(keyCode);
+        ifWillToEquip(keyCode, player);
 
         switch (keyCode) {
             case KeyEvent.VK_P:
@@ -49,19 +52,19 @@ public class EquipmentKeyController implements KeyListener {
                 updatable.update();
                 break;
             case KeyEvent.VK_COMMA:
-                if (locked()) { return; }
+                if (locked(player)) { return; }
                 player.removeArmorFromInventory();
                 updatable.update();
                 break;
             case KeyEvent.VK_PERIOD:
-                if (locked()) { return; }
+                if (locked(player)) { return; }
                 player.removeWeaponFromInventory();
                 updatable.update();
                 break;
         }
     }
 
-    private boolean locked() {
+    private boolean locked(Player player) {
         if (player.isLocked()) {
             updatable.update();
             return true;
@@ -69,9 +72,9 @@ public class EquipmentKeyController implements KeyListener {
         return false;
     }
 
-    private void ifWillToEquip(int keyCode) {
+    private void ifWillToEquip(int keyCode, Player player) {
         if (keyCode > 48 && keyCode < 58) {
-            if (locked()) { return; }
+            if (locked(player)) { return; }
             player.equip(keyCode - 48);
             updatable.update();
         }

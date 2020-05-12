@@ -99,6 +99,7 @@ public class GameLogic {
                 playerInCombat = true;
             }
             if(!playerAliveCheck()) {
+                restart();
                 return;
             }
             if (moveEnemy(enemy)) {
@@ -111,11 +112,7 @@ public class GameLogic {
     }
 
     private boolean playerAliveCheck() {
-        if (player.getHP() <= 0) {
-            restart();
-            return false;
-        }
-        return true;
+        return player.getHP() > 0;
     }
 
     private void restart() {
@@ -201,8 +198,8 @@ public class GameLogic {
     private void setPlayerStartingPoint() {
         log.info("Getting Starting Point for a new Player...");
 
-        int y = terrain.getEntrances().keySet().iterator().next();
-        int x = terrain.getEntrances().get(y);
+        int y = terrain.getEntrance().getY();
+        int x = terrain.getEntrance().getX();
 
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
@@ -238,8 +235,8 @@ public class GameLogic {
     }
 
     private boolean isNearEntrance(int x, int y) {
-        int entranceY = terrain.getEntrances().keySet().iterator().next();
-        int entranceX = terrain.getEntrances().get(entranceY);
+        int entranceY = terrain.getEntrance().getY();
+        int entranceX = terrain.getEntrance().getX();
 
         for (int i = -3; i < 4; i++) {
             for (int j = -3; j < 4; j++) {

@@ -175,6 +175,10 @@ public abstract class Player implements Movable {
 
     public void getHit(int damage) {
         hp -= damage;
+        if (hp < 0) {
+            addMessage("[INFO]: GAME OVER! Press any arrow to continue.");
+            hp = 0;
+        }
     }
 
     public void addMessage(String message) {

@@ -3,5 +3,6 @@ Tulip;Weapon. Broken glass bottle looking like a tulip. (+2dmg);2
 Spiked board;Weapon. Cumbersome board studded with spikes, looks really old (+2dmg);2
 Baseball Bat;Weapon. Worn baseball bat with traces of blood on it. (+3dmg);3
 Spiked mace;Weapon. Primitive, but this definitely meant to be used as a weapon! (+3dmg);3
+Knuckle-Duster; Weapon. Small, but versatile and fast, made of pure steel. (+3dmg);3
 Kitchen Knife;Weapon. Pretty large butcher knife, unfortunately blunt too (+4dmg);4
 Small WoodAxe;Weapon. Small WoodAxe, rather for small trees! (+4dmg);4

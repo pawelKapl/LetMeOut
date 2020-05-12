@@ -18,10 +18,10 @@ Current progress: <br>
     - fog of war <br>
     - basic player attack and fight log <br>
     - basic enemy attack + log <br>
-    - equipment with potions and items + equipment log + item description view<br>
+    - equipment with potions and items + equipment log + item description view <br>
     - inventory (equipping, unequipping, counting bonus from items) <br>
     - blocking equipment operations when in combat <br>
-    - basic treasure find mechanism <br>
+    - basic treasure find mechanism + item collection bootstrap form txt files <br>
 
 ![alt text](https://i.imgur.com/ViMCnhe.png)
 

@@ -34,11 +34,10 @@ public class Main {
 
 
         Path path = Paths.get("src/resources/savedLocations/");
-        Runnable r = () -> {
-            cleanDirectory(path);
-        };
 
-        Runtime.getRuntime().addShutdownHook(new Thread(r));
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            cleanDirectory(path);
+        }));
     }
 
     private static void cleanDirectory(Path path) {

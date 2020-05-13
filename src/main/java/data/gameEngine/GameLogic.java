@@ -37,7 +37,7 @@ public class GameLogic {
     private LocationsManager lm = new LocationsManager();
     private Random random = new Random();
 
-    private final Logger log = Logger.getLogger(this.getClass().toString());
+    private static final Logger log = Logger.getLogger(GameLogic.class.toString());
 
     public GameLogic() {
         log.info("Starting game logic engine!");

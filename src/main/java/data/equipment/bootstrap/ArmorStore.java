@@ -18,7 +18,7 @@ public class ArmorStore implements Map<Integer, Armor> {
 
     private Map<Integer, Armor> armorStore = new HashMap<>();
 
-    private final Logger log = Logger.getLogger(ArmorStore.class.toString());
+    private static final Logger log = Logger.getLogger(ArmorStore.class.toString());
 
     public ArmorStore() {
         log.info("Bootstrapping armor store");

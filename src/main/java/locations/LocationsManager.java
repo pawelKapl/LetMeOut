@@ -16,7 +16,7 @@ public class LocationsManager implements Map<String, Location> {
 
     private Map<String, Location> locations = new HashMap<>();
 
-    private final Logger log = Logger.getLogger(this.getClass().toString());
+    private static final Logger log = Logger.getLogger(LocationsManager.class.toString());
 
 
     public LocationsManager() {

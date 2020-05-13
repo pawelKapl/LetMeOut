@@ -18,7 +18,7 @@ public class WeaponStore implements Map<Integer, Weapon> {
 
     private Map<Integer, Weapon> weaponStore = new HashMap<>();
 
-    private final Logger log = Logger.getLogger(WeaponStore.class.toString());
+    private static final Logger log = Logger.getLogger(WeaponStore.class.toString());
 
     public WeaponStore() {
         log.info("Bootstrapping weapon store");

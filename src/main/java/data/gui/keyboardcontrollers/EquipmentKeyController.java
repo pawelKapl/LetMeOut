@@ -11,8 +11,9 @@ import java.util.logging.Logger;
 public class EquipmentKeyController implements KeyListener {
 
     private GameLogic game;
-    private final Logger log = Logger.getLogger(this.getClass().toString());
     private Updatable updatable;
+
+    private static final Logger log = Logger.getLogger(EquipmentKeyController.class.toString());
 
 
     public EquipmentKeyController(GameLogic game, Updatable updatable) {

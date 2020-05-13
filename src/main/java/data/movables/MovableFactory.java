@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 public class MovableFactory {
 
-    private Logger log = Logger.getLogger(this.toString());
+    private static final Logger log = Logger.getLogger(MovableFactory.class.toString());
 
     public Enemy buildEnemy(int race) {
 

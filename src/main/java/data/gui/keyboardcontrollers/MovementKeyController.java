@@ -9,7 +9,8 @@ import java.util.logging.Logger;
 public class MovementKeyController implements KeyListener {
 
     private GameLogic game;
-    private final Logger log = Logger.getLogger(this.getClass().toString());
+
+    private static final Logger log = Logger.getLogger(MovementKeyController.class.toString());
 
 
     public MovementKeyController(GameLogic game) {

@@ -28,7 +28,7 @@ public class LocationSaveUtil {
 
         String filename = prepareFileName(terrain.getName());
 
-        Path path = Paths.get(String.format("src/resources/savedLocs/%s.txt", prepareFileName(filename)));
+        Path path = Paths.get(String.format("src/resources/savedLocations/%s.dat", prepareFileName(filename)));
 
         try (ObjectOutputStream file = new ObjectOutputStream(new BufferedOutputStream(Files.newOutputStream(path)))) {
             file.writeObject(terrain);
@@ -49,7 +49,7 @@ public class LocationSaveUtil {
             return false;
         }
 
-        Path path = Paths.get(String.format("src/resources/savedLocs/%s.txt", prepareFileName(location)));
+        Path path = Paths.get(String.format("src/resources/savedLocations/%s.dat", prepareFileName(location)));
 
         if (!Files.exists(path)) {
             return false;

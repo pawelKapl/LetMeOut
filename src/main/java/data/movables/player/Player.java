@@ -1,4 +1,4 @@
-package data.movables.playerClass;
+package data.movables.player;
 
 import data.equipment.Equipment;
 import data.equipment.Item;

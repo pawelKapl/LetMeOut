@@ -6,7 +6,7 @@ import data.equipment.armors.Armor;
 import data.equipment.weapons.Weapon;
 import data.gameEngine.GameLogic;
 import data.movables.enemies.Enemy;
-import data.movables.playerClass.Player;
+import data.movables.player.Player;
 import data.other.Preferences;
 import data.terrains.TerrainType;
 

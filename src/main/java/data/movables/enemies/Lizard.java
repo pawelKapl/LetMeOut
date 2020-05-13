@@ -11,7 +11,7 @@ public class Lizard extends Enemy implements Serializable {
     public Lizard(Coords coords) {
         super(coords);
         super.setVisionRadius(3);
-        super.setHP(35);
+        super.setHP(40);
         super.setAttack(10);
         super.setDefense(6);
     }

@@ -1,7 +1,7 @@
 package data.gameEngine;
 
 import data.movables.enemies.Enemy;
-import data.movables.playerClass.Player;
+import data.movables.player.Player;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -66,7 +66,7 @@ public class FightUtil {
         switch (rollDice) {
             case 20:
                 //critical hit
-                attack = rollDice/3 + enemy.getAttack();
+                attack = rollDice/2 + enemy.getAttack();
                 player.getHit(attack);
                 addMessage(String.format("[ATTACK]: Critical hit! %s attacked you and dealt %d damage.",
                         enemy.getClass().getSimpleName(), attack));
@@ -78,7 +78,7 @@ public class FightUtil {
             default:
                 //regular hit
                 int dodgeRate = random.nextInt(player.getDefense()+1);
-                attack = rollDice/3 + enemy.getAttack() - player.getDefense();
+                attack = rollDice/2 + enemy.getAttack() - player.getDefense();
                 player.getHit(attack);
                 addMessage(String.format("[ATTACK]: %s attacked you and dealt %d damage, your reflection rate was -%d.",
                         enemy.getClass().getSimpleName( ), attack, dodgeRate));

@@ -2,7 +2,7 @@ package data.gui.keyboardcontrollers;
 
 import data.gameEngine.GameLogic;
 import data.gui.Updatable;
-import data.movables.playerClass.Player;
+import data.movables.player.Player;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;

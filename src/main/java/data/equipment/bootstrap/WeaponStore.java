@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -28,8 +27,8 @@ public class WeaponStore implements Map<Integer, Weapon> {
 
     private void bootstrap() {
 
-        Path path = Paths.get("src/resources/weapons.txt");
-        List<String> weapons = new ArrayList<>();
+        Path path = Paths.get("src/resources/bootstrapFiles/weapons.txt");
+        List<String> weapons = null;
 
         try {
             weapons = Files.readAllLines(path);

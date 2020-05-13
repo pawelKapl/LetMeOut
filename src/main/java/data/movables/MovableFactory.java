@@ -2,8 +2,8 @@ package data.movables;
 
 import data.movables.enemies.Enemy;
 import data.movables.enemies.Lizard;
-import data.movables.playerClass.Player;
-import data.movables.playerClass.Solider;
+import data.movables.player.Player;
+import data.movables.player.Solider;
 
 import java.util.logging.Logger;
 

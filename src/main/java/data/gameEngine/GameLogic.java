@@ -9,7 +9,7 @@ import data.gui.Updatable;
 import data.movables.Coords;
 import data.movables.MovableFactory;
 import data.movables.enemies.Enemy;
-import data.movables.playerClass.Player;
+import data.movables.player.Player;
 import data.terrains.Cave;
 import data.terrains.Terrain;
 import data.terrains.TerrainType;

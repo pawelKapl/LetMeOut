@@ -4,7 +4,7 @@ import data.equipment.armors.Armor;
 import data.equipment.bootstrap.ArmorStore;
 import data.equipment.bootstrap.WeaponStore;
 import data.equipment.weapons.Weapon;
-import data.movables.playerClass.Player;
+import data.movables.player.Player;
 
 import java.util.Map;
 import java.util.Random;

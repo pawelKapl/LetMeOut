@@ -13,19 +13,17 @@ Current progress: <br>
     - gui interface implemented (swing) <br>
     - player movement mechanism introduced <br>
     - enemies position calculation algorithm <br>
-    - main game logic class <br>
     - moving and chasing enemies (path finding by A*) <br>
     - fog of war <br>
-    - basic player attack and fight log <br>
-    - basic enemy attack + log <br>
+    - fight logic + fight log + combat locking mode <br>
     - equipment with potions and items + equipment log + item description view <br>
     - inventory (equipping, unequipping, counting bonus from items) <br>
-    - blocking equipment operations when in combat <br>
     - basic treasure find mechanism + item collection bootstrap form txt files <br>
+    - Locations Manager - map of levels, with a local file cashing (Java NIO), Loading level map'n'params form text file <br>
 
 Quick Gameplay:
 
-[![gameplay](https://i.imgur.com/cKcTPTV.png?1)](https://www.youtube.com/watch?v=4Tbkemo1ss0 "Click to watch gameplay!") <br>
+[![gameplay](https://i.imgur.com/cKcTPTV.png?1)](https://www.youtube.com/watch?v=JbunuswfUNc "Click to watch gameplay!") <br>
 https://www.youtube.com/watch?v=xWyfJgaSxh0
 
 

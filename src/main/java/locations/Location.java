@@ -12,15 +12,15 @@ public class Location {
     private final Map<Integer, String> exits;
 
     public Location(String name,
-            int width,
-            int height,
-            int enemies,
+            String width,
+            String height,
+            String enemies,
             LocationType locationType,
             Map<Integer, String> exits) {
         this.name = name;
-        this.width = width;
-        this.height = height;
-        this.enemies = enemies;
+        this.width = Integer.parseInt(width);
+        this.height = Integer.parseInt(height);
+        this.enemies = Integer.parseInt(enemies);
         this.locationType = locationType;
         this.exits = exits;
     }

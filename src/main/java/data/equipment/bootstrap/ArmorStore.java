@@ -17,22 +17,29 @@ import java.util.logging.Logger;
 
 public class ArmorStore implements Map<Integer, Armor> {
 
-    private static Map<Integer, Armor> armorStore = new HashMap<>();
+    private Map<Integer, Armor> armorStore = new HashMap<>();
 
-    private static final Logger log = Logger.getLogger(ArmorStore.class.toString());
+    private final Logger log = Logger.getLogger(ArmorStore.class.toString());
 
-    static {
+    public ArmorStore() {
         log.info("Bootstrapping armor store");
+        bootstrap();
+    }
+
+    private void bootstrap() {
+
         Path path = Paths.get("src/resources/armors.txt");
-        List<String> items = new ArrayList<>();
+        List<String> armors = new ArrayList<>();
+
         try {
-            items = Files.readAllLines(path);
+            armors = Files.readAllLines(path);
         } catch (IOException e) {
             e.printStackTrace();
             log.warning("Troubles with reading file!" + path.getFileName());
         }
+
         int i = 0;
-        for (String item : items) {
+        for (String item : armors) {
             String[] itemData = item.split(";");
             Armor armor = new CasualArmor();
             armor.setName(itemData[0]);
@@ -41,7 +48,6 @@ public class ArmorStore implements Map<Integer, Armor> {
             armorStore.put(i++, armor);
         }
     }
-
 
     @Override
     public int size() {

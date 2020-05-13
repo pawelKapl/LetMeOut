@@ -2,12 +2,15 @@ package data.gameEngine;
 
 import data.movables.Coords;
 
+import java.io.Serializable;
 import java.util.logging.Logger;
 
-public class FogOfWar {
+public class FogOfWar implements Serializable {
+
+    private static final long serialVersionUID = 5L;
 
     private boolean[][] fog;
-    private final Logger log = Logger.getLogger(this.getClass().toString());
+    private static final Logger log = Logger.getLogger(FogOfWar.class.toString());
 
     public FogOfWar(int height, int width) {
         log.info("Creating Fog of War");

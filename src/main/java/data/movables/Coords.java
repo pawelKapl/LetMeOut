@@ -1,8 +1,11 @@
 package data.movables;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Coords {
+public class Coords implements Serializable {
+
+    private static final long serialVersionUID = 4L;
 
     private int x, y;
 

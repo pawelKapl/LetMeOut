@@ -3,10 +3,13 @@ package data.movables.enemies;
 import data.movables.Coords;
 import data.movables.Movable;
 
-public abstract class Enemy implements Movable {
+import java.io.Serializable;
+
+public abstract class Enemy implements Movable, Serializable {
+
+    private static final long serialVersionUID = 2L;
 
     private static int nextNumber = 1;
-
     private Coords coords;
     private int hp;
     private int number;

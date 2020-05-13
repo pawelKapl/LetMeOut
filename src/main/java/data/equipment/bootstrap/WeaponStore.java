@@ -17,22 +17,29 @@ import java.util.logging.Logger;
 
 public class WeaponStore implements Map<Integer, Weapon> {
 
-    private static Map<Integer, Weapon> weaponStore = new HashMap<>();
+    private Map<Integer, Weapon> weaponStore = new HashMap<>();
 
-    private static final Logger log = Logger.getLogger(WeaponStore.class.toString());
+    private final Logger log = Logger.getLogger(WeaponStore.class.toString());
 
-    static {
+    public WeaponStore() {
         log.info("Bootstrapping weapon store");
+        bootstrap();
+    }
+
+    private void bootstrap() {
+
         Path path = Paths.get("src/resources/weapons.txt");
-        List<String> items = new ArrayList<>();
+        List<String> weapons = new ArrayList<>();
+
         try {
-            items = Files.readAllLines(path);
+            weapons = Files.readAllLines(path);
         } catch (IOException e) {
             e.printStackTrace();
             log.warning("Troubles with reading file!" + path.getFileName());
         }
+
         int i = 0;
-        for (String item : items) {
+        for (String item : weapons) {
             String[] itemData = item.split(";");
             Weapon weapon = new CasualWeapon();
             weapon.setName(itemData[0]);

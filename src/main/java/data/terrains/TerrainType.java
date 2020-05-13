@@ -1,6 +1,10 @@
 package data.terrains;
 
-public enum TerrainType {
+import java.io.Serializable;
+
+public enum TerrainType implements Serializable {
+
+
     WALL("#"),
     GROUND("."),
     FOREST("f"),

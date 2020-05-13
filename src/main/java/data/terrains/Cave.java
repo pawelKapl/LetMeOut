@@ -4,36 +4,37 @@ import data.gameEngine.pathfinding.AStarPathFinder;
 import data.gameEngine.pathfinding.FPath;
 import data.gameEngine.pathfinding.TileMapImpl;
 import data.movables.Coords;
+import locations.Location;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Logger;
 
 import static java.lang.StrictMath.random;
 
-public final class Cave implements Terrain {
+public final class Cave implements Terrain, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final String name;
     private final Coords entrance;
     private final TerrainType[][] mapFinal;
+    private Map<Coords, String> inOuts = new HashMap<>();
+    private static final Logger log = Logger.getLogger(Cave.class.toString());
 
-    private final Logger log = Logger.getLogger(this.getClass().toString());
 
-
-    public Cave(String name, int height, int width) {
-        if (!withinHeightBoundaries(height)) {
-            height = 25;
-        }
-        if (!withinWidthBoundaries(width)) {
-            width = 100;
-        }
-        this.name = name;
-        this.entrance = genEntrance(height,width);
-        this.mapFinal = createMap(generatePattern(height, width));
+    public Cave(Location location) {
+        this.name = location.getName();
+        this.entrance = genEntrance(location.getHeight(),location.getWidth());
+        inOuts.put(entrance, location.getExits().get(0));
+        this.mapFinal = createMap(generatePattern(location.getHeight(),location.getWidth()), location.getExits());
     }
 
-    private final TerrainType[][] createMap(boolean[][] mapPattern) {
+    private final TerrainType[][] createMap(boolean[][] mapPattern, Map<Integer, String> exits) {
         log.info("Composing map and converting to char table");
         TerrainType[][] enumMap = new TerrainType[mapPattern.length][mapPattern[0].length];
 
@@ -51,9 +52,11 @@ public final class Cave implements Terrain {
 
         growForests(enumMap);
         addTreasures(enumMap, mapPattern);
-        Coords exit = genExit(enumMap , mapPattern);
-        enumMap[exit.getY()][exit.getX()] = TerrainType.DOOR;
 
+        for (int i = 1; i < exits.size(); i++) {
+            Coords exit = genSingleDoor(enumMap , mapPattern);
+            inOuts.put(exit, exits.get(i));
+        }
         return enumMap;
     }
 
@@ -170,7 +173,7 @@ public final class Cave implements Terrain {
         return entrance;
     }
 
-    private Coords genExit(TerrainType[][] map, boolean[][] mapPattern) {
+    private Coords genSingleDoor(TerrainType[][] map, boolean[][] mapPattern) {
         AStarPathFinder asp = new AStarPathFinder(new TileMapImpl(map, new ArrayList<>()),
                 (int) 1.2*map[0].length, false);
         Random random = new Random();
@@ -180,6 +183,7 @@ public final class Cave implements Terrain {
             if (map[y][x] == TerrainType.GROUND & countAliveNeighbours(mapPattern, x, y) > 1) {
                 FPath pathToExit = asp.findPath(null, entrance.getX(), entrance.getY(), x, y);
                 if (pathToExit != null && pathToExit.size() > map[0].length/2) {
+                    map[y][x] = TerrainType.DOOR;
                     return new Coords(x, y);
                 }
             }
@@ -242,20 +246,17 @@ public final class Cave implements Terrain {
                 nbx < map[0].length && map[nby][nbx] == TerrainType.GROUND;
     }
 
-    private boolean withinWidthBoundaries(int width) {
-        return width >= 20 && width <= 102;
-    }
-
-    private boolean withinHeightBoundaries(int height) {
-        return height >= 15 && height <= 27;
-    }
-
-    public Coords getEntrance() {
-        return entrance;
+    public Map<Coords, String> getInOuts() {
+        return inOuts;
     }
 
     public TerrainType[][] getMap() {
         return mapFinal;
+    }
+
+    @Override
+    public Coords getEntrance() {
+        return entrance;
     }
 
     public String getName() {

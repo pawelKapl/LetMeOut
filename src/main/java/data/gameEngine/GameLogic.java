@@ -10,10 +10,12 @@ import data.movables.Coords;
 import data.movables.MovableFactory;
 import data.movables.enemies.Enemy;
 import data.movables.playerClass.Player;
-import data.other.Preferences;
 import data.terrains.Cave;
 import data.terrains.Terrain;
 import data.terrains.TerrainType;
+import locations.Location;
+import locations.LocationSaveUtil;
+import locations.LocationsManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,39 +31,46 @@ public class GameLogic {
     private Updatable updatable;
     private PathFinder pathFinder;
     private FogOfWar fogOfWar;
+    private FightUtil fightUtil;
     private List<Enemy> enemies = new ArrayList<>();
     private MovableFactory movableFactory = new MovableFactory();
+    private LocationsManager lm = new LocationsManager();
     private Random random = new Random();
-    private FightUtil fightUtil;
 
     private final Logger log = Logger.getLogger(this.getClass().toString());
 
     public GameLogic() {
         log.info("Starting game logic engine!");
-        prepareLocation();
+        this.player = movableFactory.buildPlayer("Recon", 1);
+        prepareLocation(lm.get("Planet Of War"));
     }
 
-    private void prepareLocation() {
+    private void prepareLocation(Location location) {
         log.info("Preparing Location Components");
-        terrain = new Cave("Planeta-Wojny", Preferences.mapHeight,Preferences.mapWidth);
-        setPlayer();
-        addEnemies(Preferences.mapVolume/60);
+
+        enemies.clear();
+        if(!LocationSaveUtil.loadLocation(this, location.getName())) {
+            terrain = new Cave(location);
+            addEnemies(location.getEnemies());
+            setPlayerStartingPoint();
+            fogOfWar = new FogOfWar(location.getHeight(), location.getWidth());
+            fogOfWar.uncover(player.getCoords());
+        }
+        enableLogic();
+        log.info("Preparation of Location Components ended successfully");
+    }
+
+    private void enableLogic() {
         TileBasedMap tbm = new TileMapImpl(terrain.getMap(), enemies);
         pathFinder = new AStarPathFinder(tbm, 10, false);
-        fogOfWar = new FogOfWar(Preferences.mapHeight, Preferences.mapWidth);
-        fogOfWar.uncover(player.getCoords());
         fightUtil = new FightUtil(player, enemies);
-        log.info("Preparation of Location Components ended successfully");
     }
 
     public void movePlayer(int dx, int dy) {
         int x = player.getX() + dx;
         int y = player.getY() + dy;
 
-        if(!playerAliveCheck()) {
-            restart();
-            return;
-        }
+        if (moveToNextLocation(x, y)) { return; }
 
         if (occupiedByEnemy(x, y)) {
             fightUtil.attackEnemy(x, y);
@@ -79,6 +88,17 @@ public class GameLogic {
         enemyTurn();
         fogOfWar.uncover(player.getCoords());
         updatable.update();
+    }
+
+    private boolean moveToNextLocation(int x, int y) {
+        if (terrain.getMap()[y][x] == TerrainType.DOOR && !player.isLocked()) {
+            LocationSaveUtil.saveLocation(terrain, enemies, fogOfWar, player.getCoords());
+            String nextLocation = terrain.getInOuts().get(new Coords(x, y));
+            prepareLocation(lm.get(nextLocation));
+            updatable.update();
+            return true;
+        }
+        return false;
     }
 
     private boolean treasureDiscovery(int x, int y) {
@@ -111,16 +131,6 @@ public class GameLogic {
         if (!playerInCombat) {
             player.unlock();
         }
-    }
-
-    private boolean playerAliveCheck() {
-        return player.getHP() > 0;
-    }
-
-    private void restart() {
-        enemies.clear();
-        prepareLocation();
-        updatable.update();
     }
 
     private boolean moveEnemy(Enemy enemy) {
@@ -219,8 +229,8 @@ public class GameLogic {
 
     private Coords setEnemyStartingPoint() {
         while (true) {
-            int x = random.nextInt(Preferences.mapWidth - 1);
-            int y = random.nextInt(Preferences.mapHeight - 1);
+            int x = random.nextInt(terrain.getMap()[0].length - 1);
+            int y = random.nextInt(terrain.getMap().length - 1);
 
             if (isFree(x, y) && !isTreasure(x, y) && !isNearEntrance(x, y)) {
                 for (int i = -3; i < 4; i++) {
@@ -285,17 +295,16 @@ public class GameLogic {
                 || terrain.getMap()[y][x] == TerrainType.UNIQUE_ITEM;
     }
 
-    private void setPlayer() {
-        player = movableFactory.buildPlayer("Recon", 1);
-        setPlayerStartingPoint();
-    }
-
     public Player getPlayer() {
         return player;
     }
 
     public Terrain getTerrain() {
         return terrain;
+    }
+
+    public void setTerrain(Terrain terrain) {
+        this.terrain = terrain;
     }
 
     public void setUpdatable(Updatable updatable) {
@@ -306,8 +315,16 @@ public class GameLogic {
         return enemies;
     }
 
+    public void setEnemies(List<Enemy> enemies) {
+        this.enemies = enemies;
+    }
+
     public FogOfWar getFogOfWar() {
         return fogOfWar;
+    }
+
+    public void setFogOfWar(FogOfWar fogOfWar) {
+        this.fogOfWar = fogOfWar;
     }
 
     public FightUtil getFightUtil() {

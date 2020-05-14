@@ -6,6 +6,8 @@ import data.equipment.armors.Armor;
 import data.equipment.weapons.Weapon;
 import data.gameEngine.GameLogic;
 import data.movables.enemies.Enemy;
+import data.movables.enemies.Lizard;
+import data.movables.enemies.Predator;
 import data.movables.player.Player;
 import data.other.Preferences;
 import data.terrains.TerrainType;
@@ -18,8 +20,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static data.other.Colors.ALMOST_BLACK;
 import static data.other.Colors.ATT_GREEN;
 import static data.other.Colors.BLINDING_PINK;
+import static data.other.Colors.CALM_WHITE;
 import static data.other.Colors.DARK_FRAMES;
 import static data.other.Colors.DARK_RED;
 import static data.other.Colors.DEF_BLUE;
@@ -27,6 +31,7 @@ import static data.other.Colors.GROUND_GREY;
 import static data.other.Colors.LIGHT_RED;
 import static data.other.Colors.LIZARD_RED;
 import static data.other.Colors.PLAYER_BLUE;
+import static data.other.Colors.PREDATOR_ORANGE;
 import static data.other.Colors.WALL_CYAN;
 
 @SuppressWarnings("serial")
@@ -42,8 +47,8 @@ public class GameBoard extends JPanel implements Updatable {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.BLACK);
-        g.fillRect(0, 0, Preferences.windowWidth, Preferences.windowHeight);
+        g.setColor(ALMOST_BLACK);
+        g.fillRect(0, 0, Preferences.windowWidth-20, Preferences.windowHeight-40);
         //pretty large 'façade' :)
         printFrames(g);
         printLocation(g);
@@ -64,7 +69,7 @@ public class GameBoard extends JPanel implements Updatable {
         int dx = 35;
         int dy = 83;
 
-        g.setColor(Color.BLACK);
+        g.setColor(ALMOST_BLACK);
         for (int i = 0; i < fog.length; i++) {
             for (int j = 0; j < fog[0].length; j++) {
                 if(!fog[i][j]) {
@@ -86,18 +91,21 @@ public class GameBoard extends JPanel implements Updatable {
         int width = 35;
 
         g.drawString("Location:  " + game.getTerrain().getName(), width, 40);
-        g.drawString("Player: " + player.getName() + "    Class: " + profession, width, height);
+        g.drawString("Player: " + player.getName() + "    Class: " + profession + "   lvl: " + player.getLevel(), width, height);
 
         g.setColor(DARK_RED);
         width += 200 + player.getName().length()*7 + profession.length()*7;
-        g.drawString("hp: " + player.getHP(),  width,
+        g.drawString("hp: " + player.getHP() + "/" + player.getMaxHp(),  width,
                 height);
-        width += 70;
+        width += 100;
         g.setColor(ATT_GREEN);
         g.drawString("att: " + player.getAttack(), width, height);
         width += 60;
         g.setColor(DEF_BLUE);
         g.drawString("def: " + player.getDefense(), width, height);
+        width += 100;
+        g.setColor(CALM_WHITE);
+        g.drawString("Exp: " + player.getExperience(), width, height);
     }
 
     private void printFightLog(Graphics g) {
@@ -125,7 +133,7 @@ public class GameBoard extends JPanel implements Updatable {
         int y = Preferences.windowHeight*2/3 + 50;
         for (String s : fightLog) {
             if (s.startsWith("[INFO]")) {
-                g.setColor(Color.WHITE);
+                g.setColor(CALM_WHITE);
             } else if (s.startsWith("[WARN]")) {
                 g.setColor(DARK_RED);
             } else if (s.startsWith("[LOOT]")) {
@@ -180,9 +188,14 @@ public class GameBoard extends JPanel implements Updatable {
     }
 
     private void printEnemies(Graphics g) {
-        g.setColor(LIZARD_RED);
         for (Enemy e : game.getEnemies()) {
-            g.drawString(TerrainType.LIZARD.getStamp(), (e.getX()*12)+35,(e.getY()*20)+100);
+            if (e instanceof Lizard) {
+                g.setColor(LIZARD_RED);
+                g.drawString(TerrainType.LIZARD.getStamp(), (e.getX() * 12) + 35, (e.getY() * 20) + 100);
+            } else if (e instanceof Predator) {
+                g.setColor(PREDATOR_ORANGE);
+                g.drawString(TerrainType.PREDATOR.getStamp(), (e.getX() * 12) + 35, (e.getY() * 20) + 100);
+            }
         }
     }
 
@@ -210,7 +223,7 @@ public class GameBoard extends JPanel implements Updatable {
         }
 
         startHeight += 55;
-        g.setColor(Color.WHITE);
+        g.setColor(CALM_WHITE);
         g.drawString("[Equipped Armor]", startWidth + 73, startHeight);
 
         y = startHeight + 30;
@@ -237,7 +250,7 @@ public class GameBoard extends JPanel implements Updatable {
         g.drawString("Large Health Potions: " + eq.getLargePotions() + "  <L>", startWidth, startHeight + 50);
 
         startHeight += 85;
-        g.setColor(Color.WHITE);
+        g.setColor(CALM_WHITE);
         g.drawString("Items: ", startWidth, startHeight);
 
         startWidth += 10;
@@ -260,7 +273,7 @@ public class GameBoard extends JPanel implements Updatable {
     }
 
     private void printItemDescription(Graphics g, int startWidth) {
-        g.setColor(Color.WHITE);
+        g.setColor(CALM_WHITE);
         String[] description = formatDescription();
         int y = 585;
         if (description != null) {
@@ -301,7 +314,7 @@ public class GameBoard extends JPanel implements Updatable {
     }
 
     private void printFrames(Graphics g) {
-        g.setColor(Color.WHITE);
+        g.setColor(CALM_WHITE);
         g.drawRect(10,10, Preferences.windowWidth*4/5, Preferences.windowHeight*2/3);
         g.drawRect(Preferences.windowWidth*4/5 + 20, 10, Preferences.windowWidth/5 - 50, Preferences.windowHeight*2/3);
         g.drawRect(10, Preferences.windowHeight*2/3 + 20, Preferences.windowWidth - 40, Preferences.windowHeight/3 - 110);
@@ -318,13 +331,13 @@ public class GameBoard extends JPanel implements Updatable {
     private void setLogFont(Graphics g) {
         Font font = new Font("log", Font.PLAIN, 12);
         g.setFont(font);
-        g.setColor(Color.WHITE);
+        g.setColor(CALM_WHITE);
     }
 
     private void setLegendFont(Graphics g) {
         Font font = new Font("legend", Font.BOLD, 15);
         g.setFont(font);
-        g.setColor(Color.WHITE);
+        g.setColor(CALM_WHITE);
     }
 
     @Override

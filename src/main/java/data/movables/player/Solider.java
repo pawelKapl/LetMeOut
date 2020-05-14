@@ -1,6 +1,6 @@
 package data.movables.player;
 
-public class Solider extends Player {
+public final class Solider extends Player {
 
     public Solider(String name) {
         super(name);

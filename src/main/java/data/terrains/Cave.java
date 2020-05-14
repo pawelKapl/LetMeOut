@@ -225,12 +225,15 @@ public final class Cave implements Terrain, Serializable {
 
     private void addTreasures(TerrainType[][] map, boolean[][] mapPattern) {
         log.info("Hiding treasures...");
+        int uniqueCount = 0;
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
                 if (map[i][j] != TerrainType.WALL && map[i][j] != TerrainType.DOOR) {
-                    if (countAliveNeighbours(mapPattern, j, i) == 6 && random() > 0.1) {
+                    if (countAliveNeighbours(mapPattern, j, i) == 6 && random() > 0.8
+                            && uniqueCount < map[0].length/20) {
                         map[i][j] = TerrainType.UNIQUE_ITEM;
-                    } else if (countAliveNeighbours(mapPattern, j, i) == 5 && random() > 0.3) {
+                        uniqueCount++;
+                    } else if (countAliveNeighbours(mapPattern, j, i) == 5 && random() > 0.5) {
                         map[i][j] = TerrainType.ITEM;
                     }
                 }

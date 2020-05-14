@@ -20,6 +20,7 @@ Current progress: <br>
     - inventory (equipping, unequipping, counting bonus from items) <br>
     - basic treasure find mechanism + item collection bootstrap form txt files <br>
     - Locations Manager - map of levels, with a local file cashing (Java NIO), Loading level map'n'params form text file <br>
+    - Basic experience and lvl management for player <br>
 
 Quick Gameplay:
 

@@ -6,6 +6,7 @@ import data.equipment.armors.Armor;
 import data.equipment.weapons.Weapon;
 import data.movables.Coords;
 import data.movables.Movable;
+import data.other.Preferences;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +20,8 @@ public abstract class Player implements Movable {
     private final String name;
     private int attack;
     private int defense;
+    private int level = 1;
+    private Long experience = 0L;
 
     private boolean locked = false;
 
@@ -34,6 +37,29 @@ public abstract class Player implements Movable {
         this.hp = 100;
         weapons.push(equipment.getWeaponStore().get(0));
         armors.push(equipment.getArmorStore().get(0));
+    }
+
+    private void checkExp() {
+        int[][] lvlMap = Preferences.levelingMap;
+        int lvl = 0;
+        for (int i = 2; i < lvlMap.length; i++) {
+            if (experience >= lvlMap[i][1]) {
+                lvl = lvlMap[i][0];
+            }
+        }
+        if (lvl > this.level) {
+            addMessage("Level up! " + lvl + " Health Restored to new max!");
+            this.level = lvl;
+            attack += lvlMap[lvl][2];
+            defense += lvlMap[lvl][3];
+            maxHp += lvlMap[lvl][4];
+            hp = maxHp;
+        }
+    }
+
+    public void gainExp(Long exp) {
+        experience += exp;
+        checkExp();
     }
 
     public String getName() {
@@ -114,12 +140,12 @@ public abstract class Player implements Movable {
     }
 
     public void equipArmor(Armor armor) {
-        if (armors.size() < 4) {
+        if (armors.size() < 3) {
             armors.push(armor);
             equipment.removeItemFromEquipment(armor);
             addMessage("[INFO]: Added new armor: " + armor.getName());
         } else {
-            addMessage("[WARN]: You are wearing already to many items! Limit = 4pcs");
+            addMessage("[WARN]: You are wearing already to many items! Limit = 3pcs");
         }
     }
 
@@ -165,6 +191,10 @@ public abstract class Player implements Movable {
         return hp;
     }
 
+    public int getMaxHp() {
+        return maxHp;
+    }
+
     public void setHp(int hp) {
         if (hp > maxHp) {
             this.hp = maxHp;
@@ -202,6 +232,14 @@ public abstract class Player implements Movable {
 
         }
         return locked;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public Long getExperience() {
+        return experience;
     }
 
     public LinkedList<String> getMessages() {

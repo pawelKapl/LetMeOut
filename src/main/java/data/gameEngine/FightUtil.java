@@ -89,7 +89,10 @@ public class FightUtil {
     private void killEnemyIfZeroHp(Enemy enemy) {
         if (enemy.getHP() <= 0) {
             addMessage(String.format("[EVENT]: %s died!", enemy.getClass().getSimpleName()));
+            player.gainExp((long) enemy.getExpReward());
             enemies.remove(enemy);
+
+
         }
     }
 

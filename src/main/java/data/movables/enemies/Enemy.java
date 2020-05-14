@@ -16,6 +16,7 @@ public abstract class Enemy implements Movable, Serializable {
     private int visionRadius;
     private int attack;
     private int defense;
+    private int expReward;
 
     public Enemy(Coords coords) {
         this.coords = coords;
@@ -75,6 +76,10 @@ public abstract class Enemy implements Movable, Serializable {
         return attack;
     }
 
+    public void getHit(int damage) {
+        hp -= damage;
+    }
+
     public void setAttack(int attack) {
         this.attack = attack;
     }
@@ -87,7 +92,11 @@ public abstract class Enemy implements Movable, Serializable {
         this.defense = defense;
     }
 
-    public void getHit(int damage) {
-        hp -= damage;
+    public int getExpReward() {
+        return expReward;
+    }
+
+    public void setExpReward(int expReward) {
+        this.expReward = expReward;
     }
 }

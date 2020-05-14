@@ -200,7 +200,12 @@ public class GameLogic {
     private void addEnemies(int number) {
         log.info("Adding enemies");
         for (int i = 0; i < number; i++) {
-            Enemy enemy = movableFactory.buildEnemy(1);
+            Enemy enemy;
+            if (random() > 0.8) {
+                enemy = movableFactory.buildEnemy(2);
+            } else {
+                enemy = movableFactory.buildEnemy(1);
+            }
             enemy.setCoords(setEnemyStartingPoint());
             enemies.add(enemy);
         }
@@ -233,8 +238,8 @@ public class GameLogic {
             int y = random.nextInt(terrain.getMap().length - 1);
 
             if (isFree(x, y) && !isTreasure(x, y) && !isNearEntrance(x, y)) {
-                for (int i = -3; i < 4; i++) {
-                    for (int j = -3; j < 4; j++) {
+                for (int i = -4; i < 5; i++) {
+                    for (int j = -4; j < 5; j++) {
                         int ndx = x + j;
                         int ndy = y + i;
                         if (isWithinMap(ndx, ndy) && isTreasure(ndx, ndy)) {

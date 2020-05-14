@@ -12,6 +12,7 @@ public enum TerrainType implements Serializable {
     ITEM("o"),
     UNIQUE_ITEM("Ϯ"),
     LIZARD("k"),
+    PREDATOR("Ψ"),
     PLAYER("@");
 
     private final String stamp;

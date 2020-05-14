@@ -1,4 +1,4 @@
-Planet Of War;102;27;40;CAVE;Planet Of War;Cave Of Nothing;Strange Passage
-Cave Of Nothing;30;15;10;CAVE;Planet Of War
-Strange Passage;70;15;12;CAVE;Planet Of War;The Den
-The Den;50;20;20;CAVE;Strange Passage
+Planet Of War;102;27;45;1;CAVE;Planet Of War;Cave Of Nothing;Strange Passage
+Cave Of Nothing;30;15;10;1;CAVE;Planet Of War
+Strange Passage;70;15;20;2;CAVE;Planet Of War;The Den
+The Den;50;20;20;2;CAVE;Strange Passage

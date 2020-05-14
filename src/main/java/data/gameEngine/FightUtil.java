@@ -27,11 +27,15 @@ public class FightUtil {
                 enemyAttacked = enemy;
             }
         }
+        if (enemyAttacked == null) {
+            return;
+        }
         calculateBasicAttack(enemyAttacked);
         player.lock();
     }
 
     private void calculateBasicAttack(Enemy enemy) {
+
         int rollDice = random.nextInt(21);
         int attack;
 

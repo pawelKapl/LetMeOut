@@ -70,8 +70,6 @@ public class GameLogic {
         int x = player.getX() + dx;
         int y = player.getY() + dy;
 
-        if (moveToNextLocation(x, y)) { return; }
-
         if (occupiedByEnemy(x, y)) {
             fightUtil.attackEnemy(x, y);
             updatable.update();
@@ -79,6 +77,8 @@ public class GameLogic {
         }
 
         if (!isFree(x, y)) { return; }
+
+        if (moveToNextLocation(x, y)) { return; }
 
         if (treasureDiscovery(x, y)) { return; }
 

@@ -10,6 +10,7 @@ import data.movables.Coords;
 import data.movables.MovableFactory;
 import data.movables.enemies.Enemy;
 import data.movables.player.Player;
+import data.other.Preferences;
 import data.terrains.Cave;
 import data.terrains.Terrain;
 import data.terrains.TerrainType;
@@ -51,7 +52,7 @@ public class GameLogic {
         enemies.clear();
         if(!LocationSaveUtil.loadLocation(this, location.getName())) {
             terrain = new Cave(location);
-            addEnemies(location.getEnemies());
+            addEnemies(location.getEnemies(), location.getDifficulty());
             setPlayerStartingPoint();
             fogOfWar = new FogOfWar(location.getHeight(), location.getWidth());
             fogOfWar.uncover(player.getCoords());
@@ -197,19 +198,23 @@ public class GameLogic {
         return new Coords(x, y);
     }
 
-    private void addEnemies(int number) {
+    private void addEnemies(int number, int difficulty) {
         log.info("Adding enemies");
-        for (int i = 0; i < number; i++) {
-            Enemy enemy;
-            if (random() > 0.8) {
-                enemy = movableFactory.buildEnemy(2);
-            } else {
-                enemy = movableFactory.buildEnemy(1);
-            }
+        double[] enemyShare = Preferences.enemyStructure[difficulty];
+
+        for (int i = 1; i < enemyShare.length; i++) {
+            int amount = (int)(enemyShare[i]*number);
+            addEnemiesByRace(amount, i);
+        }
+        log.info("Adding Enemies completed successfully");
+    }
+
+    private void addEnemiesByRace(int amount, int race) {
+        for (int i = 0; i < amount; i++) {
+            Enemy enemy =  movableFactory.buildEnemy(race);
             enemy.setCoords(setEnemyStartingPoint());
             enemies.add(enemy);
         }
-        log.info("Adding Enemies completed successfully");
     }
 
     private void setPlayerStartingPoint() {

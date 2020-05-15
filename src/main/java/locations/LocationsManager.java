@@ -42,12 +42,12 @@ public class LocationsManager implements Map<String, Location> {
 
 
             Map<Integer, String> exits = new HashMap<>();
-            for (int j = 6; j < details.length; j++) {
-                exits.put(j - 6, details[j]);
+            for (int j = 7; j < details.length; j++) {
+                exits.put(j - 7, details[j]);
             }
 
             Location newLocation = new Location(details[0], details[1],
-                    details[2], details[3], details[4], LocationType.valueOf(details[5]), exits);
+                    details[2], details[3], details[4], details[5], LocationType.valueOf(details[6]), exits);
 
             locations.put(newLocation.getName(), newLocation);
         }

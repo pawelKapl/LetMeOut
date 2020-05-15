@@ -24,13 +24,16 @@ Current progress: <br>
 
 Quick Gameplay:
 
-[![gameplay](https://i.imgur.com/cKcTPTV.png?1)](https://www.youtube.com/watch?v=JbunuswfUNc "Click to watch gameplay!") <br>
+[![gameplay](https://i.imgur.com/c8VZIzg.png)](https://www.youtube.com/watch?v=JbunuswfUNc "Click to watch gameplay!") <br>
 https://www.youtube.com/watch?v=xWyfJgaSxh0
 
 
-Screen:
+Screens:
+
+![alt text](https://i.imgur.com/8RqThol.png)
 
 ![alt text](https://i.imgur.com/ViMCnhe.png)
+
 
 
 Want to participate? Just let me know!

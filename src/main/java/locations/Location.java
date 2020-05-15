@@ -9,6 +9,7 @@ public class Location {
     private final int height;
     private final int enemies;
     private final int difficulty;
+    private final String terrainType;
     private final LocationType locationType;
     private final Map<Integer, String> exits;
 
@@ -16,13 +17,15 @@ public class Location {
             String width,
             String height,
             String enemies,
-            String difficulty, LocationType locationType,
+            String difficulty, String terrainType,
+            LocationType locationType,
             Map<Integer, String> exits) {
         this.name = name;
         this.width = Integer.parseInt(width);
         this.height = Integer.parseInt(height);
         this.enemies = Integer.parseInt(enemies);
         this.difficulty = Integer.parseInt(difficulty);
+        this.terrainType = terrainType;
         this.locationType = locationType;
         this.exits = exits;
     }
@@ -43,11 +46,19 @@ public class Location {
         return enemies;
     }
 
+    public int getDifficulty() {
+        return difficulty;
+    }
+
     public LocationType getLocationType() {
         return locationType;
     }
 
     public Map<Integer, String> getExits() {
         return exits;
+    }
+
+    public String getTerrainType() {
+        return terrainType;
     }
 }

@@ -11,6 +11,7 @@ import data.movables.enemies.Predator;
 import data.movables.player.Player;
 import data.other.Preferences;
 import data.terrains.TerrainType;
+import data.terrains.TerrainTypeColors;
 
 import javax.swing.JPanel;
 import java.awt.Color;
@@ -27,12 +28,12 @@ import static data.other.Colors.CALM_WHITE;
 import static data.other.Colors.DARK_FRAMES;
 import static data.other.Colors.DARK_RED;
 import static data.other.Colors.DEF_BLUE;
-import static data.other.Colors.GROUND_GREY;
 import static data.other.Colors.LIGHT_RED;
 import static data.other.Colors.LIZARD_RED;
 import static data.other.Colors.PLAYER_BLUE;
 import static data.other.Colors.PREDATOR_ORANGE;
-import static data.other.Colors.WALL_CYAN;
+import static data.other.Colors.TRAP_GREY;
+
 
 @SuppressWarnings("serial")
 public class GameBoard extends JPanel implements Updatable {
@@ -149,16 +150,22 @@ public class GameBoard extends JPanel implements Updatable {
         int dy = 100;
 
         TerrainType[][] location = game.getTerrain().getMap();
+        TerrainTypeColors colors = TerrainTypeColors
+                .valueOf(game.getTerrain().getTerrainType());
 
         for (int i = 0; i < location.length; i++) {
             for (int j = 0; j < location[0].length; j++) {
                 switch (location[i][j]) {
                     case WALL:
-                        g.setColor(WALL_CYAN);
+                        g.setColor(colors.getWallPaint());
                         g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
                     case GROUND:
-                        g.setColor(GROUND_GREY);
+                        g.setColor(colors.getGroundPaint());
+                        g.drawString(location[i][j].getStamp(), dx, dy);
+                        break;
+                    case FOREST:
+                        g.setColor(ATT_GREEN);
                         g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
                     case DOOR:
@@ -170,10 +177,9 @@ public class GameBoard extends JPanel implements Updatable {
                         g.setColor(Color.YELLOW);
                         g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
-                    case FOREST:
-                        g.setColor(ATT_GREEN);
+                    case TRAP:
+                        g.setColor(TRAP_GREY);
                         g.drawString(location[i][j].getStamp(), dx, dy);
-                        break;
                 }
                 dx += 12;
             }

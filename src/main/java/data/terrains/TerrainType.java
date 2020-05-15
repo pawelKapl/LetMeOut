@@ -9,6 +9,7 @@ public enum TerrainType implements Serializable {
     GROUND("."),
     FOREST("f"),
     DOOR("d"),
+    TRAP("ꭙ"),
     ITEM("o"),
     UNIQUE_ITEM("Ϯ"),
     LIZARD("k"),

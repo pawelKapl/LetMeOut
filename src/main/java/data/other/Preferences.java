@@ -15,7 +15,13 @@ public class Preferences {
             {4, 5000, 2, 1, 20},
             {5, 10000, 3, 2, 30},
             {6, 20000, 3, 2, 30}
-            //to be continued
 
+    };
+
+    public final static double[][] enemyStructure = {
+            //{0:difficulty lvl, 1:lizards share, 2:predators share, 3:other monster share}
+            {0, 0.8, 0.2},
+            {1, 0.5, 0.5},
+            {2, 0.2, 0.5, 0.3}
     };
 }

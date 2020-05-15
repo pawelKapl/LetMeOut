@@ -22,6 +22,7 @@ public final class Cave implements Terrain, Serializable {
 
     private final String name;
     private final Coords entrance;
+    private final String terrainType;
     private final TerrainType[][] mapFinal;
     private Map<Coords, String> inOuts = new HashMap<>();
 
@@ -30,6 +31,7 @@ public final class Cave implements Terrain, Serializable {
 
     public Cave(Location location) {
         this.name = location.getName();
+        this.terrainType = location.getTerrainType();
         this.entrance = genEntrance(location.getHeight(),location.getWidth());
         inOuts.put(entrance, location.getExits().get(0));
         this.mapFinal = createMap(generatePattern(location.getHeight(),location.getWidth()), location.getExits());
@@ -53,6 +55,7 @@ public final class Cave implements Terrain, Serializable {
 
         growForests(enumMap);
         addTreasures(enumMap, mapPattern);
+        setTraps(enumMap);
 
         for (int i = 1; i < exits.size(); i++) {
             Coords exit = genSingleDoor(enumMap , mapPattern);
@@ -197,11 +200,22 @@ public final class Cave implements Terrain, Serializable {
                 .toArray(boolean[][]::new);
     }
 
+    private void setTraps(TerrainType[][] map) {
+        log.info("Setting traps...");
+        for (int i = 0; i < map.length-1; i++) {
+            for (int j = 0; j < map[0].length - 1; j++) {
+                if (map[i][j] == TerrainType.GROUND && random() < 0.03) {
+                    map[i][j] = TerrainType.TRAP;
+                }
+            }
+        }
+    }
+
     private void growForests(TerrainType[][] map) {
         log.info("Growing forests...");
         for (int i = 0; i < map.length-1; i++) {
             for (int j = 0; j < map[0].length-1; j++) {
-                if (map[i][j] == TerrainType.GROUND && random() < 0.03) {
+                if (map[i][j] == TerrainType.GROUND && random() < 0.04) {
                     map[i][j] = TerrainType.FOREST;
                     forestExpansion(map, i, j);
                 }
@@ -233,7 +247,7 @@ public final class Cave implements Terrain, Serializable {
                             && uniqueCount < map[0].length/20) {
                         map[i][j] = TerrainType.UNIQUE_ITEM;
                         uniqueCount++;
-                    } else if (countAliveNeighbours(mapPattern, j, i) == 5 && random() > 0.5) {
+                    } else if (countAliveNeighbours(mapPattern, j, i) == 5 && random() > 0.4) {
                         map[i][j] = TerrainType.ITEM;
                     }
                 }
@@ -261,6 +275,11 @@ public final class Cave implements Terrain, Serializable {
     @Override
     public Coords getEntrance() {
         return entrance;
+    }
+
+    @Override
+    public String getTerrainType() {
+        return terrainType;
     }
 
     public String getName() {

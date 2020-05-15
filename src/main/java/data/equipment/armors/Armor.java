@@ -10,6 +10,15 @@ public abstract class Armor implements Item {
     private String description;
     private int defence;
 
+    public Armor() {
+    }
+
+    public Armor(String name, String description, int defence) {
+        this.name = name;
+        this.description = description;
+        this.defence = defence;
+    }
+
     public int getDefense() {
         return defence;
     }

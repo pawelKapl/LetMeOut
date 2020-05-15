@@ -10,6 +10,14 @@ public abstract class Weapon implements Item {
     private String description;
     private int attack;
 
+    public Weapon() {
+    }
+
+    public Weapon(String name, String description, int attack) {
+        this.name = name;
+        this.description = description;
+        this.attack = attack;
+    }
 
     public int getAttack() {
         return attack;

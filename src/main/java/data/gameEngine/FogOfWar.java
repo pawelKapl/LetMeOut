@@ -20,6 +20,9 @@ public class FogOfWar implements Serializable {
     public void uncover(Coords coords) {
         int count = 0;
         int size = 3;
+        if (!isInsideBoard(coords.getX(), coords.getY())) {
+            return;
+        }
         for (int i = coords.getY() + size; i >= coords.getY() - size; i--) {
             for (int j = coords.getX() - count; j <= coords.getX() + count; j++) {
                 if (isInsideBoard(j, i)) {

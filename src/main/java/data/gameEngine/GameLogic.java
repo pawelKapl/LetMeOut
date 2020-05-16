@@ -12,6 +12,7 @@ import data.movables.enemies.Enemy;
 import data.movables.player.Player;
 import data.other.Preferences;
 import data.terrains.Cave;
+import data.terrains.CustomMap;
 import data.terrains.Terrain;
 import data.terrains.TerrainType;
 import locations.Location;
@@ -51,7 +52,12 @@ public class GameLogic {
 
         enemies.clear();
         if(!LocationSaveUtil.loadLocation(this, location.getName())) {
-            terrain = new Cave(location);
+
+            if (!location.getLocationType().equals("CAVE")) {
+                terrain = new CustomMap(location);
+            } else {
+                terrain = new Cave(location);
+            }
             addEnemies(location.getEnemies(), location.getDifficulty());
             setPlayerStartingPoint();
             fogOfWar = new FogOfWar(location.getHeight(), location.getWidth());

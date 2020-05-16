@@ -34,6 +34,10 @@ public class Colors {
     public static final Color WALL_DCAVE = new Color(54, 54, 54);
     public static final Color GROUND_DCAVE = new Color(92, 92, 92);
 
+    //cellar
+    public static final Color WALL_CELLAR = new Color(78, 23, 0);
+    public static final Color GROUND_CELLAR = new Color(92, 92, 92);
+
     //purple haze
     public static final Color WALL_PURPLE_HAZE = new Color(167, 0, 173);
     public static final Color GROUND_PURPLE_HAZE = new Color(234, 113, 227);

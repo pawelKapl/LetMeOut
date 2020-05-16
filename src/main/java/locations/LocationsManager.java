@@ -47,7 +47,7 @@ public class LocationsManager implements Map<String, Location> {
             }
 
             Location newLocation = new Location(details[0], details[1],
-                    details[2], details[3], details[4], details[5], LocationType.valueOf(details[6]), exits);
+                    details[2], details[3], details[4], details[5], details[6], exits);
 
             locations.put(newLocation.getName(), newLocation);
         }

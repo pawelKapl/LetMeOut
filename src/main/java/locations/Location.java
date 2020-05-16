@@ -10,7 +10,7 @@ public class Location {
     private final int enemies;
     private final int difficulty;
     private final String terrainType;
-    private final LocationType locationType;
+    private final String locationType;
     private final Map<Integer, String> exits;
 
     public Location(String name,
@@ -18,7 +18,7 @@ public class Location {
             String height,
             String enemies,
             String difficulty, String terrainType,
-            LocationType locationType,
+            String locationType,
             Map<Integer, String> exits) {
         this.name = name;
         this.width = Integer.parseInt(width);
@@ -50,7 +50,7 @@ public class Location {
         return difficulty;
     }
 
-    public LocationType getLocationType() {
+    public String getLocationType() {
         return locationType;
     }
 

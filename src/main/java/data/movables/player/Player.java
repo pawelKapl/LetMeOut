@@ -41,19 +41,18 @@ public abstract class Player implements Movable {
 
     private void checkExp() {
         int[][] lvlMap = Preferences.levelingMap;
-        int lvl = 0;
         for (int i = 2; i < lvlMap.length; i++) {
             if (experience >= lvlMap[i][1]) {
-                lvl = lvlMap[i][0];
+                int lvl = lvlMap[i][0];
+                if (lvl > this.level) {
+                    addMessage("Level up! " + lvl + " Health Restored to new max!");
+                    this.level = lvl;
+                    attack += lvlMap[lvl][2];
+                    defense += lvlMap[lvl][3];
+                    maxHp += lvlMap[lvl][4];
+                    hp = maxHp;
+                }
             }
-        }
-        if (lvl > this.level) {
-            addMessage("Level up! " + lvl + " Health Restored to new max!");
-            this.level = lvl;
-            attack += lvlMap[lvl][2];
-            defense += lvlMap[lvl][3];
-            maxHp += lvlMap[lvl][4];
-            hp = maxHp;
         }
     }
 
@@ -112,7 +111,7 @@ public abstract class Player implements Movable {
     }
 
     public void equipWeapon(Weapon weapon) {
-        if (weapons.size() < 2) {
+        if (weapons.size() < 2 && !weapons.contains(weapon)) {
             weapons.push(weapon);
             equipment.removeItemFromEquipment(weapon);
             addMessage("[INFO]: Equipped new weapon: " + weapon.getName());
@@ -140,7 +139,7 @@ public abstract class Player implements Movable {
     }
 
     public void equipArmor(Armor armor) {
-        if (armors.size() < 3) {
+        if (armors.size() < 3 && !armors.contains(armor)) {
             armors.push(armor);
             equipment.removeItemFromEquipment(armor);
             addMessage("[INFO]: Added new armor: " + armor.getName());

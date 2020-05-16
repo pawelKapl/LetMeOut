@@ -3,6 +3,7 @@ package data.movables;
 import data.movables.enemies.Enemy;
 import data.movables.enemies.Lizard;
 import data.movables.enemies.Predator;
+import data.movables.enemies.Wherewolf;
 import data.movables.player.Player;
 import data.movables.player.Solider;
 
@@ -19,6 +20,8 @@ public class MovableFactory {
                 return new Lizard(new Coords(0,0));
             case (2):
                 return new Predator(new Coords(0,0));
+            case (3):
+                return new Wherewolf(new Coords(0,0));
             default:
                 log.warning("Wrong enemy type");
                 return new Lizard(new Coords(0,0));

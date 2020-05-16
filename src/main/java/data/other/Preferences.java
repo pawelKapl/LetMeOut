@@ -22,6 +22,6 @@ public class Preferences {
             //{0:difficulty lvl, 1:lizards share, 2:predators share, 3:other monster share}
             {0, 0.8, 0.2},
             {1, 0.5, 0.5},
-            {2, 0.2, 0.5, 0.3}
+            {2, 0.4, 0.5, 0.1}
     };
 }

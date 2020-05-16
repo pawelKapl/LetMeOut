@@ -8,6 +8,7 @@ import data.gameEngine.GameLogic;
 import data.movables.enemies.Enemy;
 import data.movables.enemies.Lizard;
 import data.movables.enemies.Predator;
+import data.movables.enemies.Wherewolf;
 import data.movables.player.Player;
 import data.other.Preferences;
 import data.terrains.TerrainType;
@@ -33,6 +34,7 @@ import static data.other.Colors.LIZARD_RED;
 import static data.other.Colors.PLAYER_BLUE;
 import static data.other.Colors.PREDATOR_ORANGE;
 import static data.other.Colors.TRAP_GREY;
+import static data.other.Colors.WHEREWOLF_BLUE;
 
 
 @SuppressWarnings("serial")
@@ -201,6 +203,9 @@ public class GameBoard extends JPanel implements Updatable {
             } else if (e instanceof Predator) {
                 g.setColor(PREDATOR_ORANGE);
                 g.drawString(TerrainType.PREDATOR.getStamp(), (e.getX() * 12) + 35, (e.getY() * 20) + 100);
+            } else if (e instanceof Wherewolf) {
+                g.setColor(WHEREWOLF_BLUE);
+                g.drawString(TerrainType.WHEREWOLF.getStamp(),(e.getX() * 12) + 35, (e.getY() * 20) + 100);
             }
         }
     }

@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public enum TerrainType implements Serializable {
 
-
+    EMPTY(" "),
     WALL("#"),
     GROUND("."),
     FOREST("f"),

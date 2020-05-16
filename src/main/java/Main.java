@@ -26,7 +26,7 @@ public class Main {
 
         try {
             es.shutdown();
-            es.awaitTermination(500, TimeUnit.MILLISECONDS);
+            es.awaitTermination(1000, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

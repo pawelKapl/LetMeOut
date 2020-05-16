@@ -248,7 +248,8 @@ public class GameLogic {
             int x = random.nextInt(terrain.getMap()[0].length - 1);
             int y = random.nextInt(terrain.getMap().length - 1);
 
-            if (isFree(x, y) && !isTreasure(x, y) && !isNearEntrance(x, y)) {
+            //if (isFree(x, y) && !isTreasure(x, y) && !isNearEntrance(x, y)) {
+            if (terrain.getMap()[y][x] == TerrainType.GROUND && !occupiedByEnemy(x, y) && !isNearEntrance(x, y)) {
                 for (int i = -4; i < 5; i++) {
                     for (int j = -4; j < 5; j++) {
                         int ndx = x + j;

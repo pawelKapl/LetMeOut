@@ -41,14 +41,10 @@ public class CustomMap implements Terrain, Serializable {
             log.warning("Troubles During reading map form file");
             e.printStackTrace();
         }
-
-        TerrainType[][] finalMap = printTerrain(exits, map);
-
-        return finalMap;
+        return printTerrain(exits, map);
     }
 
     private TerrainType[][] printTerrain(Map<Integer, String> exits, List<String> map) {
-        Coords in = null;
         int exitNumber = 0;
         int width = map.get(0).length();
         int height = map.size();
@@ -57,6 +53,9 @@ public class CustomMap implements Terrain, Serializable {
             for (int j = 0; j < width; j++) {
                 String stamp = Character.toString(map.get(i).charAt(j));
                 switch (stamp) {
+                    case "-":
+                        finalMap[i][j] = TerrainType.EMPTY;
+                        break;
                     case "#":
                         finalMap[i][j] = TerrainType.WALL;
                         break;
@@ -75,7 +74,7 @@ public class CustomMap implements Terrain, Serializable {
                     case "d":
                         inOuts.put(new Coords(j, i), exits.get(exitNumber));
                         if (exitNumber == 0) {
-                            in = new Coords(j, i);
+                            entrance = new Coords(j, i);
                         }
                         exitNumber++;
                         finalMap[i][j] = TerrainType.DOOR;
@@ -83,7 +82,6 @@ public class CustomMap implements Terrain, Serializable {
                 }
             }
         }
-        entrance = in;
         return finalMap;
     }
 

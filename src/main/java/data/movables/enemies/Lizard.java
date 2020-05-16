@@ -12,7 +12,7 @@ public final class Lizard extends Enemy implements Serializable {
         super(coords);
         setVisionRadius(3);
         setHP(40);
-        setAttack(10);
+        setAttack(8);
         setDefense(6);
         setExpReward(150);
     }

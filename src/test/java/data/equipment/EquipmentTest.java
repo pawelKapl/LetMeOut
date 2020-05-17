@@ -10,7 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.util.logging.Logger;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EquipmentTest {
 
@@ -19,9 +24,15 @@ class EquipmentTest {
     CasualWeapon testWeapon = new CasualWeapon("testWeapon", "test1", 10);
     CasualArmor testArmor = new CasualArmor("testArmor", "test2", 3);
 
+    Logger log = Logger.getLogger(EquipmentTest.class.toString());
 
     @BeforeEach
     void setUp() {
+        createPlayerAndEquipmentFotTests();
+        log.info("Eq size: " + equipment.getItems().size());
+    }
+
+    private void createPlayerAndEquipmentFotTests() {
         player = new Solider("test");
         player.setHp(10);
         equipment = new Equipment(player);
@@ -29,7 +40,6 @@ class EquipmentTest {
             equipment.addToEquipment(equipment.getWeaponStore().get(i));
             equipment.addToEquipment(equipment.getArmorStore().get(i));
         }
-        System.out.println("Eq size: " + equipment.getItems().size());
     }
 
     @Test
@@ -37,7 +47,7 @@ class EquipmentTest {
     void addToEquipmentSuccess() {
         equipment.getItems().remove(3);
         boolean test = equipment.addToEquipment(testArmor);
-        assertEquals(true, test);
+        assertTrue(test);
         assertEquals("testArmor", equipment.getItems().get(3).getName());
     }
 
@@ -46,7 +56,8 @@ class EquipmentTest {
     void addToEquipmentAndFailBecauseOfAlreadyFullEQ() {
         equipment.addToEquipment(testArmor);
         boolean test = equipment.addToEquipment(testWeapon);
-        assertEquals(false, test);
+        assertFalse(test);
+        assertEquals(9, equipment.getItems().size());
     }
 
     @Test
@@ -55,14 +66,21 @@ class EquipmentTest {
         equipment.getItems().remove(1);
         equipment.addToEquipment(testArmor);
         boolean test = equipment.addToEquipment(testArmor);
-        assertEquals(false, test);
+        assertFalse(test);
     }
 
     @Test
     void removeItemFromEquipmentSuccess() {
         equipment.addToEquipment(testArmor);
         equipment.removeItemFromEquipment(testArmor);
-        assertEquals(null, equipment.getItems().get(9));
+        assertNull(equipment.getItems().get(9));
+    }
+
+    @Test
+    @DisplayName("Testing if equipment will change its size when deleting item that does not contain")
+    void removeItemFromEquipmentFail() {
+        equipment.removeItemFromEquipment(testArmor);
+        assertEquals(8, equipment.getItems().size());
     }
 
     @ParameterizedTest(name = "For a given key = {0}, equipment size should be equal to {1}, and message starting with {2}")
@@ -75,7 +93,7 @@ class EquipmentTest {
     void removeItemFromEquipmentByKey(int key, int size, String msg) {
         equipment.removeItemFromEquipmentByKey(key);
         assertEquals(size, equipment.getItems().size());
-        assertEquals(msg, player.getMessages().peek().split(" ")[0]);
+        assertEquals(msg, player.getMessages().peek().substring(0,' '));
     }
 
 

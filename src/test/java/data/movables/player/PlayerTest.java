@@ -19,10 +19,13 @@ class PlayerTest {
 
     @BeforeEach
     void setUp() {
+        createPlayerForTests();
+    }
+
+    private void createPlayerForTests() {
         player = new Solider("test");
         player.getEquipment().addToEquipment(testArmor); //1
         player.getEquipment().addToEquipment(testWeapon); //2
-
     }
 
     @ParameterizedTest(name = "For a given sequence of xp addition: {0}," +

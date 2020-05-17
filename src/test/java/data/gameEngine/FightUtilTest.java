@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FightUtilTest {
 
@@ -31,13 +32,20 @@ class FightUtilTest {
         //given
         player = new Solider("test");
         player.setCoords(new Coords(1,1));
+
+        setTestEnemyList();
+
+        fightUtil = new FightUtil(player, enemies);
+    }
+
+    private void setTestEnemyList() {
         enemy1 = new Lizard(new Coords(1, 1));
         enemy2 = new Predator(new Coords(2,2));
         enemies = new ArrayList<>();
         enemies.add(enemy1);
         enemies.add(enemy2);
-        fightUtil = new FightUtil(player, enemies);
     }
+
     @DisplayName("Testing player locking after attack")
     @ParameterizedTest(name = "For given x = {0} and y = {1} player.isLocked() should return {2}")
     @CsvSource({
@@ -52,9 +60,9 @@ class FightUtilTest {
         assertEquals(result, player.isLocked());
     }
 
-    @DisplayName("Testing enemy attack against Player, if eney was close enough to attack," +
-            " and player get locked after attack")
-    @ParameterizedTest(name= "For given enemy coords x = {0}, y = {1}, method should return {2}," +
+    @DisplayName("Testing enemy attack against Player, if enemy was close enough to attack," +
+            " and player got locked after attack")
+    @ParameterizedTest(name= "For a given enemy coords x = {0}, y = {1}, method should return {2}," +
                                 " player.isLocked() should return {3} ")
     @CsvSource({
             "0, 0, true, true",
@@ -90,15 +98,13 @@ class FightUtilTest {
     @Test
     void getMessagesDuringPlayerAttack() {
         fightUtil.attackEnemy(2, 2);
-        String fightMessage = fightUtil.getMessages().peek().split(" ")[0];
-        assertEquals("[FIGHT]:", fightMessage);
+        assertTrue(fightUtil.getMessages().peek().startsWith("[FIGHT]:"));
     }
 
     @Test
     void getMessagesDuringEnemyAttack() {
         player.setCoords(new Coords(1,2));
         fightUtil.tryAttackPlayer(enemy2);
-        String fightMessage = fightUtil.getMessages().peek().split(" ")[0];
-        assertEquals("[ATTACK]:", fightMessage);
+        assertTrue(fightUtil.getMessages().peek().startsWith("[ATTACK]:"));
     }
 }

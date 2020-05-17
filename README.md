@@ -30,9 +30,11 @@ https://www.youtube.com/watch?v=xWyfJgaSxh0
 
 Screens:
 
+![alt text](https://i.imgur.com/81Yebt4.png)
+
 ![alt text](https://i.imgur.com/8RqThol.png)
 
-![alt text](https://i.imgur.com/ViMCnhe.png)
+
 
 
 Want to participate? Just let me know!

@@ -45,7 +45,7 @@ public abstract class Player implements Movable {
             if (experience >= lvlMap[i][1]) {
                 int lvl = lvlMap[i][0];
                 if (lvl > this.level) {
-                    addMessage("Level up! " + lvl + " Health Restored to new max!");
+                    addMessage("[LEVEL UP]: Level " + lvl + ". Health Restored to new max!");
                     this.level = lvl;
                     attack += lvlMap[lvl][2];
                     defense += lvlMap[lvl][3];
@@ -211,7 +211,7 @@ public abstract class Player implements Movable {
     }
 
     public void addMessage(String message) {
-        if (messages.size() == 7) {
+        if (messages.size() == 9) {
             messages.removeLast();
         }
         messages.push(message);

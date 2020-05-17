@@ -12,16 +12,16 @@ public class Colors {
     public static final Color WHEREWOLF_BLUE = new Color(31, 29, 128);
 
     //System, logs, background, frames, other
-    public static final Color DEF_BLUE  = new Color(37, 29, 196);
-    public static final Color ATT_GREEN = new Color(24, 161, 24);
-    public static final Color DARK_RED = new Color(160, 5, 5);
+    public static final Color DEF_BLUE  = new Color(31, 23, 173);
+    public static final Color ATT_GREEN = new Color(18, 135, 18);
+    public static final Color DARK_RED = new Color(132, 4, 4);
     public static final Color LIGHT_RED = new Color(210, 92, 92);
+    public static final Color LIGHT_YELLOW = new Color(226, 209, 53);
     public static final Color BLINDING_PINK = new Color(255, 0, 215);
     public static final Color DARK_FRAMES = new Color(45, 45, 45);
     public static final Color ALMOST_BLACK = new Color(5, 5, 5, 255);
-    public static final Color CALM_WHITE = new Color(196, 196, 196);
-    public static final Color TRAP_GREY = new Color(88, 88, 88);
-
+    public static final Color CALM_WHITE = new Color(135, 135, 135);
+    public static final Color TRAP_GREY = new Color(114, 94, 94);
 
     //classic map
     public static final Color WALL_PLUTO = new Color(33, 196, 182);

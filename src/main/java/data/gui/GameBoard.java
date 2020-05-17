@@ -30,6 +30,7 @@ import static data.other.Colors.DARK_FRAMES;
 import static data.other.Colors.DARK_RED;
 import static data.other.Colors.DEF_BLUE;
 import static data.other.Colors.LIGHT_RED;
+import static data.other.Colors.LIGHT_YELLOW;
 import static data.other.Colors.LIZARD_RED;
 import static data.other.Colors.PLAYER_BLUE;
 import static data.other.Colors.PREDATOR_ORANGE;
@@ -100,7 +101,7 @@ public class GameBoard extends JPanel implements Updatable {
         width += 200 + player.getName().length()*7 + profession.length()*7;
         g.drawString("hp: " + player.getHP() + "/" + player.getMaxHp(),  width,
                 height);
-        width += 100;
+        width += 90;
         g.setColor(ATT_GREEN);
         g.drawString("att: " + player.getAttack(), width, height);
         width += 60;
@@ -117,13 +118,6 @@ public class GameBoard extends JPanel implements Updatable {
         LinkedList<String> fightLog = game.getFightUtil().getMessages();
         int y = Preferences.windowHeight*2/3 + 90;
         for (String s : fightLog) {
-            if (s.startsWith("[FIGHT]")) {
-                g.setColor(Color.YELLOW);
-            } else if (s.startsWith("[EVENT]")) {
-                g.setColor(DEF_BLUE);
-            } else if (s.startsWith("[ATTACK]")) {
-                g.setColor(DARK_RED);
-            }
             g.drawString(s, 35, y);
             y += 20;
         }
@@ -135,14 +129,13 @@ public class GameBoard extends JPanel implements Updatable {
         LinkedList<String> fightLog = game.getPlayer().getMessages();
         int y = Preferences.windowHeight*2/3 + 50;
         for (String s : fightLog) {
-            if (s.startsWith("[INFO]")) {
-                g.setColor(CALM_WHITE);
-            } else if (s.startsWith("[WARN]")) {
-                g.setColor(DARK_RED);
-            } else if (s.startsWith("[LOOT]")) {
-                g.setColor(Color.YELLOW);
+            if (s.startsWith("[LEVEL UP]:")) {
+               g.setColor(LIGHT_YELLOW);
+               g.drawString(s, 1070, y);
+               g.setColor(CALM_WHITE);
+            } else {
+                g.drawString(s, 1070, y);
             }
-            g.drawString(s, 1070, y);
             y += 20;
         }
     }
@@ -325,17 +318,16 @@ public class GameBoard extends JPanel implements Updatable {
     }
 
     private void printFrames(Graphics g) {
-        g.setColor(CALM_WHITE);
+        g.setColor(DARK_FRAMES);
         g.drawRect(10,10, Preferences.windowWidth*4/5, Preferences.windowHeight*2/3);
         g.drawRect(Preferences.windowWidth*4/5 + 20, 10, Preferences.windowWidth/5 - 50, Preferences.windowHeight*2/3);
         g.drawRect(10, Preferences.windowHeight*2/3 + 20, Preferences.windowWidth - 40, Preferences.windowHeight/3 - 110);
-        g.setColor(DARK_FRAMES);
         g.drawRect(Preferences.windowWidth*4/5 + 30,300,250,260);
         g.drawRect(Preferences.windowWidth*4/5 + 30, 565, 250, 100);
         g.drawRect(25, Preferences.windowHeight*2/3 + 70, 500,150);
         g.drawRect(1060,Preferences.windowHeight*2/3 + 30, 500, 200);
 
-        g.setColor(Color.RED);
+        g.setColor(DARK_RED);
         g.drawString("DarkOnion", Preferences.windowWidth/2 - 30, Preferences.windowHeight - 60);
     }
 
@@ -346,7 +338,7 @@ public class GameBoard extends JPanel implements Updatable {
     }
 
     private void setLegendFont(Graphics g) {
-        Font font = new Font("legend", Font.BOLD, 15);
+        Font font = new Font("legend", Font.BOLD, 13);
         g.setFont(font);
         g.setColor(CALM_WHITE);
     }

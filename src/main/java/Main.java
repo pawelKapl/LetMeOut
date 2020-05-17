@@ -15,7 +15,7 @@ public class Main {
 
     private static final Logger log = Logger.getLogger(Main.class.toString());
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         log.info("Starting game!");
 
         GameLogic game = new GameLogic();
@@ -24,24 +24,20 @@ public class Main {
         ExecutorService es = Executors.newSingleThreadScheduledExecutor();
         es.execute(ui);
 
-        try {
-            es.shutdown();
-            es.awaitTermination(1000, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        es.shutdown();
+        es.awaitTermination(1000, TimeUnit.MILLISECONDS);
+
         game.setUpdatable(ui.getUpdatable());
 
-
-        Path path = Paths.get("src/resources/savedLocations/");
-
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            cleanDirectory(path);
+            cleanDirectory();
         }));
     }
 
-    private static void cleanDirectory(Path path) {
+    private static void cleanDirectory() {
         log.info("Cleaning works! Erasing temp files!");
+        Path path = Paths.get("src/resources/savedLocations/");
+
         try {
             Files.walk(path)
                     .filter(Files::isRegularFile)

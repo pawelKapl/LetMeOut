@@ -14,7 +14,7 @@ public final class Lizard extends Enemy implements Serializable {
         setHP(40);
         setAttack(8);
         setDefense(6);
-        setExpReward(5150);
+        setExpReward(150);
     }
 
     //+ some extra class specific skills to do

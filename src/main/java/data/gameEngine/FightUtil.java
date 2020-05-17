@@ -55,6 +55,7 @@ public class FightUtil {
                 //regular hit
                 int dodgeRate = random.nextInt(enemy.getDefense()+1);
                 attack = rollDice + player.getAttack() - dodgeRate;
+                attack = negativeAttackBlock(attack);
                 enemy.getHit(attack);
                 addMessage(String.format("[FIGHT]: You dealt %d damage to %s, enemy reflection rate was -%d.",
                         attack, enemy.getClass().getSimpleName(), dodgeRate));
@@ -83,11 +84,19 @@ public class FightUtil {
                 //regular hit
                 int dodgeRate = random.nextInt(player.getDefense()+1);
                 attack = rollDice/2 + enemy.getAttack() - player.getDefense();
+                attack = negativeAttackBlock(attack);
                 player.getHit(attack);
                 addMessage(String.format("[ATTACK]: %s attacked you and dealt %d damage, your reflection rate was -%d.",
                         enemy.getClass().getSimpleName( ), attack, dodgeRate));
                 break;
         }
+    }
+
+    private int negativeAttackBlock(int attack) {
+        if (attack < 0) {
+            attack = 0;
+        }
+        return attack;
     }
 
     private void killEnemyIfZeroHp(Enemy enemy) {

@@ -80,21 +80,38 @@ public class GameLogic {
         if (occupiedByEnemy(x, y)) {
             fightUtil.attackEnemy(x, y);
             updatable.update();
-            enemyTurn();
+        } else {
+            if (checkForOtherEvents(x, y)) {
+                return;
+            }
+            player.setX(x);
+            player.setY(y);
         }
-
-        if (!isFree(x, y)) { return; }
-
-        if (moveToNextLocation(x, y)) { return; }
-
-        if (treasureDiscovery(x, y)) { return; }
-
-        player.setX(x);
-        player.setY(y);
-
         enemyTurn();
         fogOfWar.uncover(player.getCoords());
         updatable.update();
+    }
+
+    private boolean checkForOtherEvents(int x, int y) {
+        if (!isFree(x, y)) { return true; }
+        if (moveToNextLocation(x, y)) { return true; }
+        if (treasureDiscovery(x, y)) { return true; }
+        isIsATrap(x, y);
+        return false;
+    }
+
+    private void isIsATrap(int x, int y) {
+        if (terrain.getMap()[y][x] == TerrainType.TRAP) {
+            terrain.getMap()[y][x] = TerrainType.GROUND;
+            if (random() > 0.4) {
+                int dmg = (int)(player.getMaxHp()*0.15);
+                player.getHit(dmg);
+                player.addMessage("[INFO]: Trap Triggered! -" + dmg + "hp");
+                updatable.update();
+            } else {
+                player.addMessage("[INFO]: Trap was broken/disarmed");
+            }
+        }
     }
 
     private boolean moveToNextLocation(int x, int y) {

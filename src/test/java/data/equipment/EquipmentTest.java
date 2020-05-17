@@ -93,7 +93,7 @@ class EquipmentTest {
     void removeItemFromEquipmentByKey(int key, int size, String msg) {
         equipment.removeItemFromEquipmentByKey(key);
         assertEquals(size, equipment.getItems().size());
-        assertEquals(msg, player.getMessages().peek().substring(0,' '));
+        assertEquals(msg, player.getMessages().peek().substring(0, 7));
     }
 
 

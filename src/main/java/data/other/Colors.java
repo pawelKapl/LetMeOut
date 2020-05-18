@@ -13,6 +13,7 @@ public class Colors {
 
     //System, logs, background, frames, other
     public static final Color DEF_BLUE  = new Color(31, 23, 173);
+    public static final Color WATER_BLUE  = new Color(0, 81, 206);
     public static final Color ATT_GREEN = new Color(18, 135, 18);
     public static final Color DARK_RED = new Color(132, 4, 4);
     public static final Color LIGHT_RED = new Color(210, 92, 92);

@@ -71,6 +71,12 @@ public class CustomMap implements Terrain, Serializable {
                     case "ꭙ":
                         finalMap[i][j] = TerrainType.TRAP;
                         break;
+                    case "=":
+                        finalMap[i][j] = TerrainType.WATER;
+                        break;
+                    case "f":
+                        finalMap[i][j] = TerrainType.FOREST;
+                        break;
                     case "d":
                         inOuts.put(new Coords(j, i), exits.get(exitNumber));
                         if (exitNumber == 0) {

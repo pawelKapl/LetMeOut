@@ -35,6 +35,7 @@ import static data.other.Colors.LIZARD_RED;
 import static data.other.Colors.PLAYER_BLUE;
 import static data.other.Colors.PREDATOR_ORANGE;
 import static data.other.Colors.TRAP_GREY;
+import static data.other.Colors.WATER_BLUE;
 import static data.other.Colors.WHEREWOLF_BLUE;
 
 
@@ -63,7 +64,7 @@ public class GameBoard extends JPanel implements Updatable {
         printInventoryMenu(g);
         printFightLog(g);
         printEquipmentLog(g);
-        printFogOfWar(g);
+        //printFogOfWar(g);
 
     }
 
@@ -165,6 +166,10 @@ public class GameBoard extends JPanel implements Updatable {
                         break;
                     case DOOR:
                         g.setColor(BLINDING_PINK);
+                        g.drawString(location[i][j].getStamp(), dx, dy);
+                        break;
+                    case WATER:
+                        g.setColor(WATER_BLUE);
                         g.drawString(location[i][j].getStamp(), dx, dy);
                         break;
                     case ITEM:

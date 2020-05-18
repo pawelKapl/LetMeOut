@@ -30,9 +30,10 @@ https://www.youtube.com/watch?v=xWyfJgaSxh0
 
 Screens:
 
+![alt text](https://i.imgur.com/5OTFYzd.png)
+
 ![alt text](https://i.imgur.com/81Yebt4.png)
 
-![alt text](https://i.imgur.com/8RqThol.png)
 
 
 

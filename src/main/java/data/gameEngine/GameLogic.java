@@ -299,6 +299,7 @@ public class GameLogic {
     private boolean isFree(int x, int y) {
         return isWithinMap(x, y)
                 && terrain.getMap()[y][x] != TerrainType.WALL
+                && terrain.getMap()[y][x] != TerrainType.WATER
                 && !occupiedByEnemy(x, y)
                 && !occupiedByPlayer(x, y);
     }

@@ -5,6 +5,7 @@ import data.equipment.Item;
 import data.equipment.armors.Armor;
 import data.equipment.weapons.Weapon;
 import data.gameEngine.GameLogic;
+import data.gameEngine.SpecialAttacks;
 import data.movables.enemies.Enemy;
 import data.movables.enemies.Lizard;
 import data.movables.enemies.Predator;
@@ -58,14 +59,46 @@ public class GameBoard extends JPanel implements Updatable {
         printFrames(g);
         printLocation(g);
         printPlayer(g);
+        printEffectsLayer(g);
         printEnemies(g);
         printPlayerStatus(g);
         printEquipmentMenu(g);
         printInventoryMenu(g);
+        printSpecialAttacksMenu(g);
         printFightLog(g);
         printEquipmentLog(g);
         printFogOfWar(g);
+    }
 
+    private void printEffectsLayer(Graphics g) {
+        TerrainType[][] effectsLayer = game.getEffectsLayer().getEffectsLayer();
+
+        int dx = 35;
+        int dy = 100;
+
+        for (int i = 0; i < effectsLayer.length; i++) {
+            for (int j = 0; j < effectsLayer[0].length; j++) {
+                switch (effectsLayer[i][j]) {
+                    case EMPTY:
+                        g.drawString(effectsLayer[i][j].getStamp(), dx, dy);
+                        break;
+                    case HIT_MARK:
+                        g.setColor(new Color(255, 0, 0, 107));
+                        g.drawString(effectsLayer[i][j].getStamp(), dx-1, dy-6);
+                        break;
+                    case DEAD_MARK:
+                        g.setColor(new Color(255, 0, 0, 107));
+                        g.drawString(effectsLayer[i][j].getStamp(), dx-1, dy);
+                        break;
+                    case WEAKNESS_MARK:
+                        g.setColor(new Color(0, 165, 0, 149));
+                        g.drawString(effectsLayer[i][j].getStamp(), dx-1, dy-6);
+                }
+                dx += 12;
+            }
+            dy += 20;
+            dx = 35;
+        }
     }
 
     private void printFogOfWar(Graphics g) {
@@ -108,9 +141,22 @@ public class GameBoard extends JPanel implements Updatable {
         width += 60;
         g.setColor(DEF_BLUE);
         g.drawString("def: " + player.getDefense(), width, height);
-        width += 100;
+        width += 80;
         g.setColor(CALM_WHITE);
         g.drawString("Exp: " + player.getExperience(), width, height);
+    }
+
+    private void printSpecialAttacksMenu(Graphics g) {
+        setLogFont(g);
+        int width = 550;
+        int height = Preferences.windowHeight*2/3 + 90;
+        g.drawString("Special Attacks: ", width, height);
+        height += 10;
+        List<SpecialAttacks> specialAttacks = game.getPlayer().getSpecialAttacks();
+        g.drawString("- " + stringNormalizer(specialAttacks.get(0).name()) + "  <Space>", width, height += 20);
+        g.drawString("- " + stringNormalizer(specialAttacks.get(1).name()) + "  <V>", width, height += 20);
+        g.drawString("- " + stringNormalizer(specialAttacks.get(2).name()) + "  <B>", width, height += 20);
+        g.drawString("Cooldown: " + game.getPlayer().getCooldown(), width, height + 40);
     }
 
     private void printFightLog(Graphics g) {
@@ -346,6 +392,11 @@ public class GameBoard extends JPanel implements Updatable {
         Font font = new Font("legend", Font.BOLD, 13);
         g.setFont(font);
         g.setColor(CALM_WHITE);
+    }
+
+    private String stringNormalizer(String in) {
+        String out = in.toLowerCase().replaceAll("_", " ");
+        return out.substring(0, 1).toUpperCase() + out.substring(1);
     }
 
     @Override

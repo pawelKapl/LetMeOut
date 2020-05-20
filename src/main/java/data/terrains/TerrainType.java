@@ -16,7 +16,13 @@ public enum TerrainType implements Serializable {
     LIZARD("k"),
     PREDATOR("Ψ"),
     WHEREWOLF("w"),
-    PLAYER("@");
+    PLAYER("@"),
+
+    //effect layer types
+
+    HIT_MARK("▼"),
+    WEAKNESS_MARK("▼"),
+    DEAD_MARK("X");
 
 
     private final String stamp;

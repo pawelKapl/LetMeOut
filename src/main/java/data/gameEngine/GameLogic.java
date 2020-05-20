@@ -34,6 +34,7 @@ public class GameLogic {
     private PathFinder pathFinder;
     private FogOfWar fogOfWar;
     private FightUtil fightUtil;
+    private EffectsLayer effectsLayer;
     private List<Enemy> enemies = new ArrayList<>();
     private MovableFactory movableFactory = new MovableFactory();
     private LocationsManager lm = new LocationsManager();
@@ -63,6 +64,7 @@ public class GameLogic {
             fogOfWar = new FogOfWar(location.getHeight(), location.getWidth());
             fogOfWar.uncover(player.getCoords());
         }
+        enableEffectsLayer(location.getWidth(), location.getHeight());
         enableLogic();
         log.info("Preparation of Location Components ended successfully");
     }
@@ -70,15 +72,21 @@ public class GameLogic {
     private void enableLogic() {
         TileBasedMap tbm = new TileMapImpl(terrain.getMap(), enemies);
         pathFinder = new AStarPathFinder(tbm, 10, false);
-        fightUtil = new FightUtil(player, enemies);
+        fightUtil = new FightUtil(player, enemies, effectsLayer);
+    }
+
+    private void enableEffectsLayer(int width, int height) {
+        effectsLayer = new EffectsLayer(width, height);
     }
 
     public void movePlayer(int dx, int dy) {
+        effectsLayer.reset();
         int x = player.getX() + dx;
         int y = player.getY() + dy;
 
         if (occupiedByEnemy(x, y)) {
             fightUtil.attackEnemy(x, y);
+            player.decreaseCooldown();
             updatable.update();
         } else {
             if (checkForOtherEvents(x, y)) {
@@ -86,9 +94,16 @@ public class GameLogic {
             }
             player.setX(x);
             player.setY(y);
+            player.decreaseCooldown();
         }
         enemyTurn();
         fogOfWar.uncover(player.getCoords());
+        updatable.update();
+    }
+
+    public void specialAttack(SpecialAttacks specialAttack) {
+        fightUtil.performSpecialAttack(specialAttack);
+        enemyTurn();
         updatable.update();
     }
 
@@ -364,5 +379,9 @@ public class GameLogic {
 
     public FightUtil getFightUtil() {
         return fightUtil;
+    }
+
+    public EffectsLayer getEffectsLayer() {
+        return effectsLayer;
     }
 }

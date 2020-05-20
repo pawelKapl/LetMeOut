@@ -2,6 +2,7 @@ package data.gameEngine;
 
 import data.movables.enemies.Enemy;
 import data.movables.player.Player;
+import data.terrains.TerrainType;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,10 +14,12 @@ public class FightUtil {
     private List<Enemy> enemies;
     private LinkedList<String> messages = new LinkedList<>();
     private Random random = new Random();
+    private EffectsLayer effectsLayer;
 
-    public FightUtil(Player player, List<Enemy> enemies) {
+    public FightUtil(Player player, List<Enemy> enemies, EffectsLayer effectsLayer) {
         this.player = player;
         this.enemies = enemies;
+        this.effectsLayer = effectsLayer;
     }
 
     public void attackEnemy(int x, int y) {
@@ -25,11 +28,13 @@ public class FightUtil {
         for (Enemy enemy : enemies) {
             if (enemy.getX() == x && enemy.getY() == y) {
                 enemyAttacked = enemy;
+                effectsLayer.mark(x, y, TerrainType.HIT_MARK);
             }
         }
         if (enemyAttacked == null) {
             return;
         }
+
         calculateBasicAttack(enemyAttacked);
         player.lock();
     }
@@ -104,8 +109,7 @@ public class FightUtil {
             addMessage(String.format("[EVENT]: %s died!", enemy.getClass().getSimpleName()));
             player.gainExp((long) enemy.getExpReward());
             enemies.remove(enemy);
-
-
+            effectsLayer.mark(enemy.getX(), enemy.getY(), TerrainType.DEAD_MARK);
         }
     }
 
@@ -118,7 +122,7 @@ public class FightUtil {
 
     public boolean tryAttackPlayer(Enemy enemy) {
         boolean attacked = false;
-        if (nextToPlayer(enemy)) {
+        if (NearPlayer.nearPlayer(enemy, player, 1)) {
             attacked = true;
             calculateEnemyBasicAttack(enemy);
             player.lock();
@@ -126,22 +130,28 @@ public class FightUtil {
         return attacked;
     }
 
-    private boolean nextToPlayer(Enemy enemy) {
-        int x = enemy.getX();
-        int y = enemy.getY();
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                int dx = x + j;
-                int dy = y + i;
-                if (dx == player.getX() && dy == player.getY()) {
-                    return true;
+    public LinkedList<String> getMessages() {
+        return messages;
+    }
+
+    public void performSpecialAttack(SpecialAttacks specialAttack) {
+        if (player.getCooldown() != 0) {
+            addMessage("[INFO]: Cant do that, cooldown remaining:" + player.getCooldown());
+            return;
+        }
+        addMessage("[SKILL]: Using " + specialAttack.name());
+        for (Enemy enemy : enemies) {
+            String result = specialAttack.attack(enemy, player);
+            if (result != null) {
+                addMessage(result);
+                if (result.startsWith("[ATTACK]")) {
+                    effectsLayer.mark(enemy.getX(), enemy.getY(), TerrainType.HIT_MARK);
+                } else if (result.startsWith("[WEAKNESS]")) {
+                    effectsLayer.mark(enemy.getX(), enemy.getY(), TerrainType.WEAKNESS_MARK);
                 }
             }
         }
-        return false;
-    }
 
-    public LinkedList<String> getMessages() {
-        return messages;
+
     }
 }

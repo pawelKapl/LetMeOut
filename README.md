@@ -15,7 +15,8 @@ Current progress: <br>
     - enemies position calculation algorithm <br>
     - moving and chasing enemies (path finding by A*) <br>
     - fog of war <br>
-    - fight logic + fight log + combat locking mode <br>
+    - effect Layer <br>
+    - fight logic + fight log + combat locking mode + special attacks<br>
     - equipment with potions and items + equipment log + item description view <br>
     - inventory (equipping, unequipping, counting bonus from items) <br>
     - basic treasure find mechanism + item collection bootstrap form txt files <br>
@@ -24,7 +25,7 @@ Current progress: <br>
 
 Quick Gameplay:
 
-[![gameplay](https://i.imgur.com/vDncrIN.png)](https://youtu.be/2GBZOq3m7o8 "Click to watch gameplay!") <br>
+[![gameplay](https://i.imgur.com/vDncrIN.png)](https://youtu.be/1lFqWT5EFLE "Click to watch gameplay!") <br>
 https://www.youtube.com/watch?v=xWyfJgaSxh0
 
 

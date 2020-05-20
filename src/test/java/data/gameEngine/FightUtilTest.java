@@ -26,6 +26,7 @@ class FightUtilTest {
     Enemy enemy1;
     Enemy enemy2;
     FightUtil fightUtil;
+    EffectsLayer effectsLayer;
 
     @BeforeEach
     void setUp() {
@@ -35,7 +36,7 @@ class FightUtilTest {
 
         setTestEnemyList();
 
-        fightUtil = new FightUtil(player, enemies);
+        fightUtil = new FightUtil(player, enemies, effectsLayer);
     }
 
     private void setTestEnemyList() {

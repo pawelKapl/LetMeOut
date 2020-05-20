@@ -4,6 +4,7 @@ import data.equipment.Equipment;
 import data.equipment.Item;
 import data.equipment.armors.Armor;
 import data.equipment.weapons.Weapon;
+import data.gameEngine.SpecialAttacks;
 import data.movables.Coords;
 import data.movables.Movable;
 import data.other.Preferences;
@@ -20,6 +21,7 @@ public abstract class Player implements Movable {
     private final String name;
     private int attack;
     private int defense;
+    private int cooldown;
     private int level = 1;
     private Long experience = 0L;
 
@@ -28,6 +30,8 @@ public abstract class Player implements Movable {
     private Equipment equipment = new Equipment(this);
     private LinkedList<Armor> armors = new LinkedList<>();
     private LinkedList<Weapon> weapons = new LinkedList<>();
+    private List<SpecialAttacks> specialAttacks;
+
     private LinkedList<String> messages = new LinkedList<>();
 
 
@@ -243,5 +247,27 @@ public abstract class Player implements Movable {
 
     public LinkedList<String> getMessages() {
         return messages;
+    }
+
+    public int getCooldown() {
+        return cooldown;
+    }
+
+    public void setCooldown(int cooldown) {
+        this.cooldown = cooldown;
+    }
+
+    public void decreaseCooldown() {
+        if (cooldown > 0) {
+            this.cooldown--;
+        }
+    }
+
+    public List<SpecialAttacks> getSpecialAttacks() {
+        return specialAttacks;
+    }
+
+    public void setSpecialAttacks(List<SpecialAttacks> specialAttacks) {
+        this.specialAttacks = specialAttacks;
     }
 }

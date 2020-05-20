@@ -43,6 +43,15 @@ public class MovementKeyController implements KeyListener {
             case KeyEvent.VK_RIGHT:
                 game.movePlayer(1, 0);
                 break;
+            case KeyEvent.VK_SPACE:
+                game.specialAttack(game.getPlayer().getSpecialAttacks().get(0));
+                break;
+            case KeyEvent.VK_V:
+                game.specialAttack(game.getPlayer().getSpecialAttacks().get(1));
+                break;
+            case KeyEvent.VK_B:
+                game.specialAttack(game.getPlayer().getSpecialAttacks().get(2));
+                break;
         }
     }
 

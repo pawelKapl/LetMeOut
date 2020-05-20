@@ -26,7 +26,7 @@ Current progress: <br>
 Quick Gameplay:
 
 [![gameplay](https://i.imgur.com/vDncrIN.png)](https://youtu.be/1lFqWT5EFLE "Click to watch gameplay!") <br>
-https://www.youtube.com/watch?v=xWyfJgaSxh0
+https://youtu.be/1lFqWT5EFLE
 
 
 Screens:

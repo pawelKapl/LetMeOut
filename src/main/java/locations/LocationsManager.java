@@ -26,7 +26,7 @@ public class LocationsManager implements Map<String, Location> {
 
     private void bootstrap() {
 
-        Path path = Paths.get("src/resources/bootstrapFiles/locations.txt");
+        Path path = Paths.get("src/resources/bootstrapFiles/locations-gameplay.txt");
 
         List<String> strings = new ArrayList<>();
 

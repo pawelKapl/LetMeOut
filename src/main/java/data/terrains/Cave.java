@@ -58,7 +58,7 @@ public final class Cave implements Terrain, Serializable {
         setTraps(enumMap);
 
         for (int i = 1; i < exits.size(); i++) {
-            Coords exit = genSingleDoor(enumMap , mapPattern);
+            Coords exit = generateSingleDoorPosition(enumMap , mapPattern);
             inOuts.put(exit, exits.get(i));
         }
         return enumMap;
@@ -177,7 +177,7 @@ public final class Cave implements Terrain, Serializable {
         return entrance;
     }
 
-    private Coords genSingleDoor(TerrainType[][] map, boolean[][] mapPattern) {
+    private Coords generateSingleDoorPosition(TerrainType[][] map, boolean[][] mapPattern) {
         AStarPathFinder asp = new AStarPathFinder(new TileMapImpl(map, new ArrayList<>()),
                 (int) 1.2*map[0].length, false);
         Random random = new Random();
@@ -228,10 +228,8 @@ public final class Cave implements Terrain, Serializable {
             for (int l = -1; l < 2; l++) {
                 int nby = i + k;
                 int nbx = j + l;
-                if (isFreeToPopulate(map, nby, nbx)) {
-                    if (random() < 0.75) {
-                        map[nby][nbx] = TerrainType.FOREST;
-                    }
+                if (isFreeToPopulate(map, nby, nbx) && random() < 0.75) {
+                    map[nby][nbx] = TerrainType.FOREST;
                 }
             }
         }

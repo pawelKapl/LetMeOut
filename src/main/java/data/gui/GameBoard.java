@@ -67,7 +67,7 @@ public class GameBoard extends JPanel implements Updatable {
         printSpecialAttacksMenu(g);
         printFightLog(g);
         printEquipmentLog(g);
-        printFogOfWar(g);
+        //printFogOfWar(g);
     }
 
     private void printEffectsLayer(Graphics g) {

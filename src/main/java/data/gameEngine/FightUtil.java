@@ -122,7 +122,7 @@ public class FightUtil {
 
     public boolean tryAttackPlayer(Enemy enemy) {
         boolean attacked = false;
-        if (NearPlayer.nearPlayer(enemy, player, 1)) {
+        if (IsNear.isNear(enemy.getCoords(), player.getCoords(), 1)) {
             attacked = true;
             calculateEnemyBasicAttack(enemy);
             player.lock();
@@ -134,10 +134,10 @@ public class FightUtil {
         return messages;
     }
 
-    public void performSpecialAttack(SpecialAttacks specialAttack) {
+    public boolean performSpecialAttack(SpecialAttacks specialAttack) {
         if (player.getCooldown() != 0) {
             addMessage("[INFO]: Cant do that, cooldown remaining:" + player.getCooldown());
-            return;
+            return false;
         }
         addMessage("[SKILL]: Using " + specialAttack.name());
         for (Enemy enemy : enemies) {
@@ -151,7 +151,6 @@ public class FightUtil {
                 }
             }
         }
-
-
+        return true;
     }
 }

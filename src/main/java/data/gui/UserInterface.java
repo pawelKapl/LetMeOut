@@ -28,7 +28,6 @@ public class UserInterface implements Runnable {
         frame.setPreferredSize(new Dimension(Preferences.windowWidth-20, Preferences.windowHeight-40));
         createComponents(frame.getContentPane());
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
         frame.setResizable(false);
         frame.setUndecorated (true);
         frame.dispose();

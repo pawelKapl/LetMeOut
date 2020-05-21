@@ -31,6 +31,7 @@ class FightUtilTest {
     @BeforeEach
     void setUp() {
         //given
+        effectsLayer = new EffectsLayer(100, 100);
         player = new Solider("test");
         player.setCoords(new Coords(1,1));
 
@@ -79,6 +80,35 @@ class FightUtilTest {
         boolean b = fightUtil.tryAttackPlayer(enemy);
         assertEquals(result, b);
         assertEquals(playerLock, player.isLocked());
+    }
+
+    @ParameterizedTest(name= "For a given player cooldown {0}, attack type {1} and enemy coords x = {2}, y = {3}," +
+            " method should return {4}, and enemy should have decreased health {5}, or decreased attack {6}")
+    @CsvSource({
+            "0, GRENADE, 0, 0, true, true, false",
+            "1, GRENADE, 0, 0, false, false, false",
+            "-1, GRENADE, 0, 0, false, false, false",
+            "999, GRENADE, 0, 0, false, false, false",
+            "0, WEAKEN, 0, 0, true, false, true",
+            "0, WEAKEN, 3, 2, true, false, false",
+            "0, GRENADE, 3, 2, true, true, false",
+    })
+    void performSpecialAttack(int coolDown, String attackType, int x, int y,
+            boolean methodResult, boolean healthDecreased, boolean attackDecreased) {
+
+        //when
+        Lizard lizard = new Lizard(new Coords(x, y));
+        int hp = lizard.getHP();
+        int attack = lizard.getAttack();
+        enemies.clear();
+        enemies.add(lizard);
+        player.setCooldown(coolDown);
+
+        //then
+        boolean b = fightUtil.performSpecialAttack(SpecialAttacks.valueOf(attackType));
+        assertEquals(methodResult, b);
+        assertEquals(healthDecreased, enemies.get(0).getHP() < hp);
+        assertEquals(attackDecreased, enemies.get(0).getAttack() < attack);
     }
 
     @Test

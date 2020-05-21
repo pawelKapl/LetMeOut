@@ -1,0 +1,5 @@
+Planet Of War;102;27;50;0;PLUTO;CAVE;Planet Of War;Cave Of Nothing;Severs Level One
+Cave Of Nothing;30;15;10;0;DCAVE;CAVE;Planet Of War
+Severs Level One;70;25;22;1;DCAVE;sewersOne;Planet Of War;Abandoned Cellar;The Den
+Abandoned Cellar;50;16;12;1;CELLAR;abandonedCellar;Severs Level One
+The Den;70;25;32;2;PURPLE_HAZE;CAVE;Severs Level One

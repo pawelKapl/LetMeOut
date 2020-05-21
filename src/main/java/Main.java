@@ -1,5 +1,7 @@
 import data.gameEngine.GameLogic;
 import data.gui.UserInterface;
+import data.movables.MovableFactory;
+import locations.LocationsManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +20,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         log.info("Starting game!");
 
-        GameLogic game = new GameLogic();
+        GameLogic game = new GameLogic(new MovableFactory(), new LocationsManager());
         UserInterface ui = new UserInterface(game);
 
         ExecutorService es = Executors.newSingleThreadScheduledExecutor();

@@ -21,6 +21,7 @@ import locations.LocationsManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -35,38 +36,45 @@ public class GameLogic {
     private FogOfWar fogOfWar;
     private FightUtil fightUtil;
     private EffectsLayer effectsLayer;
+    private MovableFactory movableFactory;
+    private LocationsManager locationsManager;
     private List<Enemy> enemies = new ArrayList<>();
-    private MovableFactory movableFactory = new MovableFactory();
-    private LocationsManager lm = new LocationsManager();
-    private Random random = new Random();
 
     private static final Logger log = Logger.getLogger(GameLogic.class.toString());
 
-    public GameLogic() {
+    public GameLogic(MovableFactory movableFactory, LocationsManager locationsManager) {
         log.info("Starting game logic engine!");
+        this.movableFactory = movableFactory;
+        this.locationsManager = locationsManager;
         this.player = movableFactory.buildPlayer("Recon", 1);
-        prepareLocation(lm.get("Planet Of War"));
+        prepareLocation(locationsManager.get("Planet Of War"));
     }
 
     private void prepareLocation(Location location) {
         log.info("Preparing Location Components");
 
         enemies.clear();
+        //check if we already visited such location - if file with location save exists - returns true and loads it into game
         if(!LocationSaveUtil.loadLocation(this, location.getName())) {
-
-            if (!location.getLocationType().equals("CAVE")) {
-                terrain = new CustomMap(location);
-            } else {
-                terrain = new Cave(location);
-            }
-            addEnemies(location.getEnemies(), location.getDifficulty());
-            setPlayerStartingPoint();
-            fogOfWar = new FogOfWar(location.getHeight(), location.getWidth());
-            fogOfWar.uncover(player.getCoords());
+            createNewLocation(location);
         }
+
+        //additional works during location loading, non related to game persistence
         enableEffectsLayer(location.getWidth(), location.getHeight());
         enableLogic();
         log.info("Preparation of Location Components ended successfully");
+    }
+
+    private void createNewLocation(Location location) {
+        if (!location.getLocationType().equals("CAVE")) {
+            terrain = new CustomMap(location);
+        } else {
+            terrain = new Cave(location);
+        }
+        addEnemies(location.getEnemies(), location.getDifficulty());
+        setPlayerStartingPoint();
+        fogOfWar = new FogOfWar(location.getHeight(), location.getWidth());
+        fogOfWar.uncover(player.getCoords());
     }
 
     private void enableLogic() {
@@ -86,24 +94,22 @@ public class GameLogic {
 
         if (occupiedByEnemy(x, y)) {
             fightUtil.attackEnemy(x, y);
-            player.decreaseCooldown();
-            updatable.update();
         } else {
             if (checkForOtherEvents(x, y)) {
                 return;
             }
             player.setX(x);
             player.setY(y);
-            player.decreaseCooldown();
         }
-        enemyTurn();
+        enemyTurn(true);
+        player.decreaseCooldown();
         fogOfWar.uncover(player.getCoords());
         updatable.update();
     }
 
     public void specialAttack(SpecialAttacks specialAttack) {
         fightUtil.performSpecialAttack(specialAttack);
-        enemyTurn();
+        enemyTurn(false);
         updatable.update();
     }
 
@@ -133,7 +139,7 @@ public class GameLogic {
         if (terrain.getMap()[y][x] == TerrainType.DOOR && !player.isLocked()) {
             LocationSaveUtil.saveLocation(terrain, enemies, fogOfWar, player.getCoords());
             String nextLocation = terrain.getInOuts().get(new Coords(x, y));
-            prepareLocation(lm.get(nextLocation));
+            prepareLocation(locationsManager.get(nextLocation));
             updatable.update();
             return true;
         }
@@ -156,18 +162,14 @@ public class GameLogic {
         return false;
     }
 
-    private void enemyTurn() {
-        boolean playerInCombat = false;
+    private void enemyTurn(boolean withRandomMove) {
+        boolean playerLocked = false;
         for (Enemy enemy : enemies) {
-            if (fightUtil.tryAttackPlayer(enemy)) {
-                playerInCombat = true;
-            }
-
-            if (moveEnemy(enemy)) {
-                playerInCombat = true;
+            if (fightUtil.tryAttackPlayer(enemy) || (withRandomMove && moveEnemy(enemy))) {
+                playerLocked = true;
             }
         }
-        if (!playerInCombat) {
+        if (!playerLocked) {
             player.unlock();
         }
     }
@@ -196,22 +198,6 @@ public class GameLogic {
                 enemy.setCoords(path.getStep(1));
             player.lock();
             return true;
-        }
-        return false;
-    }
-
-    private boolean playerWithinRange(Enemy enemy) {
-        int visionRadius = enemy.getVisionRadius();
-        Coords temp = new Coords(0, 0);
-        for (int i = -visionRadius; i <= visionRadius; i++) {
-            temp.setY(enemy.getY() + i);
-            for (int j = -visionRadius; j <= visionRadius; j++) {
-                temp.setX(enemy.getX() + j);
-
-                if (temp.equals(player.getCoords())) {
-                    return true;
-                }
-            }
         }
         return false;
     }
@@ -258,38 +244,26 @@ public class GameLogic {
     private void setPlayerStartingPoint() {
         log.info("Getting Starting Point for a new Player...");
 
-        int y = terrain.getEntrance().getY();
-        int x = terrain.getEntrance().getX();
+        int entranceY = terrain.getEntrance().getY();
+        int entranceX = terrain.getEntrance().getX();
 
-        for (int i = -1; i < 2; i++) {
-            for (int j = -1; j < 2; j++) {
-                int nbx = x + j;
-                int nby = y + i;
-                if (i == 0 && j == 0) {
-                } else if (isFree(nbx, nby)) {
-                    player.setCoords(new Coords(nbx,nby));
-                    return;
-                }
-            }
-        }
-        throw new RuntimeException("Error during calculation of player starting point");
+        player.setCoords(IsNear.convenientCoords(entranceX, entranceY, 1,
+                (x, y) -> isFree((int)x, (int)y))
+                .orElseThrow(() -> new RuntimeException("Error during calculation of player starting point")));
     }
 
     private Coords setEnemyStartingPoint() {
+        Random random = new Random();
         while (true) {
             int x = random.nextInt(terrain.getMap()[0].length - 1);
             int y = random.nextInt(terrain.getMap().length - 1);
 
-            //if (isFree(x, y) && !isTreasure(x, y) && !isNearEntrance(x, y)) {
-            if (terrain.getMap()[y][x] == TerrainType.GROUND && !occupiedByEnemy(x, y) && !isNearEntrance(x, y)) {
-                for (int i = -4; i < 5; i++) {
-                    for (int j = -4; j < 5; j++) {
-                        int ndx = x + j;
-                        int ndy = y + i;
-                        if (isWithinMap(ndx, ndy) && isTreasure(ndx, ndy)) {
-                            return new Coords(x, y);
-                        }
-                    }
+            if (terrain.getMap()[y][x] == TerrainType.GROUND &&
+                    !occupiedByEnemy(x, y) && !isNearEntrance(x, y)) {
+                Optional<Coords> coords = IsNear.convenientCoords(x,y,6,
+                        (x1, y1) -> isWithinMap((int)x1, (int)y1) && isTreasure((int)x1, (int)y1));
+                if (coords.isPresent()) {
+                    return new Coords(x, y);
                 }
             }
         }
@@ -299,16 +273,11 @@ public class GameLogic {
         int entranceY = terrain.getEntrance().getY();
         int entranceX = terrain.getEntrance().getX();
 
-        for (int i = -3; i < 4; i++) {
-            for (int j = -3; j < 4; j++) {
-                int dx = entranceX + j;
-                int dy = entranceY + i;
-                if (dx == x && dy == y) {
-                    return true;
-                }
-            }
-        }
-        return false;
+        return IsNear.isNear(entranceX, entranceY, x, y, 3);
+    }
+
+    private boolean playerWithinRange(Enemy enemy) {
+        return IsNear.isNear(player.getCoords(), enemy.getCoords(),enemy.getVisionRadius());
     }
 
     private boolean isFree(int x, int y) {

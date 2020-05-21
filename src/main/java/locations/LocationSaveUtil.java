@@ -43,7 +43,6 @@ public class LocationSaveUtil {
     }
 
     public static boolean loadLocation(GameLogic gameLogic, String location) {
-
         //triggers only on first run
         if (gameLogic.getTerrain() == null) {
             return false;

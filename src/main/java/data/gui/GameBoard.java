@@ -35,6 +35,7 @@ import static data.other.Colors.LIGHT_YELLOW;
 import static data.other.Colors.LIZARD_RED;
 import static data.other.Colors.PLAYER_BLUE;
 import static data.other.Colors.PREDATOR_ORANGE;
+import static data.other.Colors.SHADOWS_BLACK;
 import static data.other.Colors.TRAP_GREY;
 import static data.other.Colors.WATER_BLUE;
 import static data.other.Colors.WHEREWOLF_BLUE;
@@ -67,7 +68,7 @@ public class GameBoard extends JPanel implements Updatable {
         printSpecialAttacksMenu(g);
         printFightLog(g);
         printEquipmentLog(g);
-        //printFogOfWar(g);
+        printFogOfWar(g);
     }
 
     private void printEffectsLayer(Graphics g) {
@@ -107,10 +108,19 @@ public class GameBoard extends JPanel implements Updatable {
         int dx = 35;
         int dy = 83;
 
-        g.setColor(ALMOST_BLACK);
         for (int i = 0; i < fog.length; i++) {
             for (int j = 0; j < fog[0].length; j++) {
-                if(!fog[i][j]) {
+                //must refactor this monster!!
+                if ((j+1 < fog[0].length && fog[i][j+1] && j-1 > 0 && !fog[i][j-1]) ||
+                        (j-1 > 0 && fog[i][j-1] && j+1 < fog[0].length && !fog[i][j+1]) ||
+                        (i+1 < fog.length && fog[i+1][j] && i-1 > 0 && !fog[i-1][j]) ||
+                        (i-1 > 0 && fog[i-1][j] && i+1 > fog.length && !fog[i+1][j])
+                ) {
+                    g.setColor(SHADOWS_BLACK);
+                    g.fillRect(dx, dy, 12, 20);
+
+                } else if (!fog[i][j]) {
+                    g.setColor(ALMOST_BLACK);
                     g.fillRect(dx, dy, 12, 20);
                 }
                 dx += 12;

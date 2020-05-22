@@ -21,6 +21,7 @@ public class Colors {
     public static final Color BLINDING_PINK = new Color(255, 0, 215);
     public static final Color DARK_FRAMES = new Color(45, 45, 45);
     public static final Color ALMOST_BLACK = new Color(5, 5, 5, 255);
+    public static final Color SHADOWS_BLACK = new Color(5, 5, 5, 129);
     public static final Color CALM_WHITE = new Color(135, 135, 135);
     public static final Color TRAP_GREY = new Color(114, 94, 94);
 

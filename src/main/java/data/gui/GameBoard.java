@@ -66,9 +66,24 @@ public class GameBoard extends JPanel implements Updatable {
         printEquipmentMenu(g);
         printInventoryMenu(g);
         printSpecialAttacksMenu(g);
+        printStatsDistributionMenu(g);
         printFightLog(g);
         printEquipmentLog(g);
         printFogOfWar(g);
+    }
+
+    private void printStatsDistributionMenu(Graphics g) {
+        Player player = game.getPlayer();
+        setLogFont(g);
+        g.setColor(LIGHT_YELLOW);
+        int width = 900;
+        int height = Preferences.windowHeight*2/3 + 90;
+        if (player.getPointsToDistribute() > 0) {
+            g.drawString("Points to distribute: " + player.getPointsToDistribute(), width, height);
+            g.drawString("Increase Attack <T>", width, height += 30);
+            g.drawString("Increase Defense <Y>", width, height += 20);
+            g.drawString("Increase Max Hp <U>", width, height += 20);
+        }
     }
 
     private void printEffectsLayer(Graphics g) {

@@ -9,7 +9,7 @@ public class Colors {
     public static final Color LIZARD_RED = new Color(127, 29, 29);
     public static final Color PREDATOR_ORANGE = new Color(255, 105, 0);
     public static final Color PLAYER_BLUE = new Color(16, 7, 239);
-    public static final Color WHEREWOLF_BLUE = new Color(31, 29, 128);
+    public static final Color WHEREWOLF_BLUE = new Color(33, 29, 173);
 
     //System, logs, background, frames, other
     public static final Color DEF_BLUE  = new Color(31, 23, 173);

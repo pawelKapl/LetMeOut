@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
@@ -46,8 +47,8 @@ public class Main {
                     .map(Path::toFile)
                     .forEach(File::delete);
         } catch (IOException e) {
-            e.printStackTrace();
             log.info("Couldn't clean files before startup!");
+            log.log(Level.WARNING,"Couldn't clean files before startup!", e);
             return;
         }
     }

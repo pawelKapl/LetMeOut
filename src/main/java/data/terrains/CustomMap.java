@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CustomMap implements Terrain, Serializable {
@@ -38,8 +39,7 @@ public class CustomMap implements Terrain, Serializable {
             map = Files.readAllLines(path);
         } catch (IOException e)
         {
-            log.warning("Troubles During reading map form file");
-            e.printStackTrace();
+            log.log(Level.WARNING,"Troubles During reading map form file", e);
         }
         return printTerrain(exits, map);
     }

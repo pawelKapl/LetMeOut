@@ -29,25 +29,20 @@ class PlayerTest {
     }
 
     @ParameterizedTest(name = "For a given sequence of xp addition: {0}," +
-            " player will promote to {1} level, has maxHp: {2}, attack increased by {3}, defense increased by {4}")
+            " player will promote to {1} level")
     @CsvSource({
-            "'0', 1, 100, 0, 0",
-            "'999', 1, 100, 0, 0",
-            "'1000', 2, 110, 1, 1",
-            "'1000, 1500', 3, 120, 2, 2",
-            "'1000, 1500, 2499', 3, 120, 2, 2",
-            "'5000', 4, 140, 4, 3",
+            "'0', 1",
+            "'999', 1",
+            "'1000', 2",
+            "'1000, 1500', 3",
+            "'1000, 1500, 2499', 3",
+            "'5000', 4",
     })
-    void gainExpTest(@ConvertWith(ArrayConverter.class) Long[] expSequence, int level, int hpMax, int att, int def) {
+    void gainExpTest(@ConvertWith(ArrayConverter.class) Long[] expSequence, int level) {
         for (int i = 0; i < expSequence.length; i++) {
             player.gainExp(expSequence[i]);
         }
-        Solider compare = new Solider("test2");
         assertEquals(level , player.getLevel());
-        assertEquals(hpMax, player.getMaxHp());
-        assertEquals(player.getHP(), player.getMaxHp());
-        assertEquals(compare.getAttack() + att, player.getAttack());
-        assertEquals(compare.getDefense() + def, player.getDefense());
     }
 
     @Test

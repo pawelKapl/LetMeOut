@@ -30,6 +30,6 @@ https://youtu.be/FUlfJNOFLCI
 
 ![alt text](https://i.imgur.com/4zTmxFa.png)
 
-![alt text](https://i.imgur.com/2C21PK0.png)
+![alt text](https://i.imgur.com/D6Qo4qY.png)
 
 Want to participate? Just let me know!

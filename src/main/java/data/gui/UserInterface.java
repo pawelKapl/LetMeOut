@@ -3,6 +3,7 @@ package data.gui;
 import data.gameEngine.GameLogic;
 import data.gui.keyboardcontrollers.EquipmentKeyController;
 import data.gui.keyboardcontrollers.MovementKeyController;
+import data.gui.keyboardcontrollers.SkillsKeyController;
 import data.gui.keyboardcontrollers.SystemKeyController;
 import data.other.Preferences;
 
@@ -44,6 +45,7 @@ public class UserInterface implements Runnable {
         frame.addKeyListener(new MovementKeyController(game));
         frame.addKeyListener(new EquipmentKeyController(game, gameBoard));
         frame.addKeyListener(new SystemKeyController());
+        frame.addKeyListener(new SkillsKeyController(game, gameBoard));
     }
 
 

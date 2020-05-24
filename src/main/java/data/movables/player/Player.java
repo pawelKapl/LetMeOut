@@ -23,6 +23,7 @@ public abstract class Player implements Movable {
     private int defense;
     private int cooldown;
     private int level = 1;
+    private int pointsToDistribute = 0;
     private Long experience = 0L;
 
     private boolean locked = false;
@@ -49,11 +50,9 @@ public abstract class Player implements Movable {
             if (experience >= lvlMap[i][1]) {
                 int lvl = lvlMap[i][0];
                 if (lvl > this.level) {
-                    addMessage("[LEVEL UP]: Level " + lvl + ". Health Restored to new max!");
+                    addMessage("[LEVEL UP]: Level " + lvl + ". Health Restored!");
                     this.level = lvl;
-                    attack += lvlMap[lvl][2];
-                    defense += lvlMap[lvl][3];
-                    maxHp += lvlMap[lvl][4];
+                    pointsToDistribute += 4;
                     hp = maxHp;
                 }
             }
@@ -176,6 +175,14 @@ public abstract class Player implements Movable {
         this.attack = attack;
     }
 
+    public void increaseAttack() {
+        if (pointsToDistribute > 0) {
+            addMessage("[INFO]: Attack increased by +1");
+            pointsToDistribute--;
+            this.attack++;
+        }
+    }
+
     public int getDefense() {
         return defense + armors
                 .stream()
@@ -184,6 +191,14 @@ public abstract class Player implements Movable {
 
     public void setDefense(int defense) {
         this.defense = defense;
+    }
+
+    public void increaseDefense() {
+        if (pointsToDistribute > 0) {
+            addMessage("[INFO]: Defense increased by +1");
+            pointsToDistribute--;
+            this.defense++;
+        }
     }
 
     public Equipment getEquipment() {
@@ -196,6 +211,14 @@ public abstract class Player implements Movable {
 
     public int getMaxHp() {
         return maxHp;
+    }
+
+    public void increaseMaxHp() {
+        if (pointsToDistribute > 0) {
+            addMessage("[INFO]: Max Hp increased by +10");
+            pointsToDistribute--;
+            this.maxHp += 10;
+        }
     }
 
     public void setHp(int hp) {
@@ -269,5 +292,9 @@ public abstract class Player implements Movable {
 
     public void setSpecialAttacks(List<SpecialAttacks> specialAttacks) {
         this.specialAttacks = specialAttacks;
+    }
+
+    public int getPointsToDistribute() {
+        return pointsToDistribute;
     }
 }

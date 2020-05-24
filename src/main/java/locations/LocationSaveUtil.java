@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -36,8 +37,7 @@ public class LocationSaveUtil {
             file.writeObject(fog);
             file.writeObject(player);
         } catch (IOException e) {
-            e.printStackTrace();
-            log.warning("Error during location saving process");
+            log.log(Level.WARNING,"Error during location saving process", e);
             return;
         }
     }
@@ -62,8 +62,7 @@ public class LocationSaveUtil {
             gameLogic.setFogOfWar((FogOfWar) file.readObject());
             gameLogic.getPlayer().setCoords((Coords) file.readObject());
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            log.warning("Error during reading location file " + path.getFileName());
+            log.log(Level.WARNING,"Error during reading location file " + path.getFileName(), e);
             return false;
         }
         return true;

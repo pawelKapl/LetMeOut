@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class WeaponStore implements Map<Integer, Weapon> {
@@ -33,8 +34,7 @@ public class WeaponStore implements Map<Integer, Weapon> {
         try {
             weapons = Files.readAllLines(path);
         } catch (IOException e) {
-            e.printStackTrace();
-            log.warning("Troubles with reading file!" + path.getFileName());
+            log.log(Level.WARNING,"Troubles with reading file!" + path.getFileName(), e);
         }
 
         int i = 0;

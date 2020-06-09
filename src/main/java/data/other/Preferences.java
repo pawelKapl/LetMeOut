@@ -14,8 +14,9 @@ public class Preferences {
             {3, 2500},
             {4, 5000},
             {5, 10000},
-            {6, 20000}
-
+            {6, 20000},
+            {7, 35000},
+            {8, 55000}
     };
 
     public final static double[][] enemyStructure = {

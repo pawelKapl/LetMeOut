@@ -1,7 +1,9 @@
 package data.equipment;
 
+import data.equipment.armors.Armor;
 import data.equipment.armors.CasualArmor;
 import data.equipment.weapons.CasualWeapon;
+import data.equipment.weapons.Weapon;
 import data.movables.player.Player;
 import data.movables.player.Solider;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +23,8 @@ class EquipmentTest {
 
     Player player;
     Equipment equipment;
-    CasualWeapon testWeapon = new CasualWeapon("testWeapon", "test1", 10);
-    CasualArmor testArmor = new CasualArmor("testArmor", "test2", 3);
+    Weapon testWeapon = CasualWeapon.getInstance("testWeapon", "test1", 10);
+    Armor testArmor = CasualArmor.getInstance("testArmor", "test2", 3);
 
     Logger log = Logger.getLogger(EquipmentTest.class.toString());
 
@@ -35,7 +37,7 @@ class EquipmentTest {
     private void createPlayerAndEquipmentFotTests() {
         player = new Solider("test");
         player.setHp(10);
-        equipment = new Equipment(player);
+        equipment = Equipment.getInstance(player);
         for (int i = 1; i < 5; i++) {
             equipment.addToEquipment(equipment.getWeaponStore().get(i));
             equipment.addToEquipment(equipment.getArmorStore().get(i));

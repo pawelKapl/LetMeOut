@@ -44,7 +44,7 @@ import static data.other.Colors.WHEREWOLF_BLUE;
 @SuppressWarnings("serial")
 public class GameBoard extends JPanel implements Updatable {
 
-    private GameLogic game;
+    private final GameLogic game;
 
 
     public GameBoard(GameLogic game) {
@@ -404,7 +404,7 @@ public class GameBoard extends JPanel implements Updatable {
         g.drawRect(1060,Preferences.windowHeight*2/3 + 30, 500, 200);
 
         g.setColor(DARK_RED);
-        g.drawString("DarkOnion", Preferences.windowWidth/2 - 30, Preferences.windowHeight - 60);
+        //g.drawString("DarkOnion", Preferences.windowWidth/2 - 30, Preferences.windowHeight - 60);
     }
 
     private void setLogFont(Graphics g) {

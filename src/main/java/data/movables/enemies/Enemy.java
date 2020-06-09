@@ -12,7 +12,7 @@ public abstract class Enemy implements Movable, Serializable {
     private static int nextNumber = 1;
     private Coords coords;
     private int hp;
-    private int number;
+    private final int number;
     private int visionRadius;
     private int attack;
     private int defense;

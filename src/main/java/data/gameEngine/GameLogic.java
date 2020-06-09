@@ -27,17 +27,17 @@ import java.util.logging.Logger;
 
 import static java.lang.StrictMath.random;
 
-public class GameLogic {
+public final class GameLogic {
 
-    private Player player;
+    private final Player player;
     private Terrain terrain;
     private Updatable updatable;
     private PathFinder pathFinder;
     private FogOfWar fogOfWar;
     private FightUtil fightUtil;
     private EffectsLayer effectsLayer;
-    private MovableFactory movableFactory;
-    private LocationsManager locationsManager;
+    private final MovableFactory movableFactory;
+    private final LocationsManager locationsManager;
     private List<Enemy> enemies = new ArrayList<>();
 
     private static final Logger log = Logger.getLogger(GameLogic.class.toString());

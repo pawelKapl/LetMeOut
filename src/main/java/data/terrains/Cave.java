@@ -24,7 +24,7 @@ public final class Cave implements Terrain, Serializable {
     private final Coords entrance;
     private final String terrainType;
     private final TerrainType[][] mapFinal;
-    private Map<Coords, String> inOuts = new HashMap<>();
+    private final Map<Coords, String> inOuts = new HashMap<>();
 
     private static final Logger log = Logger.getLogger(Cave.class.toString());
 

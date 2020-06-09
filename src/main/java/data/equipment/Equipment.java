@@ -12,21 +12,25 @@ import java.util.TreeMap;
 
 import static java.lang.StrictMath.random;
 
-public class Equipment {
+public final class Equipment {
 
-    private Player player;
+    private final Player player;
     private int smallPotions = 2;
     private int largePotions = 1;
 
-    private Map<Integer, Item> items = new TreeMap<>();
-    private WeaponStore weaponStore = new WeaponStore();
-    private ArmorStore armorStore = new ArmorStore();
-    private Random random = new Random();
+    private final Map<Integer, Item> items = new TreeMap<>();
+    private final WeaponStore weaponStore = WeaponStore.getInstance();
+    private final ArmorStore armorStore = ArmorStore.getInstance();
+    private final Random random = new Random();
 
     private String currentDesc = "";
 
-    public Equipment(Player player) {
+    private Equipment(Player player) {
         this.player = player;
+    }
+
+    public static Equipment getInstance(Player player) {
+        return new Equipment(player);
     }
 
     public boolean addToEquipment(Item item) {

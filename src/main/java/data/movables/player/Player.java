@@ -28,12 +28,12 @@ public abstract class Player implements Movable {
 
     private boolean locked = false;
 
-    private Equipment equipment = new Equipment(this);
-    private LinkedList<Armor> armors = new LinkedList<>();
-    private LinkedList<Weapon> weapons = new LinkedList<>();
+    private final Equipment equipment = Equipment.getInstance(this);
+    private final LinkedList<Armor> armors = new LinkedList<>();
+    private final LinkedList<Weapon> weapons = new LinkedList<>();
     private List<SpecialAttacks> specialAttacks;
 
-    private LinkedList<String> messages = new LinkedList<>();
+    private final LinkedList<String> messages = new LinkedList<>();
 
 
     public Player(String name) {

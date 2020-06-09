@@ -13,16 +13,21 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LocationsManager implements Map<String, Location> {
+public final class LocationsManager implements Map<String, Location> {
 
-    private Map<String, Location> locations = new HashMap<>();
+    private final Map<String, Location> locations = new HashMap<>();
+    private static final LocationsManager instance = new LocationsManager();
 
-    private static final Logger log = Logger.getLogger(LocationsManager.class.toString());
+    private static Logger log;
 
 
-    public LocationsManager() {
-        log.info("Bootstrapping locations manager");
+    private LocationsManager() {
+        log = Logger.getLogger(LocationsManager.class.toString());
         bootstrap();
+    }
+
+    public static LocationsManager getInstance() {
+        return instance;
     }
 
     private void bootstrap() {
@@ -46,10 +51,8 @@ public class LocationsManager implements Map<String, Location> {
                 exits.put(j - 7, details[j]);
             }
 
-            Location newLocation = new Location(details[0], details[1],
-                    details[2], details[3], details[4], details[5], details[6], exits);
-
-            locations.put(newLocation.getName(), newLocation);
+            locations.put(details[0], Location.getInstance(details[0], details[1],
+                    details[2], details[3], details[4], details[5], details[6], exits));
         }
     }
 

@@ -4,17 +4,18 @@ import data.movables.enemies.Enemy;
 import data.movables.player.Player;
 import data.terrains.TerrainType;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
 public class FightUtil {
 
-    private Player player;
-    private List<Enemy> enemies;
-    private LinkedList<String> messages = new LinkedList<>();
-    private Random random = new Random();
-    private EffectsLayer effectsLayer;
+    private final Player player;
+    private final List<Enemy> enemies;
+    private final LinkedList<String> messages = new LinkedList<>();
+    private final Random random = new Random();
+    private final EffectsLayer effectsLayer;
 
     public FightUtil(Player player, List<Enemy> enemies, EffectsLayer effectsLayer) {
         this.player = player;
@@ -135,22 +136,35 @@ public class FightUtil {
     }
 
     public boolean performSpecialAttack(SpecialAttacks specialAttack) {
-        if (player.getCooldown() != 0) {
-            addMessage("[INFO]: Cant do that, cooldown remaining:" + player.getCooldown());
-            return false;
-        }
+        if (playerIsExhausted()) { return false; }
+
         addMessage("[SKILL]: Using " + specialAttack.name());
-        for (Enemy enemy : enemies) {
+
+        Iterator<Enemy> iterator = enemies.iterator();
+        while (iterator.hasNext()) {
+            Enemy enemy = iterator.next();
             String result = specialAttack.attack(enemy, player);
             if (result != null) {
                 addMessage(result);
                 if (result.startsWith("[ATTACK]")) {
                     effectsLayer.mark(enemy.getX(), enemy.getY(), TerrainType.HIT_MARK);
+                    if (enemy.getHP() <= 0) {
+                        iterator.remove();
+                        effectsLayer.mark(enemy.getX(), enemy.getY(), TerrainType.DEAD_MARK);
+                    }
                 } else if (result.startsWith("[WEAKNESS]")) {
                     effectsLayer.mark(enemy.getX(), enemy.getY(), TerrainType.WEAKNESS_MARK);
                 }
             }
         }
         return true;
+    }
+
+    private boolean playerIsExhausted() {
+        if (player.getCooldown() != 0) {
+            addMessage("[INFO]: Cant do that, cooldown remaining:" + player.getCooldown());
+            return true;
+        }
+        return false;
     }
 }

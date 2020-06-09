@@ -1,15 +1,13 @@
 package data.equipment.weapons;
 
-public class CasualWeapon extends Weapon {
+public final class CasualWeapon extends Weapon {
 
-
-    public CasualWeapon() {
-    }
-
-    public CasualWeapon(String name, String description, int attack) {
+    private CasualWeapon(String name, String description, int attack) {
         super(name, description, attack);
     }
 
-
+    public static Weapon getInstance(String name, String description, int attack) {
+        return new CasualWeapon(name, description, attack);
+    }
 
 }

@@ -15,19 +15,22 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class ArmorStore implements Map<Integer, Armor> {
+public final class ArmorStore implements Map<Integer, Armor> {
 
-    private Map<Integer, Armor> armorStore = new HashMap<>();
+    private final Map<Integer, Armor> armorStore = new HashMap<>();
 
     private static final Logger log = Logger.getLogger(ArmorStore.class.toString());
 
-    public ArmorStore() {
+    private ArmorStore() {
         log.info("Bootstrapping armor store");
         bootstrap();
     }
 
-    private void bootstrap() {
+    public static ArmorStore getInstance() {
+        return new ArmorStore();
+    }
 
+    private void bootstrap() {
         Path path = Paths.get("src/resources/bootstrapFiles/armors.txt");
         List<String> armors = null;
 
@@ -41,11 +44,7 @@ public class ArmorStore implements Map<Integer, Armor> {
         int i = 0;
         for (String item : armors) {
             String[] itemData = item.split(";");
-            Armor armor = new CasualArmor();
-            armor.setName(itemData[0]);
-            armor.setDescription(itemData[1]);
-            armor.setDefence(Integer.parseInt(itemData[2]));
-            armorStore.put(i++, armor);
+            armorStore.put(i++, CasualArmor.getInstance(itemData[0], itemData[1], Integer.parseInt(itemData[2])));
         }
     }
 

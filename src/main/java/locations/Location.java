@@ -2,7 +2,7 @@ package locations;
 
 import java.util.Map;
 
-public class Location {
+public final class Location {
 
     private final String name;
     private final int width;
@@ -13,7 +13,7 @@ public class Location {
     private final String locationType;
     private final Map<Integer, String> exits;
 
-    public Location(String name,
+    private Location(String name,
             String width,
             String height,
             String enemies,
@@ -28,6 +28,16 @@ public class Location {
         this.terrainType = terrainType;
         this.locationType = locationType;
         this.exits = exits;
+    }
+
+    public static Location getInstance(String name,
+            String width,
+            String height,
+            String enemies,
+            String difficulty, String terrainType,
+            String locationType,
+            Map<Integer, String> exits) {
+        return new Location(name, width, height, enemies, difficulty, terrainType, locationType, exits);
     }
 
     public String getName() {

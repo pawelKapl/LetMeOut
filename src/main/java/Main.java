@@ -21,7 +21,7 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
         log.info("Starting game!");
 
-        GameLogic game = new GameLogic(new MovableFactory(), new LocationsManager());
+        GameLogic game = new GameLogic(new MovableFactory(), LocationsManager.getInstance());
         UserInterface ui = new UserInterface(game);
 
         ExecutorService es = Executors.newSingleThreadScheduledExecutor();
@@ -47,7 +47,6 @@ public class Main {
                     .map(Path::toFile)
                     .forEach(File::delete);
         } catch (IOException e) {
-            log.info("Couldn't clean files before startup!");
             log.log(Level.WARNING,"Couldn't clean files before startup!", e);
             return;
         }

@@ -1,11 +1,12 @@
 package data.equipment.armors;
 
-public class CasualArmor extends Armor {
+public final class CasualArmor extends Armor {
 
-    public CasualArmor() {
+    private CasualArmor(String name, String description, int defence) {
+        super(name, description, defence);
     }
 
-    public CasualArmor(String name, String description, int defence) {
-        super(name, description, defence);
+    public static Armor getInstance(String name, String description, int defence) {
+        return new CasualArmor(name, description, defence);
     }
 }

@@ -1,7 +1,9 @@
 package data.movables.player;
 
+import data.equipment.armors.Armor;
 import data.equipment.armors.CasualArmor;
 import data.equipment.weapons.CasualWeapon;
+import data.equipment.weapons.Weapon;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,8 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PlayerTest {
 
     Solider player;
-    CasualWeapon testWeapon = new CasualWeapon("testWeapon", "test1", 10);
-    CasualArmor testArmor = new CasualArmor("testArmor", "test2", 3);
+    Weapon testWeapon = CasualWeapon.getInstance("testWeapon", "test1", 10);
+    Armor testArmor = CasualArmor.getInstance("testArmor", "test2", 3);
 
     @BeforeEach
     void setUp() {
@@ -79,7 +81,7 @@ class PlayerTest {
     void equipWeapon() {
         //partly tested in equip method cases
         player.equipWeapon(testWeapon);
-        player.equipWeapon(new CasualWeapon("testWeapon2", "test1", 10));
+        player.equipWeapon(CasualWeapon.getInstance("testWeapon2", "test1", 10));
         assertEquals(2, player.getWeapons().size());
         assertEquals(1, player.getEquipment().getItems().size());
 
@@ -96,8 +98,8 @@ class PlayerTest {
     void equipArmor() {
         //partly tested in equip method cases
         player.equipArmor(testArmor);
-        player.equipArmor(new CasualArmor("testArmor2", "test1", 10));
-        player.equipArmor(new CasualArmor("testArmor3", "test1", 10));
+        player.equipArmor(CasualArmor.getInstance("testArmor2", "test1", 10));
+        player.equipArmor(CasualArmor.getInstance("testArmor3", "test1", 10));
         assertEquals(3, player.getArmorList().size());
         assertEquals(1, player.getEquipment().getItems().size());
     }

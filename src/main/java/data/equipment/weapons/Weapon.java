@@ -6,14 +6,11 @@ import java.util.Objects;
 
 public abstract class Weapon implements Item {
 
-    private String name;
-    private String description;
-    private int attack;
+    private final String name;
+    private final String description;
+    private final int attack;
 
-    public Weapon() {
-    }
-
-    public Weapon(String name, String description, int attack) {
+    protected Weapon(String name, String description, int attack) {
         this.name = name;
         this.description = description;
         this.attack = attack;
@@ -23,23 +20,9 @@ public abstract class Weapon implements Item {
         return attack;
     }
 
-    public void setAttack(int attack) {
-        this.attack = attack;
-    }
-
     @Override
     public String getName() {
         return this.name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     @Override

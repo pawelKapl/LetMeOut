@@ -6,6 +6,7 @@ import data.equipment.armors.Armor;
 import data.equipment.weapons.Weapon;
 import data.gameEngine.GameLogic;
 import data.gameEngine.SpecialAttacks;
+import data.gameEngine.SpecialSkills;
 import data.movables.enemies.Enemy;
 import data.movables.enemies.Lizard;
 import data.movables.enemies.Predator;
@@ -66,6 +67,7 @@ public class GameBoard extends JPanel implements Updatable {
         printEquipmentMenu(g);
         printInventoryMenu(g);
         printSpecialAttacksMenu(g);
+        printSpecialSkillsMenu(g);
         printStatsDistributionMenu(g);
         printFightLog(g);
         printEquipmentLog(g);
@@ -178,10 +180,34 @@ public class GameBoard extends JPanel implements Updatable {
         g.drawString("Special Attacks: ", width, height);
         height += 10;
         List<SpecialAttacks> specialAttacks = game.getPlayer().getSpecialAttacks();
-        g.drawString("- " + stringNormalizer(specialAttacks.get(0).name()) + "  <Space>", width, height += 20);
-        g.drawString("- " + stringNormalizer(specialAttacks.get(1).name()) + "  <V>", width, height += 20);
-        g.drawString("- " + stringNormalizer(specialAttacks.get(2).name()) + "  <B>", width, height += 20);
-        g.drawString("Cooldown: " + game.getPlayer().getCooldown(), width, height + 40);
+        if (specialAttacks.size() >= 1) {
+            g.drawString("- " + stringNormalizer(specialAttacks.get(0).name()) + "  <Space>", width, height += 20);
+        }
+        if (specialAttacks.size() >= 2) {
+            g.drawString("- " + stringNormalizer(specialAttacks.get(1).name()) + "  <V>", width, height += 20);
+        }
+        if (specialAttacks.size() >= 3) {
+            g.drawString("- " + stringNormalizer(specialAttacks.get(2).name()) + "  <B>", width, height += 20);
+        }
+        g.drawString("Cooldown: " + game.getPlayer().getCooldown(), width, Preferences.windowHeight*2/3 + 220);
+    }
+
+    private void printSpecialSkillsMenu(Graphics g) {
+        setLogFont(g);
+        int width = 725;
+        int height = Preferences.windowHeight*2/3 + 90;
+        g.drawString("Special Skills: ", width, height);
+        height += 10;
+        List<SpecialSkills> specialSkills = game.getPlayer().getSpecialSkills();
+        if (specialSkills.size() >= 1) {
+            g.drawString("- " + stringNormalizer(specialSkills.get(0).name()) + "  <Z>", width, height += 20);
+        }
+        if (specialSkills.size() >= 2) {
+            g.drawString("- " + stringNormalizer(specialSkills.get(1).name()) + "  <X>", width, height += 20);
+        }
+        if (specialSkills.size() >= 3) {
+            g.drawString("- " + stringNormalizer(specialSkills.get(2).name()) + "  <C>", width, height += 20);
+        }
     }
 
     private void printFightLog(Graphics g) {
@@ -395,13 +421,15 @@ public class GameBoard extends JPanel implements Updatable {
 
     private void printFrames(Graphics g) {
         g.setColor(DARK_FRAMES);
-        g.drawRect(10,10, Preferences.windowWidth*4/5, Preferences.windowHeight*2/3);
+        g.drawRect(10,10, Preferences.windowWidth*4/5, Preferences.windowHeight*2/3); //main frame
         g.drawRect(Preferences.windowWidth*4/5 + 20, 10, Preferences.windowWidth/5 - 50, Preferences.windowHeight*2/3);
         g.drawRect(10, Preferences.windowHeight*2/3 + 20, Preferences.windowWidth - 40, Preferences.windowHeight/3 - 110);
         g.drawRect(Preferences.windowWidth*4/5 + 30,300,250,260);
         g.drawRect(Preferences.windowWidth*4/5 + 30, 565, 250, 100);
-        g.drawRect(25, Preferences.windowHeight*2/3 + 70, 500,150);
-        g.drawRect(1060,Preferences.windowHeight*2/3 + 30, 500, 200);
+        g.drawRect(25, Preferences.windowHeight*2/3 + 70, 500,150); //fight log
+        g.drawRect(1060,Preferences.windowHeight*2/3 + 30, 500, 200); //player log
+        g.drawRect(540,Preferences.windowHeight*2/3 + 70, 160, 105); //attack skills
+        g.drawRect(715,Preferences.windowHeight*2/3 + 70, 160, 105); //skills
 
         g.setColor(DARK_RED);
         //g.drawString("DarkOnion", Preferences.windowWidth/2 - 30, Preferences.windowHeight - 60);

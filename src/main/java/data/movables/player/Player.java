@@ -5,10 +5,12 @@ import data.equipment.Item;
 import data.equipment.armors.Armor;
 import data.equipment.weapons.Weapon;
 import data.gameEngine.SpecialAttacks;
+import data.gameEngine.SpecialSkills;
 import data.movables.Coords;
 import data.movables.Movable;
 import data.other.Preferences;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +23,8 @@ public abstract class Player implements Movable {
     private final String name;
     private int attack;
     private int defense;
+    private int defenseBoost = 0;
+    private int attackBoost = 0;
     private int cooldown;
     private int level = 1;
     private int pointsToDistribute = 0;
@@ -31,7 +35,8 @@ public abstract class Player implements Movable {
     private final Equipment equipment = Equipment.getInstance(this);
     private final LinkedList<Armor> armors = new LinkedList<>();
     private final LinkedList<Weapon> weapons = new LinkedList<>();
-    private List<SpecialAttacks> specialAttacks;
+    private List<SpecialAttacks> specialAttacks = new ArrayList<>();
+    private List<SpecialSkills> specialSkills = new ArrayList<>();
 
     private final LinkedList<String> messages = new LinkedList<>();
 
@@ -166,7 +171,7 @@ public abstract class Player implements Movable {
     }
 
     public int getAttack() {
-        return attack + weapons
+        return attack + attackBoost + weapons
                 .stream()
                 .collect(Collectors.summingInt(Weapon::getAttack));
     }
@@ -184,7 +189,7 @@ public abstract class Player implements Movable {
     }
 
     public int getDefense() {
-        return defense + armors
+        return defense + defenseBoost + armors
                 .stream()
                 .collect(Collectors.summingInt(Armor::getDefense));
     }
@@ -280,18 +285,42 @@ public abstract class Player implements Movable {
         this.cooldown = cooldown;
     }
 
-    public void decreaseCooldown() {
+    public void decreaseCooldowns() {
         if (cooldown > 0) {
-            this.cooldown--;
+            cooldown--;
         }
+
+        if (defenseBoost > 0) {
+            defenseBoost--;
+        }
+
+        if (attackBoost > 0) {
+            attackBoost--;
+        }
+    }
+
+    public void addAttackBoost(int boost) {
+        attackBoost += boost;
+    }
+
+    public void addDefenseBoost(int boost) {
+        defenseBoost += boost;
     }
 
     public List<SpecialAttacks> getSpecialAttacks() {
         return specialAttacks;
     }
 
+    public List<SpecialSkills> getSpecialSkills() {
+        return specialSkills;
+    }
+
     public void setSpecialAttacks(List<SpecialAttacks> specialAttacks) {
         this.specialAttacks = specialAttacks;
+    }
+
+    public void setSpecialSkills(List<SpecialSkills> specialSkills) {
+        this.specialSkills = specialSkills;
     }
 
     public int getPointsToDistribute() {

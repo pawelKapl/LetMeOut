@@ -44,7 +44,6 @@ public class SkillsKeyController implements KeyListener {
         }
     }
 
-
     @Override
     public void keyReleased(KeyEvent e) {
     }

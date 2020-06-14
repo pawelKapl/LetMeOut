@@ -5,6 +5,7 @@ import data.movables.enemies.Lizard;
 import data.movables.enemies.Predator;
 import data.movables.enemies.Wherewolf;
 import data.movables.player.Player;
+import data.movables.player.Recon;
 import data.movables.player.Solider;
 
 import java.util.logging.Logger;
@@ -35,6 +36,8 @@ public class MovableFactory {
         switch (profession) {
             case (1):
                 return new Solider(name);
+            case (2):
+                return new Recon(name);
             default:
                 log.warning("Wrong profession");
                 return new Solider("DefaultName");

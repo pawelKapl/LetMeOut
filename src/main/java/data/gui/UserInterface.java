@@ -42,7 +42,7 @@ public class UserInterface implements Runnable {
         contentPane.add(gameBoard);
         ImageIcon img = new ImageIcon("src/resources/icon.png");
         frame.setIconImage(img.getImage());
-        frame.addKeyListener(new MovementKeyController(game));
+        frame.addKeyListener(new MovementKeyController(game, gameBoard));
         frame.addKeyListener(new EquipmentKeyController(game, gameBoard));
         frame.addKeyListener(new SystemKeyController());
         frame.addKeyListener(new SkillsKeyController(game, gameBoard));

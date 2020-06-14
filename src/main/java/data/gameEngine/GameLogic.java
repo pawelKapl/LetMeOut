@@ -42,11 +42,11 @@ public final class GameLogic {
 
     private static final Logger log = Logger.getLogger(GameLogic.class.toString());
 
-    public GameLogic(MovableFactory movableFactory, LocationsManager locationsManager) {
+    public GameLogic(MovableFactory movableFactory, LocationsManager locationsManager, String playerName, int profession) {
         log.info("Starting game logic engine!");
         this.movableFactory = movableFactory;
         this.locationsManager = locationsManager;
-        this.player = movableFactory.buildPlayer("Recon", 1);
+        this.player = movableFactory.buildPlayer(playerName, profession);
         prepareLocation(locationsManager.get("Planet Of War"));
     }
 
@@ -102,7 +102,7 @@ public final class GameLogic {
             player.setY(y);
         }
         enemyTurn(true);
-        player.decreaseCooldown();
+        player.decreaseCooldowns();
         fogOfWar.uncover(player.getCoords());
         updatable.update();
     }

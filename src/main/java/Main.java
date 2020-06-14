@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -19,9 +20,10 @@ public class Main {
     private static final Logger log = Logger.getLogger(Main.class.toString());
 
     public static void main(String[] args) throws InterruptedException {
+        GameLogic game = startMenu();
+
         log.info("Starting game!");
 
-        GameLogic game = new GameLogic(new MovableFactory(), LocationsManager.getInstance());
         UserInterface ui = new UserInterface(game);
 
         ExecutorService es = Executors.newSingleThreadScheduledExecutor();
@@ -51,4 +53,39 @@ public class Main {
             return;
         }
     }
+
+    private static GameLogic startMenu() {
+        String name;
+        int profession;
+        try (Scanner reader = new Scanner(System.in)) {
+            System.out.println("Welcome to Gwiezdna Flota ASCII");
+            while (true) {
+                System.out.println("Please type name of your character (max 10 characters):");
+                name = reader.nextLine();
+                if (name.length() > 10) {
+                    System.out.println("Too long name!");
+                    continue;
+                }
+                break;
+            }
+
+            while (true) {
+                System.out.println("Choose your profession ([1] Solider, [2] Recon):");
+                if (!reader.hasNextInt()) {
+                    System.out.println("Only numbers are allowed!");
+                    reader.next();
+                    continue;
+                }
+                profession = reader.nextInt();
+                if (profession > 2 || profession < 1) {
+                    System.out.println("Wrong profession number!");
+                    continue;
+                }
+                break;
+
+            }
+        }
+        return new GameLogic(new MovableFactory(), LocationsManager.getInstance(), name, profession);
+    }
+
 }

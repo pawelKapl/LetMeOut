@@ -10,6 +10,7 @@ public final class Solider extends Player {
         super(name);
         setDefense(6);
         setAttack(8);
+        setMaxHp(100);
         setSpecialAttacks(List.of(SpecialAttacks.GRENADE, SpecialAttacks.ARMOR_BREAKER, SpecialAttacks.WEAKEN));
     }
 }

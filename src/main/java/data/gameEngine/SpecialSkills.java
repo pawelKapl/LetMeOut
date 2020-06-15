@@ -12,8 +12,8 @@ public enum SpecialSkills {
                 return;
             }
             player.setCooldown(15);
-            player.addDefenseBoost(10);
-            player.addMessage("[INFO]: Armor boosted by 10!");
+            player.addDefenseBoost(5 + player.getLevel());
+            player.addMessage("[INFO]: Armor boosted by " + 5 + player.getLevel());
         }
     },
 
@@ -25,8 +25,8 @@ public enum SpecialSkills {
                 return;
             }
             player.setCooldown(15);
-            player.addAttackBoost(10);
-            player.addMessage("[INFO]: Attack boosted by 10!");
+            player.addAttackBoost(5 + player.getLevel());
+            player.addMessage("[INFO]: Attack boosted by " + 5 + player.getLevel());
         }
     };
 

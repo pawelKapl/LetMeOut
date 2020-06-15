@@ -12,7 +12,7 @@ public enum SpecialAttacks {
         String attack(Enemy enemy, Player player) {
             player.setCooldown(15);
             if (IsNear.isNear(enemy.getCoords(), player.getCoords(), 2)) {
-                int attack = player.getAttack() * 2 / 3 - enemy.getDefense() / 3;
+                int attack = player.getAttack() * 2 / 3 + player.getLevel() - enemy.getDefense() / 3;
                 enemy.getHit(attack);
                 return "[ATTACK]: " + enemy.getClass().getSimpleName() + " got " + attack + "dmg form grenade explosion";
             }

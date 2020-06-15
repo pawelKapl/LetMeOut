@@ -218,6 +218,10 @@ public abstract class Player implements Movable {
         return maxHp;
     }
 
+    public void setMaxHp(int maxHp) {
+        this.maxHp = maxHp;
+    }
+
     public void increaseMaxHp() {
         if (pointsToDistribute > 0) {
             addMessage("[INFO]: Max Hp increased by +10");

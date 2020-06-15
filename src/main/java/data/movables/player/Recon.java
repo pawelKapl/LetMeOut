@@ -11,6 +11,7 @@ public class Recon extends Player {
         super(name);
         setDefense(3);
         setAttack(10);
+        setMaxHp(80);
         setSpecialAttacks(List.of(SpecialAttacks.ARMOR_BREAKER, SpecialAttacks.WEAKEN));
         setSpecialSkills(List.of(SpecialSkills.ARMOR_BOOST, SpecialSkills.ATTACK_BOOST));
     }

@@ -2,9 +2,10 @@ package data.terrains;
 
 import data.movables.Coords;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public interface Terrain {
+public interface Terrain extends Serializable {
 
     TerrainType[][] getMap();
     Coords getEntrance();

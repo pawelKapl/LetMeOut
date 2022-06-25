@@ -1,11 +1,14 @@
 package locations;
 
+import static java.lang.String.format;
+import static java.util.logging.Level.INFO;
+import static java.util.logging.Level.WARNING;
+
 import data.gameEngine.FogOfWar;
 import data.gameEngine.GameLogic;
 import data.movables.Coords;
 import data.movables.enemies.Enemy;
 import data.terrains.Terrain;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -16,61 +19,66 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class LocationSaveUtil {
 
-    private static final Logger log = Logger.getLogger(LocationSaveUtil.class.toString());
+  private static final String SAVED_LOCATIONS_PATH = "./src/resources/savedLocations/%s.dat";
+  private static final Logger LOG = Logger.getLogger(LocationSaveUtil.class.toString());
 
-    public static void saveLocation(Terrain terrain, List<Enemy> enemies, FogOfWar fog , Coords player) {
-        log.info("Saving Location " + terrain.getName() + " to file...");
+  private LocationSaveUtil() {}
 
-        String filename = prepareFileName(terrain.getName());
+  public static void saveLocation(Terrain terrain, List<Enemy> enemies, FogOfWar fog,
+      Coords player) {
+    LOG.log(INFO,"Saving Location {0} to file...", terrain.getName());
 
-        Path path = Paths.get(String.format("src/resources/savedLocations/%s.dat", prepareFileName(filename)));
+    String filename = prepareFileName(terrain.getName());
+    Path path = Paths.get(
+        format(SAVED_LOCATIONS_PATH, prepareFileName(filename)));
 
-        try (ObjectOutputStream file = new ObjectOutputStream(new BufferedOutputStream(Files.newOutputStream(path)))) {
-            file.writeObject(terrain);
-            file.writeObject(enemies);
-            file.writeObject(fog);
-            file.writeObject(player);
-        } catch (IOException e) {
-            log.log(Level.WARNING,"Error during location saving process", e);
-            return;
-        }
+    try (ObjectOutputStream file = new ObjectOutputStream(
+        new BufferedOutputStream(Files.newOutputStream(path)))) {
+      file.writeObject(terrain);
+      file.writeObject(enemies);
+      file.writeObject(fog);
+      file.writeObject(player);
+    } catch (IOException e) {
+      LOG.log(WARNING, "Error during location saving process", e);
+    }
+  }
+
+  public static boolean loadLocation(GameLogic gameLogic, String location) {
+    if (gameLogic.getTerrain() == null) {
+      return false;
     }
 
-    public static boolean loadLocation(GameLogic gameLogic, String location) {
-        //triggers only on a first run
-        if (gameLogic.getTerrain() == null) {
-            return false;
-        }
+    Path path = Paths.get(
+        format(SAVED_LOCATIONS_PATH, prepareFileName(location)));
 
-        Path path = Paths.get(String.format("src/resources/savedLocations/%s.dat", prepareFileName(location)));
-
-        if (!Files.exists(path)) {
-            return false;
-        }
-
-        log.info("Loading Location " + location + " from file...");
-
-        try (ObjectInputStream file = new ObjectInputStream(new BufferedInputStream(Files.newInputStream(path)))){
-            gameLogic.setTerrain((Terrain) file.readObject());
-            gameLogic.setEnemies((List<Enemy>) file.readObject());
-            gameLogic.setFogOfWar((FogOfWar) file.readObject());
-            gameLogic.getPlayer().setCoords((Coords) file.readObject());
-        } catch (IOException | ClassNotFoundException e) {
-            log.log(Level.WARNING,"Error during reading location file " + path.getFileName(), e);
-            return false;
-        }
-        return true;
+    if (!Files.exists(path)) {
+      return false;
     }
 
-    private static String prepareFileName(String location) {
-        return Arrays.stream(location.split(" "))
-                .map(String::toLowerCase)
-                .collect(Collectors.joining());
+    LOG.log(INFO, "Loading Location {0} from file...", location);
+
+    try (ObjectInputStream file = new ObjectInputStream(
+        new BufferedInputStream(Files.newInputStream(path)))) {
+      gameLogic.setTerrain((Terrain) file.readObject());
+      gameLogic.setEnemies((List<Enemy>) file.readObject());
+      gameLogic.setFogOfWar((FogOfWar) file.readObject());
+      gameLogic.getPlayer().setCoords((Coords) file.readObject());
+    } catch (IOException | ClassNotFoundException e) {
+      LOG.log(WARNING, "Error during reading location file {0}, error: {1}",
+          new Object[]{path.getFileName(), e});
+      return false;
     }
+    return true;
+  }
+
+  private static String prepareFileName(String location) {
+    return Arrays.stream(location.split(" "))
+        .map(String::toLowerCase)
+        .collect(Collectors.joining());
+  }
 }
